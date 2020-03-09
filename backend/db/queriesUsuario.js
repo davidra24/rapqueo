@@ -1,6 +1,6 @@
-require('dotenv/config');
+require("dotenv/config");
 
-const Usuarios = require('../models/Usuarios');
+const Usuarios = require("../models/Usuarios");
 
 getAllUsers = (req, res) => {
   Usuarios.find().then(data => {
@@ -9,7 +9,7 @@ getAllUsers = (req, res) => {
 };
 
 getOneUser = (req, res) => {
-  const id = req.params._id;
+  const id = req.params.id;
   Usuarios.findById(id).then(data => {
     res.send(data);
   });
@@ -22,17 +22,15 @@ postUser = (req, res) => {
 };
 
 pullUser = (req, res) => {
-  Usuarios.findByIdAndUpdate(
-    req.params._id,
-    req.body,
-    (err, todo) => {}
-  ).then(data => {
-    res.send(data);
-  });
+  Usuarios.findByIdAndUpdate(req.params.id, req.body, (err, todo) => {}).then(
+    data => {
+      res.send(data);
+    }
+  );
 };
 
 deleteUser = (req, res) => {
-  Usuarios.findOneAndRemove(req.params._id).then(data => {
+  Usuarios.findOneAndRemove(req.params.id).then(data => {
     res.send(data);
   });
 };

@@ -1,6 +1,6 @@
-require('dotenv/config');
+require("dotenv/config");
 
-const Promociones = require('../models/Promociones');
+const Promociones = require("../models/Promociones");
 
 getAllPromos = (req, res) => {
   Promociones.find().then(data => {
@@ -9,7 +9,7 @@ getAllPromos = (req, res) => {
 };
 
 getOnePromo = (req, res) => {
-  const id = req.params._id;
+  const id = req.params.id;
   Promociones.findById(id).then(data => {
     res.send(data);
   });
@@ -23,7 +23,7 @@ postPromo = (req, res) => {
 
 pullPromo = (req, res) => {
   Promociones.findByIdAndUpdate(
-    req.params._id,
+    req.params.id,
     req.body,
     (err, todo) => {}
   ).then(data => {
@@ -32,7 +32,7 @@ pullPromo = (req, res) => {
 };
 
 deletePromo = (req, res) => {
-  Promociones.findOneAndRemove(req.params._id).then(data => {
+  Promociones.findOneAndRemove(req.params.id).then(data => {
     res.send(data);
   });
 };

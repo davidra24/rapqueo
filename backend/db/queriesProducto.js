@@ -1,6 +1,6 @@
-require('dotenv/config');
+require("dotenv/config");
 
-const Productos = require('../models/Productos');
+const Productos = require("../models/Productos");
 
 getAllProducts = (req, res) => {
   Productos.find().then(data => {
@@ -9,7 +9,7 @@ getAllProducts = (req, res) => {
 };
 
 getOneProduct = (req, res) => {
-  const id = req.params._id;
+  const id = req.params.id;
   Productos.findById(id).then(data => {
     res.send(data);
   });
@@ -22,17 +22,15 @@ postProduct = (req, res) => {
 };
 
 pullProduct = (req, res) => {
-  Productos.findByIdAndUpdate(
-    req.params._id,
-    req.body,
-    (err, todo) => {}
-  ).then(data => {
-    res.send(data);
-  });
+  Productos.findByIdAndUpdate(req.params.id, req.body, (err, todo) => {}).then(
+    data => {
+      res.send(data);
+    }
+  );
 };
 
 deleteProduct = (req, res) => {
-  Productos.findOneAndRemove(req.params._id).then(data => {
+  Productos.findOneAndRemove(req.params.id).then(data => {
     res.send(data);
   });
 };
