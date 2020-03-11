@@ -34,15 +34,17 @@ postCategorie = (req, res) => {
 };
 
 pullCategorie = (req, res) => {
-  Categorias.findByIdAndUpdate(req.params.id, req.body, (err, todo) => {}).then(
-    data => {
+  Categorias.findByIdAndUpdate(req.params.id, req.body, (err, todo) => {})
+    .then(data => {
       res.send(data);
-    }
-  );
+    })
+    .catch(err => {
+      console.log(err);
+    });
 };
 
 deleteCategorie = (req, res) => {
-  Categorias.findOneAndRemove(req.params.id).then(data => {
+  Categorias.findByIdAndRemove(req.params.id).then(data => {
     res.send(data);
   });
 };

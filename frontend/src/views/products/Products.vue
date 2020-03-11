@@ -1,9 +1,14 @@
 <template>
-  <div>holamundo</div>
+  <Products />
 </template>
+
 <script>
-  export default {
-    name: "ProductsContainer"
-  };
+// @ is an alias to /src
+import Products from "@/components/products/Products.vue";
+export default {
+  name: "ProductsContainer",
+  components: {
+    Products
+  }
+};
 </script>
-<style scoped></style>
