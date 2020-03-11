@@ -3,11 +3,13 @@ const express = require("express");
 const api = require("../api/api");
 const path = require("path");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 
 const app = express();
 const server = http.createServer(app);
 const port = process.env.PORT || 3000;
 
+app.use(cors());
 app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 
