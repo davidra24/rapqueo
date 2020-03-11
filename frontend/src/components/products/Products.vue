@@ -11,7 +11,7 @@
               <div class="card-header">{{ item.nombre }}</div>
               <div class="card-body">
                 <img alt src="`../../assets/${item.imagen}`" />
-                <h5 class="card-title">{{ item.foto[0] }}</h5>
+                <h5 class="card-title">{{ item.nombre }}</h5>
                 <p class="card-text">{{ item.id_categoria }}</p>
               </div>
             </div>
@@ -38,7 +38,7 @@ export default {
   },
   methods: {
     ...mapActions(["addAllproducts"]),
-    crearCategorias(products) {
+    crearProductos(products) {
       this.addAllproducts(products);
     },
     fetch() {
@@ -59,7 +59,7 @@ export default {
         });
     },
     goProduct(id_categoria, id) {
-      this.$router.push({ path: `/categories/${id_categoria}/${id}` });
+      this.$router.push({ path: `/${id}` });
     }
   },
   created() {
@@ -75,6 +75,4 @@ export default {
 }
 </style>
 
-<script>
-</script>
 <style scoped></style>
