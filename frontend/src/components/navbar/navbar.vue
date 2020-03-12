@@ -1,33 +1,20 @@
 <template>
   <div>
     <b-navbar toggleable="lg" type="dark" variant="info">
-      <router-link class="no-link" to="/">NavBar</router-link>
+      <router-link class="no-link" to="/">MercarChevere</router-link>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
-          <router-link class="no-link" to="/">Link</router-link>
+          <router-link class="no-link" to="/categorias">Categorias</router-link>
         </b-navbar-nav>
-
-        <!-- Right aligned nav items -->
+        <b-navbar-nav>
+          <router-link class="no-link" to="/productos">Productos</router-link>
+        </b-navbar-nav>
         <b-navbar-nav class="ml-auto">
-          <b-nav-form>
-            <b-form-input
-              size="sm"
-              class="mr-sm-2"
-              placeholder="Search"
-            ></b-form-input>
-            <b-button size="sm" class="my-2 my-sm-0" type="submit"
-              >Search</b-button
-            >
-          </b-nav-form>
-
-          <router-link class="no-link" to="/carrito" right>
-            Carrito
-          </router-link>
-
-          <router-link class="no-link" to="/profile">User</router-link>
+          <router-link class="no-link" to="/carrito" right>Carrito</router-link>
+          <router-link class="no-link" to="/profile">Usuario</router-link>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
@@ -35,20 +22,20 @@
 </template>
 
 <script>
-  export default {
-    name: "Navbar",
-    data() {
-      return {};
-    },
-    computed: {},
-    created() {},
-    methods: {}
-  };
+export default {
+  name: "Navbar",
+  data() {
+    return {};
+  },
+  computed: {},
+  created() {},
+  methods: {}
+};
 </script>
 
 <style scoped>
-  .no-link {
-    color: white;
-    padding: 1em;
-  }
+.no-link {
+  color: white;
+  padding: 1em;
+}
 </style>

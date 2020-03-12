@@ -3,16 +3,21 @@
     <br />
     <div class="container clickable">
       <div class="row">
-        <div v-if="loading" class="col-12">Cargando...</div>
-        <div v-else class="col-12 col-md-6 col-lg-3">
-          <div v-for="item in data" :key="item._id" @click="goProduct(item._id)">
-            <div>xd</div>
-            <div class="card bg-light mb-3" style="max-width: 18rem;">
-              <div class="card-header">{{ item.nombre }}</div>
-              <div class="card-body">
-                <img alt src="`../../assets/${item.imagen}`" />
-                <h5 class="card-title">{{ item.nombre }}</h5>
-                <p class="card-text">{{ item.id_categoria }}</p>
+        <div v-if="loading" class="col-12">
+          <Loading />
+        </div>
+        <div v-else class="col-12">
+          <div class="row">
+            <div class="col-12 col-md-6 col-lg-3">
+              <div v-for="item in data" :key="item._id" @click="goProduct(item._id)">
+                <div class="card bg-light mb-3" style="max-width: 18rem;">
+                  <div class="card-header">{{ item.nombre }}</div>
+                  <div class="card-body">
+                    <img alt src="`../../assets/${item.imagen}`" />
+                    <h5 class="card-title">{{ item.nombre }}</h5>
+                    <p class="card-text">{{ item.caracteristicas }}</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -23,9 +28,12 @@
 </template>
 <script>
 import { apiurl, products } from "../../util/constans";
-import { mapState, mapActions } from "vuex";
+import Loading from "../loading";
 export default {
   name: "Products",
+  components: {
+    Loading
+  },
   data() {
     return {
       loading: true,
@@ -33,15 +41,9 @@ export default {
       error: null
     };
   },
-  computed: {
-    ...mapState(["getProducts"])
-  },
   methods: {
-    ...mapActions(["addAllproducts"]),
-    crearProductos(products) {
-      this.addAllproducts(products);
-    },
     fetch() {
+      console.log(this.$route.params.id);
       fetch(apiurl + products)
         .then(data => {
           if (data.ok) {
@@ -50,15 +52,15 @@ export default {
         })
         .then(info => {
           this.loading = false;
-          this.data = info;
-          this.crearProductos(info);
-          localStorage.setItem("productos", info);
+          this.data = info.filter(producto => {
+            return producto.idCategoria == this.$route.params.id;
+          });
         })
         .catch(err => {
           this.error = err;
         });
     },
-    goProduct(id_categoria, id) {
+    goProduct(id) {
       this.$router.push({ path: `/${id}` });
     }
   },

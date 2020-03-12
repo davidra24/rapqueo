@@ -3,16 +3,39 @@
     <br />
     <div class="container clickable">
       <div class="row">
-        <div v-if="loading" class="col-12">Cargando...</div>
-        <div v-else class="col-12 col-md-6 col-lg-3">
-          <div v-for="item in data" :key="item._id" @click="goProducts(item._id)">
-            <div class="card bg-light mb-3" style="max-width: 18rem;">
-              <div class="card-header">{{ item.nombre }}</div>
-              <div class="card-body">
-                <img alt src="`../../assets/${item.imagen}`" />
-                <h5 class="card-title">{{ item.imagen }}</h5>
-                <p class="card-text">{{ item.descripcion }}</p>
-              </div>
+        <div v-if="loading" class="col-12">
+          <Loading />
+        </div>
+        <div v-else class="col-12">
+          <div class="row">
+            <div
+              class="col-12 col-md-6 col-lg-4"
+              v-for="item in data"
+              :key="item._id"
+              @click="goProducts(item._id)"
+            >
+              <b-card
+                no-body
+                class="overflow-hidden"
+                style="max-width: 540px; height:10rem; max-height: 30rem;"
+              >
+                <b-row no-gutters>
+                  <b-col md="6">
+                    <b-card-img
+                      class="img-fluid rounded-0 resize-img"
+                      alt="item.imagen"
+                      :src="require(`@/assets/img/${item.imagen}`)"
+                    ></b-card-img>
+                  </b-col>
+                  <b-col md="6">
+                    <b-card-body :title="item.nombre">
+                      <b-card-text>{{ item.descripcion }}</b-card-text>
+                    </b-card-body>
+                  </b-col>
+                </b-row>
+              </b-card>
+              <br />
+              <br />
             </div>
           </div>
         </div>
@@ -23,9 +46,13 @@
 
 <script>
 import { apiurl, categories } from "../../util/constans";
+import Loading from "../loading";
 import { mapState, mapActions } from "vuex";
 export default {
   name: "Categories",
+  components: {
+    Loading
+  },
   data() {
     return {
       loading: true,
@@ -59,7 +86,7 @@ export default {
         });
     },
     goProducts(id) {
-      this.$router.push({ path: `/categories/${id}` });
+      this.$router.push({ path: `/categorias/${id}` });
     }
   },
   created() {
@@ -72,5 +99,8 @@ export default {
 <style scoped>
 .clickable {
   cursor: pointer;
+}
+.resize-img {
+  width: 8rem;
 }
 </style>

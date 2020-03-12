@@ -13,7 +13,12 @@ const routes = [
     component: CategoriesContainer
   },
   {
-    path: "/categories/:id",
+    path: "/categorias",
+    name: "CategoriesContainer",
+    component: CategoriesContainer
+  },
+  {
+    path: "/categorias/:id",
     name: "ProductContainer",
     component: ProductsContainer
   },
