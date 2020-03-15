@@ -7,11 +7,9 @@
           <Loading />
         </div>
         <div v-else class="col-12">
-          <div class="row">
-            <div class="col-12 col-md-6 col-lg-3">
-              <div v-for="item in data" :key="item._id">
-                <Product v-bind:product="item" />
-              </div>
+          <div class="col-3 col-md-6 col-lg-12">
+            <div v-for="item in data" :key="item._id">
+              <OneProduct v-bind:product="item" />
             </div>
           </div>
         </div>
@@ -19,15 +17,16 @@
     </div>
   </div>
 </template>
+
 <script>
   import { apiurl, products } from "../../util/constants";
-  import Loading from "../loading";
-  import Product from "./Product";
+  import Loading from "../../components/loading";
+  import OneProduct from "./OneProduct";
   export default {
-    name: "Products",
+    name: "OneProducts",
     components: {
       Loading,
-      Product
+      OneProduct
     },
     data() {
       return {
@@ -38,7 +37,6 @@
     },
     methods: {
       fetch() {
-        console.log(this.$route.params.id);
         fetch(apiurl + products)
           .then(data => {
             if (data.ok) {
@@ -48,7 +46,7 @@
           .then(info => {
             this.loading = false;
             this.data = info.filter(producto => {
-              return producto.idCategoria == this.$route.params.id;
+              return producto._id == this.$route.params.id;
             });
           })
           .catch(err => {
@@ -61,12 +59,4 @@
     }
   };
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-  .clickable {
-    cursor: pointer;
-  }
-</style>
-
-<style scoped></style>
+<style lang="stylus" scoped></style>

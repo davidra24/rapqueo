@@ -10,6 +10,7 @@
           <div class="row">
             <div
               class="col-12 col-md-6 col-lg-4"
+              style="margin-bottom: 2%;"
               v-for="item in data"
               :key="item._id"
               @click="goProducts(item._id)"
@@ -17,7 +18,7 @@
               <b-card
                 no-body
                 class="overflow-hidden"
-                style="max-width: 540px; height:10rem; max-height: 30rem;"
+                style=" min-height:100%; max-height: 100%;"
               >
                 <b-row no-gutters>
                   <b-col md="6">
@@ -45,62 +46,62 @@
 </template>
 
 <script>
-import { apiurl, categories } from "../../util/constans";
-import Loading from "../loading";
-import { mapState, mapActions } from "vuex";
-export default {
-  name: "Categories",
-  components: {
-    Loading
-  },
-  data() {
-    return {
-      loading: true,
-      data: [],
-      error: null
-    };
-  },
-  computed: {
-    ...mapState(["getCategories"])
-  },
-  methods: {
-    ...mapActions(["addAllcategories"]),
-    crearCategorias(categories) {
-      this.addAllcategories(categories);
+  import { apiurl, categories } from "../../util/constants";
+  import Loading from "../loading";
+  import { mapState, mapActions } from "vuex";
+  export default {
+    name: "Categories",
+    components: {
+      Loading
     },
-    fetch() {
-      fetch(apiurl + categories)
-        .then(data => {
-          if (data.ok) {
-            return data.json();
-          }
-        })
-        .then(info => {
-          this.loading = false;
-          this.data = info;
-          this.crearCategorias(info);
-          localStorage.setItem("categorias", info);
-        })
-        .catch(err => {
-          this.error = err;
-        });
+    data() {
+      return {
+        loading: true,
+        data: [],
+        error: null
+      };
     },
-    goProducts(id) {
-      this.$router.push({ path: `/categorias/${id}` });
+    computed: {
+      ...mapState(["getCategories"])
+    },
+    methods: {
+      ...mapActions(["addAllcategories"]),
+      crearCategorias(categories) {
+        this.addAllcategories(categories);
+      },
+      fetch() {
+        fetch(apiurl + categories)
+          .then(data => {
+            if (data.ok) {
+              return data.json();
+            }
+          })
+          .then(info => {
+            this.loading = false;
+            this.data = info;
+            this.crearCategorias(info);
+            localStorage.setItem("categorias", info);
+          })
+          .catch(err => {
+            this.error = err;
+          });
+      },
+      goProducts(id) {
+        this.$router.push({ path: `/categorias/${id}` });
+      }
+    },
+    created() {
+      this.fetch();
     }
-  },
-  created() {
-    this.fetch();
-  }
-};
+  };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.clickable {
-  cursor: pointer;
-}
-.resize-img {
-  width: 8rem;
-}
+  .clickable {
+    cursor: pointer;
+  }
+  .resize-img {
+    width: 8rem;
+  }
 </style>
