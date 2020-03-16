@@ -1,14 +1,14 @@
 <template>
-  <Car />
+  <CartComponent />
 </template>
 
 <script>
 // @ is an alias to /src
-import Car from "@/components/car/Car.vue";
+import CartComponent from '@/components/cart/';
 export default {
-  name: "Carr",
+  name: 'Cart',
   components: {
-    Car
+    CartComponent
   }
 };
 </script>

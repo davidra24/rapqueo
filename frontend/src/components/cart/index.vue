@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: "Car",
+  name: 'CartComponent',
   data() {
     return {};
   },

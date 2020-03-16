@@ -2,50 +2,70 @@
   <div v-if="loading" class="col-12">
     <Loading />
   </div>
-  <div v-else class="col-12">
+  <div v-else>
     <div class="row">
-      <md-card>
-        <div class="container" @click="goProduct(product._id)">
+      <md-card style="width: 85%;">
+        <div
+          class="container-fluid"
+          @click="goProduct(product._id)"
+          style="cursor: pointer;"
+        >
           <md-card-header>
             <md-card-header-text>
-              <div class="md-title">{{ product.nombre }}</div>
+              <h6>
+                <strong> {{ product.nombre }}</strong>
+              </h6>
               <div class="md-subhead">{{ peso }} {{ unidad }}</div>
               <br />
               <div>${{ precio }}</div>
             </md-card-header-text>
-
             <md-card-media md-big>
               <img
-                class="img-fluid rounded-0 resize-img"
+                class="img-fluid resize-img"
                 v-bind:src="product.foto"
                 v-bind:alt="product.nombre"
               />
             </md-card-media>
           </md-card-header>
         </div>
-        <md-card-actions>
-          <md-button class="md-fab md-mini-mini md-primary" @click="resta()">
-            <md-icon>remove</md-icon>
-          </md-button>
-          <div class="col-1"></div>
-          <h2 class="f-bold">{{ cantidad }}</h2>
-          <div class="col-1"></div>
-          <md-button class="md-fab md-mini-mini md-primary" @click="suma()">
-            <md-icon>add</md-icon>
-          </md-button>
-          <button class="btn">Agregar</button>
-        </md-card-actions>
+        <div class="row">
+          <div class="col-4">
+            <md-button class="md-fab md-mini-mini md-primary" @click="resta()">
+              <md-icon>remove</md-icon>
+            </md-button>
+          </div>
+          <div class="col-4">
+            <h2 class="f-bold">{{ cantidad }}</h2>
+          </div>
+          <div class="col-4">
+            <md-button class="md-fab md-mini-mini md-primary" @click="suma()">
+              <md-icon>add</md-icon>
+            </md-button>
+          </div>
+        </div>
+        <div class="col-12">
+          <button
+            class="btn mrg-btn btn-success btn-block"
+            @click="agregarCarrito()"
+          >
+            Agregar
+          </button>
+        </div>
       </md-card>
     </div>
-
     <br />
   </div>
 </template>
 
 <script>
+import Loading from '../loading';
+import { addToCart } from '../../util';
 export default {
-  name: "Product",
-  props: ["product"],
+  name: 'Product',
+  props: ['product'],
+  component: {
+    Loading
+  },
   data() {
     return {
       cantidad: 1,
@@ -58,6 +78,14 @@ export default {
   methods: {
     goProduct(id) {
       this.$router.push({ path: `/productos/${id}` });
+    },
+    agregarCarrito() {
+      addToCart({
+        id: this.product._id,
+        imagen: this.product.foto,
+        cantidad: this.cantidad,
+        precio: this.precio
+      });
     },
     resta() {
       this.cantidad = this.cantidad > 1 ? this.cantidad - 1 : this.cantidad;
@@ -75,24 +103,16 @@ export default {
 </script>
 
 <style scoped>
-.btn-circle {
-  width: 45px;
-  height: 45px;
-  line-height: 45px;
-  border-radius: 50%;
-  border-color: grey;
-}
-.visible {
-  visibility: visible;
-}
-.invisible {
-  visibility: hidden;
-}
 .resize-img {
-  width: 10rem;
+  width: 100%;
+  height: 100%;
 }
 .md-mini-mini {
   width: 2rem;
   height: 2rem;
+}
+.mrg-btn {
+  margin-top: 5%;
+  margin-bottom: 5%;
 }
 </style>

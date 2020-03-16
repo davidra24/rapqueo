@@ -1,17 +1,19 @@
 <template>
   <div>
     <br />
-    <div class="container clickable">
+    <div class="container">
       <div class="row">
         <div v-if="loading" class="col-12">
           <Loading />
         </div>
         <div v-else class="col-12">
           <div class="row">
-            <div class="col-12 col-md-6 col-lg-3">
-              <div v-for="item in data" :key="item._id">
-                <Product v-bind:product="item" />
-              </div>
+            <div
+              class="col-12 col-md-6 col-lg-4"
+              v-for="item in data"
+              :key="item._id"
+            >
+              <Product v-bind:product="item" />
             </div>
           </div>
         </div>
@@ -20,11 +22,11 @@
   </div>
 </template>
 <script>
-import { apiurl, products } from "../../util/constants";
-import Loading from "../loading";
-import Product from "./Product";
+import { apiurl, products } from '../../util/constants';
+import Loading from '../loading';
+import Product from './Product';
 export default {
-  name: "AllProducts",
+  name: 'AllProducts',
   components: {
     Loading,
     Product

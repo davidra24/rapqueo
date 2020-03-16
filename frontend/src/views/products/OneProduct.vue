@@ -3,41 +3,58 @@
     <div v-if="loading" class="col-12">
       <Loading />
     </div>
-    <div v-else>
-      <div class="mt-4">
-        <b-card
-          img-src="https://placekitten.com/300/300"
-          img-alt="Card image"
-          img-left
-          class="mb-3"
+    <div v-else class="col-12 d-flex justify-content-center">
+      <md-card style="min-width: 50%; max-width: 100%;">
+        <div
+          class="container"
+          @click="goProduct(product._id)"
+          style="cursor: pointer;"
         >
-          <b-card-text>
-            <h1 class>{{product.nombre}}</h1>
-            <h2 class="a">{{peso}}{{unidad}}</h2>
-            <h3 class="a">${{precio}}</h3>
-          </b-card-text>
-          <br />
-          <br />
-          <br />
-          <div class="row">
-            <button class="btn-circle" @click="resta()">-</button>
-            <h2 class="col-4 f-bold">{{cantidad}}</h2>
-            <button class="btn-circle" @click="suma()">+</button>
-            <div class="col-4.5"></div>
-            <button class="col-4 btn btn-outline-dark">Agregar</button>
-            <div class="col-4"></div>
+          <md-card-header>
+            <md-card-header-text>
+              <h6>
+                <strong> {{ product.nombre }}</strong>
+              </h6>
+              <div class="md-subhead">{{ peso }} {{ unidad }}</div>
+              <br />
+              <div>${{ precio }}</div>
+            </md-card-header-text>
+            <md-card-media md-big>
+              <img
+                class="img-fluid resize-img"
+                v-bind:src="product.foto"
+                v-bind:alt="product.nombre"
+              />
+            </md-card-media>
+          </md-card-header>
+        </div>
+        <div class="row">
+          <div class="col-4">
+            <md-button class="md-fab md-mini-mini md-primary" @click="resta()">
+              <md-icon>remove</md-icon>
+            </md-button>
           </div>
-        </b-card>
-      </div>
-      <!--<p class="card-img-top">{{foto}}</p>-->
+          <div class="col-4">
+            <h2 class="f-bold">{{ cantidad }}</h2>
+          </div>
+          <div class="col-4">
+            <md-button class="md-fab md-mini-mini md-primary" @click="suma()">
+              <md-icon>add</md-icon>
+            </md-button>
+          </div>
+        </div>
+        <div class="col-12 mrg-btn">
+          <button class="btn btn-success btn-block">Agregar</button>
+        </div>
+      </md-card>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "OneProduct",
-  props: ["product"],
+  name: 'OneProduct',
+  props: ['product'],
   data() {
     return {
       cantidad: 1,
@@ -64,14 +81,12 @@ export default {
 </script>
 
 <style scoped>
-.btn-circle {
-  width: 45px;
-  height: 45px;
-  line-height: 45px;
-  border-radius: 50%;
-  border-color: grey;
+.resize-img {
+  width: 100%;
+  height: 100%;
 }
-.a {
-  font-family: "Comic Sans MS", cursive, sans-serif;
+.mrg-btn {
+  padding-top: 5%;
+  padding-bottom: 5%;
 }
 </style>
