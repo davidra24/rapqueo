@@ -82,8 +82,11 @@ export default {
     agregarCarrito() {
       addToCart({
         id: this.product._id,
+        nombre: this.nombre,
         imagen: this.product.foto,
         cantidad: this.cantidad,
+        peso: this.peso,
+        unidad: this.unidad,
         precio: this.precio
       });
     },
