@@ -22,54 +22,54 @@ mongoose
  * Categorías
  */
 api.get("/categories", queryCategoria.getAllCategories);
-api.get("/categorie/:id", queryCategoria.getOneCategorie);
+api.get("/categories/:id", queryCategoria.getOneCategorie);
 api.post("/categories", queryCategoria.postCategorie);
-api.put("/categorie/:id", queryCategoria.pullCategorie);
-api.delete("/categorie/:id", queryCategoria.deleteCategorie);
+api.put("/categories/:id", queryCategoria.pullCategorie);
+api.delete("/categories/:id", queryCategoria.deleteCategorie);
 
 /**
  * Usuarios
  */
 api.get("/users", queryUsuario.getAllUsers);
-api.get("/user/:id", queryUsuario.getOneUser);
+api.get("/users/:id", queryUsuario.getOneUser);
 api.post("/users", queryUsuario.postUser);
-api.put("/user/:id", queryUsuario.pullUser);
-api.delete("/user/:id", queryUsuario.deleteUser);
+api.put("/users/:id", queryUsuario.pullUser);
+api.delete("/users/:id", queryUsuario.deleteUser);
 
 /**
  * Productos
  */
 api.get("/products", queryProducto.getAllProducts);
-api.get("/product/:id", queryProducto.getOneProduct);
+api.get("/products/:id", queryProducto.getOneProduct);
 api.post("/products", queryProducto.postProduct);
-api.put("/product/:id", queryProducto.pullProduct);
-api.delete("/product/:id", queryProducto.deleteProduct);
+api.put("/products/:id", queryProducto.pullProduct);
+api.delete("/products/:id", queryProducto.deleteProduct);
 
 /**
  * Promociones
  */
 api.get("/promos", queryPromocion.getAllPromos);
-api.get("/promo/:id", queryPromocion.getOnePromo);
+api.get("/promos/:id", queryPromocion.getOnePromo);
 api.post("/promos", queryPromocion.postPromo);
-api.put("/promo/:id", queryPromocion.pullPromo);
-api.delete("/promo/:id", queryPromocion.deletePromo);
+api.put("/promos/:id", queryPromocion.pullPromo);
+api.delete("/promos/:id", queryPromocion.deletePromo);
 
 /**
  * Pedidos
  */
 api.get("/orders", queryPedido.getAllOrders);
-api.get("/order/:id", queryPedido.getOneOrder);
+api.get("/orders/:id", queryPedido.getOneOrder);
 api.post("/orders", queryPedido.postOrder);
-api.put("/order/:id", queryPedido.pullOrder);
-api.delete("/order/:id", queryPedido.deleteOrder);
+api.put("/orders/:id", queryPedido.pullOrder);
+api.delete("/orders/:id", queryPedido.deleteOrder);
 
 /**
  * Roles
  */
 api.get("/roles", queryRol.getAllRoles);
-api.get("/role/:id", queryRol.getOneRole);
+api.get("/roles/:id", queryRol.getOneRole);
 api.post("/roles", queryRol.postRole);
-api.put("/role/:id", queryRol.pullRole);
-api.delete("/role/:id", queryRol.deleteRole);
+api.put("/roles/:id", queryRol.pullRole);
+api.delete("/roles/:id", queryRol.deleteRole);
 
 module.exports = api;

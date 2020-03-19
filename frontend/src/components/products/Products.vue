@@ -1,6 +1,7 @@
 <template>
   <div>
     <br />
+
     <div class="container">
       <div class="row">
         <div v-if="loading" class="col-12">
@@ -22,53 +23,55 @@
   </div>
 </template>
 <script>
-import { apiurl, products } from '../../util/constants';
-import Loading from '../loading';
-import Product from './Product';
-export default {
-  name: 'Products',
-  components: {
-    Loading,
-    Product
-  },
-  data() {
-    return {
-      loading: true,
-      data: [],
-      error: null
-    };
-  },
-  methods: {
-    fetch() {
-      console.log(this.$route.params.id);
-      fetch(apiurl + products)
-        .then(data => {
-          if (data.ok) {
-            return data.json();
-          }
-        })
-        .then(info => {
-          this.loading = false;
-          this.data = info.filter(producto => {
-            return producto.idCategoria == this.$route.params.id;
+  import { apiurl, products } from "../../util/constants";
+  import Loading from "../loading";
+  import Product from "./Product";
+  export default {
+    name: "Products",
+    components: {
+      Loading,
+      Product
+    },
+    data() {
+      return {
+        loading: true,
+        data: [],
+        error: null
+      };
+    },
+    methods: {
+      fetch() {
+        fetch(apiurl + products)
+          .then(data => {
+            if (data.ok) {
+              return data.json();
+            }
+          })
+          .then(info => {
+            this.loading = false;
+            this.data = info.filter(producto => {
+              return (
+                producto.idCategoria == this.$route.params.id &&
+                producto.caracteristicas.cantidad > 0
+              );
+            });
+          })
+          .catch(err => {
+            this.error = err;
           });
-        })
-        .catch(err => {
-          this.error = err;
-        });
+      }
+    },
+    created() {
+      this.fetch();
     }
-  },
-  created() {
-    this.fetch();
-  }
-};
+  };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.clickable {
-  cursor: pointer;
-}
+  .clickable {
+    cursor: pointer;
+  }
 </style>
 
 <style scoped></style>

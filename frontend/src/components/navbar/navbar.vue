@@ -20,28 +20,15 @@
             ></md-bottom-bar-item>
           </router-link>
         </b-navbar-nav>
-
         <b-navbar-nav class="ml-auto">
-          <md-menu md-size="auto">
+          <div class="md-toolbar-section-end">
             <md-bottom-bar-item
-              md-menu-trigger
               md-label="Carrito"
               md-icon="shopping_cart"
+              @click="slideCart()"
             ></md-bottom-bar-item>
-
-            <md-menu-content class="row">
-              <md-menu-item class="col-12">
-                <CartContent />
-              </md-menu-item>
-              <md-menu-item class="col-12">
-                <Button class="btn btn-block btn-success" @click="irACarrito()"
-                  >COMPRAR</Button
-                >
-              </md-menu-item>
-            </md-menu-content>
-          </md-menu>
+          </div>
         </b-navbar-nav>
-
         <b-navbar-nav class="ml-auto">
           <router-link class="no-link" to="/usuario">
             <div v-if="logged">
@@ -66,74 +53,85 @@
 </template>
 
 <script>
-import CartContent from '../cart/CartContent';
-export default {
-  name: 'Navbar',
-  components: {
-    CartContent
-  },
-  data() {
-    return {
-      logged: true,
-      theme: 'teal'
-    };
-  },
-  computed: {},
-  created() {
-    this.theme = this.validatePath();
-  },
-  methods: {
-    irACarrito() {
-      this.$router.push('/carrito');
+  export default {
+    name: "Navbar",
+    props: {
+      slider: Function
     },
-    validatePath() {
-      switch (this.$router.path) {
-        case '/':
-          return 'teal;';
-        case '/productos':
-          return 'orange';
-        case '/carrito':
-          return 'red';
-        default:
-          return 'blue';
+    components: {},
+    data() {
+      return {
+        logged: true,
+        theme: "teal",
+        items: this.countElements(),
+        checkInterval: null,
+        showSidepanel: false
+      };
+    },
+    computed: {},
+    created() {
+      this.theme = this.validatePath();
+    },
+    methods: {
+      slideCart() {
+        if (this.slider) {
+          this.slider();
+        }
+      },
+      countElements() {
+        return JSON.parse(localStorage.getItem("cart")).length;
+      },
+      validatePath() {
+        switch (this.$router.path) {
+          case "/":
+            return "teal;";
+          case "/productos":
+            return "orange";
+          case "/carrito":
+            return "red";
+          default:
+            return "blue";
+        }
       }
     }
-  }
-};
+  };
 </script>
 <style lang="scss">
-@import '~vue-material/dist/theme/engine';
+  @import "~vue-material/dist/theme/engine";
 
-@include md-register-theme(
-  'bottom-bar-teal',
-  (
-    primary: md-get-palette-color(teal, A200)
-  )
-);
+  @include md-register-theme(
+    "bottom-bar-teal",
+    (
+      primary: md-get-palette-color(teal, A200)
+    )
+  );
 
-@include md-register-theme(
-  'bottom-bar-orange',
-  (
-    primary: md-get-palette-color(orange, A200)
-  )
-);
+  @include md-register-theme(
+    "bottom-bar-orange",
+    (
+      primary: md-get-palette-color(orange, A200)
+    )
+  );
 
-@include md-register-theme(
-  'bottom-bar-blue',
-  (
-    primary: md-get-palette-color(blue, A200),
-    accent: md-get-palette-color(red, A200)
-  )
-);
+  @include md-register-theme(
+    "bottom-bar-blue",
+    (
+      primary: md-get-palette-color(blue, A200),
+      accent: md-get-palette-color(red, A200)
+    )
+  );
 
-@include md-register-theme(
-  'bottom-bar-red',
-  (
-    primary: md-get-palette-color(red, A200)
-  )
-);
+  @include md-register-theme(
+    "bottom-bar-red",
+    (
+      primary: md-get-palette-color(red, A200)
+    )
+  );
 
-@import '~vue-material/dist/theme/all';
+  @import "~vue-material/dist/theme/all";
+  .md-content {
+    max-width: 600px;
+    max-height: 200px;
+    overflow: auto;
+  }
 </style>
-
-<style lang="scss" scoped></style>

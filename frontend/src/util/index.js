@@ -1,9 +1,14 @@
 export const addToCart = item => {
-  let cart = localStorage.getItem('cart');
+  let cart = localStorage.getItem("cart");
   if (!cart) {
-    localStorage.setItem('cart', JSON.stringify([]));
+    localStorage.setItem("cart", JSON.stringify([]));
   }
-  cart = JSON.parse(localStorage.getItem('cart'));
+  cart = JSON.parse(localStorage.getItem("cart"));
   cart.push(item);
-  localStorage.setItem('cart', JSON.stringify(cart));
+  localStorage.setItem("cart", JSON.stringify(cart));
+};
+export const getCart = () => {
+  return localStorage.getItem("cart")
+    ? JSON.parse(localStorage.getItem("cart"))
+    : [];
 };

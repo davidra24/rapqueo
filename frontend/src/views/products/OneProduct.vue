@@ -5,29 +5,19 @@
     </div>
     <div v-else class="col-12 d-flex justify-content-center">
       <md-card style="min-width: 50%; max-width: 100%;">
-        <div
-          class="container"
-          @click="goProduct(product._id)"
-          style="cursor: pointer;"
-        >
-          <md-card-header>
-            <md-card-header-text>
-              <h6>
-                <strong> {{ product.nombre }}</strong>
-              </h6>
-              <div class="md-subhead">{{ peso }} {{ unidad }}</div>
-              <br />
-              <div>${{ precio }}</div>
-            </md-card-header-text>
-            <md-card-media md-big>
-              <img
-                class="img-fluid resize-img"
-                v-bind:src="product.foto"
-                v-bind:alt="product.nombre"
-              />
-            </md-card-media>
-          </md-card-header>
-        </div>
+        <md-card-header>
+          <md-card-header-text>
+            <h6>
+              <strong>{{ product.nombre }}</strong>
+            </h6>
+            <div class="md-subhead">{{ peso }} {{ unidad }}</div>
+            <br />
+            <div>${{ precio }}</div>
+          </md-card-header-text>
+          <md-card-media md-big>
+            <img class="img-fluid resize-img" v-bind:src="product.foto" v-bind:alt="product.nombre" />
+          </md-card-media>
+        </md-card-header>
         <div class="row">
           <div class="col-4">
             <md-button class="md-fab md-mini-mini md-primary" @click="resta()">
@@ -53,8 +43,8 @@
 
 <script>
 export default {
-  name: 'OneProduct',
-  props: ['product'],
+  name: "OneProduct",
+  props: ["product"],
   data() {
     return {
       cantidad: 1,
