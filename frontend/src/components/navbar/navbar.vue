@@ -56,87 +56,86 @@
 </template>
 
 <script>
-export default {
-  name: 'Navbar',
-  props: {
-    slider: Function
-  },
-  components: {},
-  data() {
-    return {
-      logged: true,
-      theme: 'teal',
-      checkInterval: null,
-      showSidepanel: false
-    };
-  },
-  computed: {
-    countElements() {
-      const el = JSON.parse(localStorage.getItem('cart'));
-      return el ? el.length : 0;
-    }
-  },
-  created() {
-    this.theme = this.validatePath();
-  },
-  methods: {
-    slideCart() {
-      if (this.slider) {
-        this.slider();
+  export default {
+    name: "Navbar",
+    props: {
+      slider: Function
+    },
+    components: {},
+    data() {
+      return {
+        logged: true,
+        theme: "teal",
+        checkInterval: null,
+        showSidepanel: false
+      };
+    },
+    computed: {
+      countElements() {
+        const el = JSON.parse(localStorage.getItem("cart"));
+        return el ? el.length : 0;
       }
     },
-
-    validatePath() {
-      switch (this.$router.path) {
-        case '/':
-          return 'teal;';
-        case '/productos':
-          return 'orange';
-        case '/carrito':
-          return 'red';
-        default:
-          return 'blue';
+    created() {
+      this.theme = this.validatePath();
+    },
+    methods: {
+      slideCart() {
+        if (this.slider) {
+          this.slider();
+        }
+      },
+      validatePath() {
+        switch (this.$router.path) {
+          case "/":
+            return "teal;";
+          case "/productos":
+            return "orange";
+          case "/carrito":
+            return "red";
+          default:
+            return "blue";
+        }
       }
     }
-  }
-};
+  };
 </script>
 <style lang="scss">
-@import '~vue-material/dist/theme/engine';
+  @import "~vue-material/dist/theme/engine";
 
-@include md-register-theme(
-  'bottom-bar-teal',
-  (
-    primary: md-get-palette-color(teal, A200)
-  )
-);
+  @include md-register-theme(
+    "bottom-bar-teal",
+    (
+      primary: md-get-palette-color(teal, A200)
+    )
+  );
 
-@include md-register-theme(
-  'bottom-bar-orange',
-  (
-    primary: md-get-palette-color(orange, A200)
-  )
-);
+  @include md-register-theme(
+    "bottom-bar-orange",
+    (
+      primary: md-get-palette-color(orange, A200)
+    )
+  );
 
-@include md-register-theme(
-  'bottom-bar-blue',
-  (
-    primary: md-get-palette-color(blue, A200),
-    accent: md-get-palette-color(red, A200)
-  )
-);
+  @include md-register-theme(
+    "bottom-bar-blue",
+    (
+      primary: md-get-palette-color(blue, A200),
+      accent: md-get-palette-color(red, A200)
+    )
+  );
 
-@include md-register-theme(
-  'bottom-bar-red',
-  (
-    primary: md-get-palette-color(red, A200)
-  )
-);
+  @include md-register-theme(
+    "bottom-bar-red",
+    (
+      primary: md-get-palette-color(red, A200)
+    )
+  );
 
-@import '~vue-material/dist/theme/all';
-.md-content {
-  max-width: 600px;
-  max-height: 200px;
-  overflow: auto;
-}
+  @import "~vue-material/dist/theme/all";
+  .md-content {
+    max-width: 600px;
+    max-height: 200px;
+    overflow: auto;
+  }
 </style>
