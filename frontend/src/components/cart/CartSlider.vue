@@ -6,6 +6,11 @@
       </span>
     </md-toolbar>
     <md-list>
+      <md-list-item class="d-flex justify-content-center">
+        <h4>
+          <strong>CARRITO DE COMPRAS</strong>
+        </h4>
+      </md-list-item>
       <md-list-item>
         <CartContent />
       </md-list-item>
@@ -19,19 +24,25 @@
 </template>
 
 <script>
-  import CartContent from "../cart/CartContent";
-  export default {
-    name: "CartSlider",
-    props: ["showSidepanel"],
-    components: {
-      CartContent
-    },
-    methods: {
-      irACarrito() {
-        this.$router.push("/carrito");
+import CartContent from '../cart/CartContent';
+export default {
+  name: 'CartSlider',
+  props: {
+    slider: Function,
+    showSidepanel: Boolean
+  },
+  components: {
+    CartContent
+  },
+  methods: {
+    irACarrito() {
+      if (this.slider) {
+        this.slider();
       }
+      this.$router.push('/carrito');
     }
-  };
+  }
+};
 </script>
 
 <style scoped></style>

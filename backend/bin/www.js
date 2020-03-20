@@ -25,14 +25,14 @@ const swaggerOptions = {
   apis: ['./api/api.js']
 };
 
+app.use(cors());
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+app.use(bodyParser.json({ limit: '50mb' }));
+
 app.use('/api', api);
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-
-app.use(cors());
-app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
-app.use(bodyParser.json({ limit: '50mb' }));
 
 server.listen(port, () => {
   console.log(`Server listen in port ${port}`);

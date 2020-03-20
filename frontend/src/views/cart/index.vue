@@ -1,4 +1,4 @@
-<template>
+<template style="height: 100vh;">
   <CartComponent />
 </template>
 

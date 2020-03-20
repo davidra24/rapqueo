@@ -1,17 +1,17 @@
 <template>
   <div class="container">
-    <div v-for="item in items" :key="item.id">
+    <div v-for="item in getItem" :key="item.id">
       <md-card overlay style>
         <md-card-header>
           <md-avatar>
             <img v-bind:src="item.imagen" v-bind:alt="item.nombre" />
           </md-avatar>
           <div class="md-title">
-            <p>{{item.nombre}}</p>
+            <p>{{ item.nombre }}</p>
           </div>
           <div class="d-flex">
-            <div class="md-subhead p-2 bd-highlight">{{item.cantidad}}</div>
-            <div class="ml-auto p-2 bd-highlight">{{item.precio}}</div>
+            <div class="md-subhead p-2 bd-highlight">{{ item.cantidad }}</div>
+            <div class="ml-auto p-2 bd-highlight">{{ item.precio }}</div>
           </div>
         </md-card-header>
       </md-card>
@@ -20,22 +20,20 @@
 </template>
 
 <script>
-import { getCart } from "../../util";
+import { getCart } from '../../util';
 export default {
-  name: "CartContent",
+  name: 'CartContent',
   data() {
     return {
       items: []
     };
   },
-  methods: {
+  computed: {
     getItem() {
-      this.items = getCart();
+      return getCart();
     }
   },
-  created() {
-    this.getItem();
-  }
+  methods: {}
 };
 </script>
 
