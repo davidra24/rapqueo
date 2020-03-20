@@ -22,7 +22,7 @@
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto">
           <div class="md-toolbar-section-end">
-            <md-badge :md-content="countElements">
+            <md-badge :md-content="count">
               <md-bottom-bar-item
                 md-label="Carrito"
                 md-icon="shopping_cart"
@@ -67,15 +67,11 @@ export default {
       logged: true,
       theme: 'teal',
       checkInterval: null,
-      showSidepanel: false
+      showSidepanel: false,
+      count: 0
     };
   },
-  computed: {
-    countElements() {
-      const el = JSON.parse(localStorage.getItem('cart'));
-      return el ? el.length : 0;
-    }
-  },
+  computed: {},
   created() {
     this.theme = this.validatePath();
   },
@@ -85,7 +81,10 @@ export default {
         this.slider();
       }
     },
-
+    countElements() {
+      const el = JSON.parse(localStorage.getItem('cart'));
+      this.count = el ? el.length : 0;
+    },
     validatePath() {
       switch (this.$router.path) {
         case '/':

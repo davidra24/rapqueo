@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div v-for="item in getItem" :key="item.id">
+    <div v-for="item in items" :key="item.id">
       <md-card overlay style>
         <md-card-header>
           <md-avatar>
@@ -28,12 +28,11 @@ export default {
       items: []
     };
   },
-  computed: {
+  methods: {
     getItem() {
-      return getCart();
+      this.items = getCart();
     }
-  },
-  methods: {}
+  }
 };
 </script>
 
