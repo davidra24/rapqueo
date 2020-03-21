@@ -19,8 +19,8 @@
 </template>
 <script>
 import { apiurl, promos } from "../../util/constants";
-import Loading from "../loading";
-import Promos from "./Promos";
+import Loading from "../../components/loading";
+import Promos from "../../components/promos/Promos";
 export default {
   name: "AllPromos",
   components: {
@@ -36,6 +36,7 @@ export default {
   },
   methods: {
     fetch() {
+      console.log(this.$route.params.id);
       fetch(apiurl + promos)
         .then(data => {
           if (data.ok) {
@@ -44,7 +45,9 @@ export default {
         })
         .then(info => {
           this.loading = false;
-          this.data = info;
+          this.data = info.filter(promo => {
+            return promo._id == this.$route.params.id;
+          });
         })
         .catch(err => {
           this.error = err;
