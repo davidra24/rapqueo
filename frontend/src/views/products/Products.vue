@@ -7,8 +7,7 @@
       <h2>
         <strong>
           NO HAY PRODUCTOS PARA ESTA CATEGORÍA
-          <br />
-          :(
+          <br />:(
         </strong>
       </h2>
     </div>
@@ -20,13 +19,13 @@
 
 <script>
 // @ is an alias to /src
-import Loading from '@/components/loading';
-import { getOneApi } from '@/util/api';
-import { productsByCategorie } from '@/util/constants';
-import Products from '@/components/products/Products.vue';
-import { mapState, mapActions } from 'vuex';
+import Loading from "@/components/loading";
+import { getOneOrManyApi } from "@/util/api";
+import { productsByCategorie } from "@/util/constants";
+import Products from "@/components/products/Products.vue";
+import { mapState, mapActions } from "vuex";
 export default {
-  name: 'ProductsContainer',
+  name: "ProductsContainer",
   components: {
     Loading,
     Products
@@ -37,13 +36,13 @@ export default {
     };
   },
   computed: {
-    ...mapState(['productsCategorie'])
+    ...mapState(["productsCategorie"])
   },
   methods: {
-    ...mapActions(['setProductsCategorie', 'setError']),
+    ...mapActions(["setProductsCategorie", "setError"]),
     async fetch(id) {
       this.loading = true;
-      await getOneApi(productsByCategorie, id)
+      await getOneOrManyApi(productsByCategorie, id)
         .then(res => {
           this.setProductsCategorie(res.data);
           console.log(res.data);

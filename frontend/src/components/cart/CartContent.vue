@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div v-for="item in items" :key="item.id">
+    <div v-for="item in cart" :key="item.id">
       <md-card overlay style>
         <md-card-header>
           <md-avatar>
@@ -20,18 +20,11 @@
 </template>
 
 <script>
-import { getCart } from '../../util';
+import { mapState } from "vuex";
 export default {
-  name: 'CartContent',
-  data() {
-    return {
-      items: []
-    };
-  },
-  methods: {
-    getItem() {
-      this.items = getCart();
-    }
+  name: "CartContent",
+  computed: {
+    ...mapState(["cart"])
   }
 };
 </script>

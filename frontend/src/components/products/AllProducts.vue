@@ -11,11 +11,7 @@
         </div>
         <div class="col-12">
           <div class="row">
-            <div
-              class="col-12 col-md-6 col-lg-4"
-              v-for="product in products"
-              :key="product._id"
-            >
+            <div class="col-12 col-md-6 col-lg-4" v-for="product in products" :key="product._id">
               <Product v-bind:product="product" />
             </div>
           </div>
@@ -25,17 +21,16 @@
   </div>
 </template>
 <script>
-import Product from './Product';
-import { mapState } from 'vuex';
+import Product from "./Product";
+import { mapState } from "vuex";
 export default {
-  name: 'AllProducts',
+  name: "AllProducts",
   components: {
     Product
   },
   computed: {
-    ...mapState(['products'])
-  },
-  methods: {}
+    ...mapState(["products"])
+  }
 };
 </script>
 

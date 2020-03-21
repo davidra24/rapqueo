@@ -18,7 +18,7 @@ export const getApi = async (service, params = {}) => {
   return info;
 };
 
-export const getOneApi = async (service, id, params = {}) => {
+export const getOneOrManyApi = async (service, id, params = {}) => {
   var info = {};
   await fetch(`${apiUrl}/${service}/${id}`, params)
     .then(res => {

@@ -7,6 +7,7 @@ export const addToCart = item => {
   cart.push(item);
   localStorage.setItem('cart', JSON.stringify(cart));
 };
+
 export const getCart = () => {
   return localStorage.getItem('cart')
     ? JSON.parse(localStorage.getItem('cart'))

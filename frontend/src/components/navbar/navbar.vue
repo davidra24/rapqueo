@@ -4,31 +4,18 @@
       <md-bottom-bar md-type="shift" :md-theme="'bottom-bar-' + theme">
         <b-navbar-nav class="ml-auto">
           <router-link class="no-link" to="/">
-            <md-bottom-bar-item
-              md-label="Inicio"
-              md-icon="home"
-              @click="theme = 'teal'"
-            ></md-bottom-bar-item>
+            <md-bottom-bar-item md-label="Inicio" md-icon="home" @click="theme = 'teal'"></md-bottom-bar-item>
           </router-link>
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto">
           <router-link class="no-link" to="/productos">
-            <md-bottom-bar-item
-              md-label="Productos"
-              md-icon="pages"
-              @click="theme = 'orange'"
-            ></md-bottom-bar-item>
+            <md-bottom-bar-item md-label="Productos" md-icon="pages" @click="theme = 'orange'"></md-bottom-bar-item>
           </router-link>
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto">
           <div class="md-toolbar-section-end">
-            <md-badge :md-content="count">
-              <md-bottom-bar-item
-                md-label="Carrito"
-                md-icon="shopping_cart"
-                @click="slideCart()"
-              >
-              </md-bottom-bar-item>
+            <md-badge :md-content="getCountCart">
+              <md-bottom-bar-item md-label="Carrito" md-icon="shopping_cart" @click="slideCart()"></md-bottom-bar-item>
             </md-badge>
           </div>
         </b-navbar-nav>
@@ -42,11 +29,7 @@
               </md-bottom-bar-item>
             </div>
             <div v-else>
-              <md-bottom-bar-item
-                md-label="Perfil"
-                md-icon="face"
-                @click="theme = 'blue'"
-              ></md-bottom-bar-item>
+              <md-bottom-bar-item md-label="Perfil" md-icon="face" @click="theme = 'blue'"></md-bottom-bar-item>
             </div>
           </router-link>
         </b-navbar-nav>
@@ -56,8 +39,9 @@
 </template>
 
 <script>
+import { mapActions, mapState, mapGetters } from "vuex";
 export default {
-  name: 'Navbar',
+  name: "Navbar",
   props: {
     slider: Function
   },
@@ -65,60 +49,62 @@ export default {
   data() {
     return {
       logged: true,
-      theme: 'teal',
+      theme: "teal",
       checkInterval: null,
       showSidepanel: false,
       count: 0
     };
   },
-  computed: {},
+  computed: {
+    ...mapState(["openedCart"]),
+    ...mapGetters(["getCountCart"])
+  },
   created() {
     this.theme = this.validatePath();
   },
   methods: {
+    ...mapActions(["openCart", "closeCart"]),
     slideCart() {
-      if (this.slider) {
-        this.slider();
-      }
+      this.openedCart ? this.closeCart() : this.openCart();
     },
     countElements() {
-      const el = JSON.parse(localStorage.getItem('cart'));
+      const el = JSON.parse(localStorage.getItem("cart"));
       this.count = el ? el.length : 0;
     },
     validatePath() {
       switch (this.$router.path) {
-        case '/':
-          return 'teal;';
-        case '/productos':
-          return 'orange';
-        case '/carrito':
-          return 'red';
+        case "/":
+          return "teal;";
+        case "/productos":
+          return "orange";
+        case "/carrito":
+          return "red";
         default:
-          return 'blue';
+          return "blue";
       }
     }
   }
 };
 </script>
 <style lang="scss">
-@import '~vue-material/dist/theme/engine';
+@import "~vue-material/dist/theme/engine";
 
 @include md-register-theme(
-  'bottom-bar-teal',
+  "bottom-bar-teal",
   (
     primary: md-get-palette-color(teal, A200)
   )
 );
 
 @include md-register-theme(
-  'bottom-bar-orange',
+  "bottom-bar-orange",
   (
     primary: md-get-palette-color(orange, A200)
   )
 );
 
 @include md-register-theme(
-  'bottom-bar-blue',
+  "bottom-bar-blue",
   (
     primary: md-get-palette-color(blue, A200),
     accent: md-get-palette-color(red, A200)
@@ -126,13 +112,13 @@ export default {
 );
 
 @include md-register-theme(
-  'bottom-bar-red',
+  "bottom-bar-red",
   (
     primary: md-get-palette-color(red, A200)
   )
 );
 
-@import '~vue-material/dist/theme/all';
+@import "~vue-material/dist/theme/all";
 .md-content {
   max-width: 600px;
   max-height: 200px;

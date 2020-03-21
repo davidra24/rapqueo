@@ -15,19 +15,19 @@
 </template>
 
 <script>
-import { products } from '@/util/constants';
-import { getOneApi } from '@/util/api';
-import Loading from '@/components/loading';
-import OneProduct from '@/components/products/OneProduct.vue';
-import { mapState, mapActions } from 'vuex';
+import { products } from "@/util/constants";
+import { getOneOrManyApi } from "@/util/api";
+import Loading from "@/components/loading";
+import OneProduct from "@/components/products/OneProduct.vue";
+import { mapState, mapActions } from "vuex";
 export default {
-  name: 'OneProducts',
+  name: "OneProducts",
   components: {
     Loading,
     OneProduct
   },
   computed: {
-    ...mapState(['product'])
+    ...mapState(["product"])
   },
   data() {
     return {
@@ -35,10 +35,10 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['setProduct', 'setError']),
+    ...mapActions(["setProduct", "setError"]),
     async fetch(id) {
       this.loading = true;
-      await getOneApi(products, id)
+      await getOneOrManyApi(products, id)
         .then(res => {
           this.setProduct(res.data);
           this.loading = false;

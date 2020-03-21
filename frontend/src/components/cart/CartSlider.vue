@@ -1,5 +1,5 @@
 <template>
-  <md-drawer class="md-right" :md-active.sync="showSidepanel">
+  <md-drawer class="md-right" :md-active.sync="openedCart">
     <md-toolbar class="md-transparent" md-elevation="0">
       <span class="md-title">
         <strong>Carrito</strong>
@@ -15,31 +15,31 @@
         <CartContent />
       </md-list-item>
       <md-list-item>
-        <button class="btn btn-block btn-success" @click="irACarrito()">
-          Comprar
-        </button>
+        <button class="btn btn-block btn-success" @click="irACarrito()">Comprar</button>
       </md-list-item>
     </md-list>
   </md-drawer>
 </template>
 
 <script>
-import CartContent from '../cart/CartContent';
+import CartContent from "../cart/CartContent";
+import { mapState, mapActions } from "vuex";
+
 export default {
-  name: 'CartSlider',
-  props: {
-    slider: Function,
-    showSidepanel: Boolean
+  name: "CartSlider",
+  computed: {
+    ...mapState(["openedCart"])
   },
   components: {
     CartContent
   },
   methods: {
+    ...mapActions(["closeCart"]),
     irACarrito() {
-      if (this.slider) {
-        this.slider();
+      if (this.openedCart) {
+        this.closeCart();
       }
-      this.$router.push('/carrito');
+      this.$router.push("/carrito");
     }
   }
 };

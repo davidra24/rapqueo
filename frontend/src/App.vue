@@ -1,29 +1,33 @@
 <template style="height: 100%">
   <div id="app">
     <div class="page-container md-layout-column full-screen">
-      <Navbar id="nav" :slider="changeSlide" />
-      <CartSlider :slider="changeSlide" :showSidepanel="showSidepanel" />
-      <router-view class="app" />
+      <Navbar id="nav" />
+      <CartSlider class="full-cart" />
+      <md-content class="md-scrollbar">
+        <router-view class="app" />
+      </md-content>
     </div>
   </div>
 </template>
 
 <script>
-import CartSlider from './components/cart/CartSlider';
-import Vue from 'vue';
-import Navbar from './components/navbar/navbar';
+import CartSlider from "./components/cart/CartSlider";
+import Vue from "vue";
+import Navbar from "./components/navbar/navbar";
+import { getCart } from "./util";
 
-import VueMaterial from 'vue-material';
-import 'vue-material/dist/vue-material.min.css';
-import 'vue-material/dist/theme/default.css';
+import VueMaterial from "vue-material";
+import "vue-material/dist/vue-material.min.css";
+import "vue-material/dist/theme/default.css";
 
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faShoppingCart, faUser } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faShoppingCart, faUser } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
+import { mapActions } from "vuex";
 
 library.add([faShoppingCart, faUser]);
-Vue.component('font-awesome-icon', FontAwesomeIcon);
+Vue.component("font-awesome-icon", FontAwesomeIcon);
 Vue.config.productionTip = false;
 
 // Install BootstrapVue
@@ -34,20 +38,20 @@ Vue.use(IconsPlugin);
 Vue.use(VueMaterial);
 
 export default {
-  data() {
-    return {
-      showSidepanel: false
-    };
-  },
   components: {
     Navbar,
     CartSlider
   },
-  created() {},
-  watch: {},
+  created() {
+    this.loadCart();
+  },
   methods: {
-    changeSlide() {
-      this.showSidepanel = !this.showSidepanel;
+    ...mapActions(["closeCart", "setCart"]),
+    close() {
+      this.closeCart();
+    },
+    loadCart() {
+      this.setCart(getCart());
     }
   }
 };
@@ -55,7 +59,7 @@ export default {
 
 <style>
 #app {
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -75,7 +79,8 @@ export default {
   z-index: 999;
 }
 .page-container {
-  min-height: 300px;
+  min-height: 100%;
+  max-height: 100%;
   overflow: hidden;
   position: relative;
   border: 1px solid rgba(#000, 0.12);
@@ -83,5 +88,11 @@ export default {
 .full-screen {
   width: 100%;
   height: 100%;
+}
+.md-content {
+  max-width: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 </style>

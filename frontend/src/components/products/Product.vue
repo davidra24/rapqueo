@@ -7,11 +7,7 @@
     <div class="row d-flex justify-content-center">
       <md-card style="width: 85%;">
         <b-overlay :show="show" rounded="sm">
-          <div
-            class="container-fluid"
-            @click="goProduct(product._id)"
-            style="cursor: pointer;"
-          >
+          <div class="container-fluid" @click="goProduct(product._id)" style="cursor: pointer;">
             <md-card-header>
               <md-card-header-text>
                 <h6>
@@ -32,10 +28,7 @@
           </div>
           <div class="row">
             <div class="col-4">
-              <md-button
-                class="md-fab md-mini-mini md-primary"
-                @click="resta()"
-              >
+              <md-button class="md-fab md-mini-mini md-primary" @click="resta()">
                 <md-icon>remove</md-icon>
               </md-button>
             </div>
@@ -54,9 +47,7 @@
               @click="agregarCarrito(), (myVar = agregado())"
               :disabled="show"
               variant="primary"
-            >
-              Agregar
-            </button>
+            >Agregar</button>
           </div>
           <template v-slot:overlay>
             <div class="text-center">
@@ -72,11 +63,12 @@
 </template>
 
 <script>
-import Loading from '../loading';
-import { addToCart } from '../../util';
+import Loading from "../loading";
+import { addToCart } from "../../util";
+import { mapActions } from "vuex";
 export default {
-  name: 'Product',
-  props: ['product'],
+  name: "Product",
+  props: ["product"],
   component: {
     Loading
   },
@@ -91,6 +83,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions(["addCart"]),
     goProduct(id) {
       this.$router.push({ path: `/productos/${id}` });
     },
@@ -101,7 +94,7 @@ export default {
       }, 3000);
     },
     agregarCarrito() {
-      addToCart({
+      const cart = {
         id: this.product._id,
         nombre: this.product.nombre,
         imagen: this.product.foto,
@@ -109,7 +102,9 @@ export default {
         peso: this.peso,
         unidad: this.unidad,
         precio: this.precio
-      });
+      };
+      addToCart(cart);
+      this.addCart(cart);
     },
     resta() {
       this.cantidad = this.cantidad > 1 ? this.cantidad - 1 : this.cantidad;

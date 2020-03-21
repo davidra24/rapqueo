@@ -10,15 +10,15 @@ const store = new Vuex.Store({
     products: null,
     product: null,
     productsCategorie: null,
-    cart: localStorage.getItem('cart'),
+    cart: null,
+    openedCart: false,
     promos: null,
     user: null,
-    error: null,
-    openCart: false
+    error: null
   },
   getters: {
     getCountCart(state) {
-      return state.cart ? state.cart.lenght : 0;
+      return state.cart ? state.cart.length : 0;
     }
   },
   //Methods
@@ -40,6 +40,20 @@ const store = new Vuex.Store({
     },
     setProductsCategorie(state, productsCategorie) {
       state.productsCategorie = productsCategorie;
+    },
+    setCart(state, cart) {
+      state.cart = cart;
+    },
+    addCart(state, oneCart) {
+      if (state.cart) {
+        state.cart.push(oneCart);
+      }
+    },
+    setOpenCart(state) {
+      state.openedCart = true;
+    },
+    setCloseCart(state) {
+      state.openedCart = false;
     }
   },
   actions: {
@@ -60,6 +74,18 @@ const store = new Vuex.Store({
     },
     setProductsCategorie({ commit }, productsCategorie) {
       commit('setProductsCategorie', productsCategorie);
+    },
+    setCart({ commit }, cart) {
+      commit('setCart', cart);
+    },
+    addCart({ commit }, oneCart) {
+      commit('addCart', oneCart);
+    },
+    openCart({ commit }) {
+      commit('setOpenCart');
+    },
+    closeCart({ commit }) {
+      commit('setCloseCart');
     }
   },
   modules: {}

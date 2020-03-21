@@ -15,10 +15,7 @@
               :key="categorie._id"
               @click="goProducts(categorie._id)"
             >
-              <b-card
-                class="overflow-hidden"
-                style="min-height:100%; max-height: 100%;"
-              >
+              <b-card class="overflow-hidden" style="min-height:100%; max-height: 100%;">
                 <b-row no-gutters class="d-flex align-items-center">
                   <b-col md="6" align-self="center">
                     <b-card-img
@@ -47,12 +44,12 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState } from "vuex";
 
 export default {
-  name: 'Categories',
+  name: "Categories",
   computed: {
-    ...mapState(['categories'])
+    ...mapState(["categories"])
   },
   methods: {
     goProducts(id) {
