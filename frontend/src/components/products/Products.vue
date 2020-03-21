@@ -1,20 +1,16 @@
 <template>
   <div>
     <br />
-
     <div class="container">
       <div class="row">
-        <div v-if="loading" class="col-12">
-          <Loading />
-        </div>
-        <div v-else class="col-12">
+        <div class="col-12">
           <div class="row">
             <div
               class="col-12 col-md-6 col-lg-4"
-              v-for="item in data"
-              :key="item._id"
+              v-for="product in productsCategorie"
+              :key="product._id"
             >
-              <Product v-bind:product="item" />
+              <Product v-bind:product="product" />
             </div>
           </div>
         </div>
@@ -23,55 +19,24 @@
   </div>
 </template>
 <script>
-  import { apiurl, products } from "../../util/constants";
-  import Loading from "../loading";
-  import Product from "./Product";
-  export default {
-    name: "Products",
-    components: {
-      Loading,
-      Product
-    },
-    data() {
-      return {
-        loading: true,
-        data: [],
-        error: null
-      };
-    },
-    methods: {
-      fetch() {
-        fetch(apiurl + products)
-          .then(data => {
-            if (data.ok) {
-              return data.json();
-            }
-          })
-          .then(info => {
-            this.loading = false;
-            this.data = info.filter(producto => {
-              return (
-                producto.idCategoria == this.$route.params.id &&
-                producto.caracteristicas.cantidad > 0
-              );
-            });
-          })
-          .catch(err => {
-            this.error = err;
-          });
-      }
-    },
-    created() {
-      this.fetch();
-    }
-  };
+import Product from './Product';
+import { mapState } from 'vuex';
+export default {
+  name: 'Products',
+  computed: {
+    ...mapState(['productsCategorie'])
+  },
+  components: {
+    Product
+  }
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .clickable {
-    cursor: pointer;
-  }
+.clickable {
+  cursor: pointer;
+}
 </style>
 
 <style scoped></style>

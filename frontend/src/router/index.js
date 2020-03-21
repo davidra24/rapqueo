@@ -6,6 +6,8 @@ import AllProductsContainer from '../views/products/AllProducts.vue';
 import Product from '../views/products/Product.vue';
 import NotFound from '../components/notfound';
 import Cart from '../views/cart';
+import PromosContainer from '../views/promos/AllPromos.vue';
+import Promo from '../views/promos/Promo.vue';
 
 const linkActiveClass = 'my-link-active-class';
 
@@ -42,6 +44,16 @@ const routes = [
     path: '/carrito',
     name: 'Cart',
     component: Cart
+  },
+  {
+    path: '/promociones',
+    name: 'Promoscontainer',
+    component: PromosContainer
+  },
+  {
+    path: '/promociones/:id',
+    name: 'Promo',
+    component: Promo
   },
   {
     path: '/404',

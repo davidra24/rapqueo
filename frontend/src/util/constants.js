@@ -1,7 +1,8 @@
 //DESARROLLO
-export const apiurl = 'http://localhost:3000/';
+export const apiUrl = 'http://localhost:3000/api';
 //PRODUCCIÓN
-//export const apiurl = 'https://rapqueo.herokuapp.com/';
-export const categories = 'api/categories';
-export const products = 'api/products/';
-export const promos = 'api/promos/';
+//export const apiUrl = 'https://rapqueo.herokuapp.com/api';
+export const categories = 'categories';
+export const products = 'products';
+export const productsByCategorie = 'productsByCategorie';
+export const promos = 'promos';

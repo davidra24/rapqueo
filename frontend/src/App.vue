@@ -62,7 +62,7 @@ export default {
   color: #2c3e50;
 }
 .app {
-  margin-top: 3%;
+  margin-top: 5%;
   overflow: auto;
   height: 100%;
   padding-bottom: 5%;

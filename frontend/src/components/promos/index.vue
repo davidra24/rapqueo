@@ -1,63 +1,51 @@
 <template>
-  <div>
-    <div v-if="loading">
-      <Loading />
-    </div>
-    <div v-else>
-      <h2>
-        <strong>APROVECHA NUESTRAS PROMOCIONES</strong>
-      </h2>
-      <CarouselCard :interval="2000" height="300px" type="card" arrow="always">
-        <CarouselCardItem v-for="item in data" :key="item._id">
-          <Promo v-bind:promo="item" />
-        </CarouselCardItem>
-      </CarouselCard>
+  <div class="container">
+    <div class="row">
+      <div v-if="promos[0]" class="col-12">
+        <h2 class="text-center">
+          <strong>APROVECHA NUESTRAS PROMOCIONES</strong>
+        </h2>
+        <CarouselCard
+          :interval="2000"
+          height="300px"
+          type="card"
+          arrow="always"
+        >
+          <CarouselCardItem v-for="promo in promos" :key="promo._id">
+            <Promo v-bind:promo="promo" />
+          </CarouselCardItem>
+        </CarouselCard>
+        <md-button
+          class="md-primary ml-auto p-2 bd-highlight"
+          @click="goPromos()"
+          >VER TODO</md-button
+        >
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-  import { apiurl, promos } from "../../util/constants";
-  import Loading from "../loading";
-  import Promo from "@/components/promos/Promo.vue";
-  import { CarouselCard, CarouselCardItem } from "vue-carousel-card";
-  import "vue-carousel-card/styles/index.css";
-  export default {
-    name: "CarouselPromo",
-    components: {
-      Promo,
-      CarouselCard,
-      CarouselCardItem,
-      Loading
-    },
-    data() {
-      return {
-        data: [],
-        loading: true,
-        error: null
-      };
-    },
-    methods: {
-      fetch() {
-        fetch(apiurl + promos)
-          .then(data => {
-            if (data.ok) {
-              return data.json();
-            }
-          })
-          .then(info => {
-            this.loading = false;
-            this.data = info;
-          })
-          .catch(err => {
-            this.error = err;
-          });
-      }
-    },
-    created() {
-      this.fetch();
+import Promo from './Promo.vue';
+import { CarouselCard, CarouselCardItem } from 'vue-carousel-card';
+import 'vue-carousel-card/styles/index.css';
+import { mapState } from 'vuex';
+export default {
+  name: 'CarouselPromo',
+  components: {
+    Promo,
+    CarouselCard,
+    CarouselCardItem
+  },
+  computed: {
+    ...mapState(['promos'])
+  },
+  methods: {
+    goPromos() {
+      this.$router.push({ path: `/promociones` });
     }
-  };
+  }
+};
 </script>
 
 <style scoped></style>

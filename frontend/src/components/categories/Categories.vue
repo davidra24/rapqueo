@@ -3,11 +3,7 @@
     <br />
     <div class="container">
       <div class="row">
-        <div v-if="loading" class="col-12">
-          <Loading />
-        </div>
-        <div v-else class="col-12">
-          <CarouselPromo />
+        <div class="col-12">
           <h2>
             <strong>NAVEGA ENTRE LAS CATEGORIAS</strong>
           </h2>
@@ -15,9 +11,9 @@
             <div
               class="col-12 col-md-6 col-lg-4 clickable"
               style="margin-bottom: 2%;"
-              v-for="item in data"
-              :key="item._id"
-              @click="goProducts(item._id)"
+              v-for="categorie in categories"
+              :key="categorie._id"
+              @click="goProducts(categorie._id)"
             >
               <b-card
                 class="overflow-hidden"
@@ -27,14 +23,14 @@
                   <b-col md="6" align-self="center">
                     <b-card-img
                       class="resize-img"
-                      :alt="item.nombre"
-                      :src="require(`@/assets/img/${item.imagen}`)"
+                      :alt="categorie.nombre"
+                      :src="require(`@/assets/img/${categorie.imagen}`)"
                     ></b-card-img>
                   </b-col>
                   <b-col md="6">
-                    <b-card-body :title="item.nombre">
+                    <b-card-body :title="categorie.nombre">
                       <md-content class="md-scrollbar">
-                        <b-card-text>{{ item.descripcion }}</b-card-text>
+                        <b-card-text>{{ categorie.descripcion }}</b-card-text>
                       </md-content>
                     </b-card-body>
                   </b-col>
@@ -51,54 +47,17 @@
 </template>
 
 <script>
-import CarouselPromo from '../promos';
-import { apiurl, categories } from '../../util/constants';
-import Loading from '../loading';
-import { mapState, mapActions } from 'vuex';
+import { mapState } from 'vuex';
+
 export default {
   name: 'Categories',
-  components: {
-    Loading,
-    CarouselPromo
-  },
-  data() {
-    return {
-      loading: true,
-      data: [],
-      error: null
-    };
-  },
   computed: {
     ...mapState(['categories'])
   },
   methods: {
-    ...mapActions(['addAllcategories']),
-    crearCategorias(categories) {
-      this.addAllcategories(categories);
-    },
-    fetch() {
-      fetch(apiurl + categories)
-        .then(data => {
-          if (data.ok) {
-            return data.json();
-          }
-        })
-        .then(info => {
-          this.loading = false;
-          this.data = info;
-          this.crearCategorias(info);
-          localStorage.setItem('categorias', info);
-        })
-        .catch(err => {
-          this.error = err;
-        });
-    },
     goProducts(id) {
       this.$router.push({ path: `/categorias/${id}` });
     }
-  },
-  created() {
-    this.fetch();
   }
 };
 </script>

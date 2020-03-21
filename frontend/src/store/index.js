@@ -6,38 +6,60 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   //Data
   state: {
-    categories: [],
-    products: [],
-    cart: [],
-    promos: [],
-    user: null
+    categories: null,
+    products: null,
+    product: null,
+    productsCategorie: null,
+    cart: localStorage.getItem('cart'),
+    promos: null,
+    user: null,
+    error: null,
+    openCart: false
   },
   getters: {
-    getCategories(state) {
-      return state.categories;
-    },
     getCountCart(state) {
-      return state.cart.length;
+      return state.cart ? state.cart.lenght : 0;
     }
   },
   //Methods
   mutations: {
+    setError(state, error) {
+      state.error = error;
+    },
     setCategories(state, categories) {
       state.categories = categories;
     },
-    setCategorie(state, categorie) {
-      state.categories.push(categorie);
+    setPromos(state, promos) {
+      state.promos = promos;
+    },
+    setProducts(state, products) {
+      state.products = products;
+    },
+    setProduct(state, product) {
+      state.product = product;
+    },
+    setProductsCategorie(state, productsCategorie) {
+      state.productsCategorie = productsCategorie;
     }
   },
   actions: {
-    addCategorie({ commit }, categorie) {
-      commit('setCategorie', categorie);
+    setError({ commit }, error) {
+      commit('setError', error);
     },
-    addAllcategories({ commit }, categories) {
+    setCategories({ commit }, categories) {
       commit('setCategories', categories);
     },
-    getCategories(state) {
-      return state.categories;
+    setPromos({ commit }, promos) {
+      commit('setPromos', promos);
+    },
+    setProducts({ commit }, products) {
+      commit('setProducts', products);
+    },
+    setProduct({ commit }, product) {
+      commit('setProduct', product);
+    },
+    setProductsCategorie({ commit }, productsCategorie) {
+      commit('setProductsCategorie', productsCategorie);
     }
   },
   modules: {}

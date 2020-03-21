@@ -270,6 +270,26 @@ api.get('/products', queryProducto.getAllProducts);
 api.get('/products/:id', queryProducto.getOneProduct);
 /**
  * @swagger
+ *  /api/productsByCategorie/{id}:
+ *    get:
+ *      tags: ['Productos']
+ *      description: Trae un Producto por categoria
+ *      summary: Get one product by Categorie ID
+ *      parameters:
+ *      - in: path
+ *        name: id
+ *        type: string
+ *        required: true
+ *        description: Id de Categoría
+ *      responses:
+ *        '200':
+ *          {description: Successful}
+ *        '500':
+ *          {description: Internal Server Error}
+ */
+api.get('/productsByCategorie/:id', queryProducto.getProductsByCategorie);
+/**
+ * @swagger
  *  /api/products:
  *    post:
  *      tags: ['Productos']
