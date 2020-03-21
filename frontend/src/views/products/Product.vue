@@ -19,7 +19,7 @@
 <script>
 import { apiurl, products } from '../../util/constants';
 import Loading from '../../components/loading';
-import OneProduct from './OneProduct';
+import OneProduct from './OneProduct.vue';
 export default {
   name: 'OneProducts',
   components: {

@@ -1,12 +1,26 @@
-import Vue from "vue";
-import Vuex from "vuex";
+import Vue from 'vue';
+import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
+  //Data
   state: {
-    categories: []
+    categories: [],
+    products: [],
+    cart: [],
+    promos: [],
+    user: null
   },
+  getters: {
+    getCategories(state) {
+      return state.categories;
+    },
+    getCountCart(state) {
+      return state.cart.length;
+    }
+  },
+  //Methods
   mutations: {
     setCategories(state, categories) {
       state.categories = categories;
@@ -17,10 +31,10 @@ export default new Vuex.Store({
   },
   actions: {
     addCategorie({ commit }, categorie) {
-      commit("setCategorie", categorie);
+      commit('setCategorie', categorie);
     },
     addAllcategories({ commit }, categories) {
-      commit("setCategories", categories);
+      commit('setCategories', categories);
     },
     getCategories(state) {
       return state.categories;
@@ -28,3 +42,5 @@ export default new Vuex.Store({
   },
   modules: {}
 });
+
+export default store;
