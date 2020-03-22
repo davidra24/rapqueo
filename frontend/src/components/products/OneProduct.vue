@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import { addToCart } from "@/util";
+import { addToCart, validateExistence } from "@/util";
 import { mapState, mapActions } from "vuex";
 export default {
   name: "OneProduct",
@@ -103,8 +103,12 @@ export default {
         unidad: this.unidad,
         precio: this.precio
       };
-      addToCart(cart);
-      this.addCart(cart);
+      if (!validateExistence(cart.id)) {
+        addToCart(cart);
+        this.addCart(cart);
+      } else {
+        alert("ya existe");
+      }
     }
   }
 };

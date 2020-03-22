@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const promocion = new Schema({
@@ -9,4 +9,4 @@ const promocion = new Schema({
   mensaje: String
 });
 
-module.exports = mongoose.model("promocion", promocion);
+module.exports = mongoose.model('promocione', promocion);
