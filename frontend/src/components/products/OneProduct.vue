@@ -8,7 +8,9 @@
               <h6>
                 <strong>{{ product.nombre }}</strong>
               </h6>
-              <div class="md-subhead">{{ peso }} {{ unidad }}</div>
+              <div
+                class="md-subhead"
+              >{{ product.caracteristicas.peso }} {{ product.caracteristicas.unidad }}</div>
               <br />
               <div>${{ precio }}</div>
             </md-card-header-text>
@@ -57,12 +59,10 @@
 
 <script>
 import { addToCart } from "@/util";
-import { mapState, mapActions } from "vuex";
+import { mapActions } from "vuex";
 export default {
   name: "OneProduct",
-  computed: {
-    ...mapState(["product"])
-  },
+  props: ["product"],
   data() {
     return {
       cantidad: 1,

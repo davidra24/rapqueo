@@ -9,4 +9,4 @@ const promocion = new Schema({
   mensaje: String
 });
 
-module.exports = mongoose.model("promocion", promocion);
+module.exports = mongoose.model("promocione", promocion);

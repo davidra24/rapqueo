@@ -18,11 +18,11 @@
   </div>
 </template>
 <script>
-import { apiurl, promos } from '../../util/constants';
-import Loading from '../../components/loading';
-import Promos from '../../components/promos/Promos';
+import { apiurl, promos } from "../../util/constants";
+import Loading from "../../components/loading";
+import Promos from "../../components/promos/Promos";
 export default {
-  name: 'AllPromos',
+  name: "AllPromos",
   components: {
     Loading,
     Promos
@@ -36,8 +36,7 @@ export default {
   },
   methods: {
     fetch() {
-      console.log(this.$route.params.id);
-      fetch(apiurl + '/' + promos)
+      fetch(apiurl + "/" + promos)
         .then(data => {
           if (data.ok) {
             return data.json();

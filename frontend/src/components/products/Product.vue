@@ -2,7 +2,6 @@
   <div v-if="loading" class="col-12">
     <Loading />
   </div>
-
   <div v-else>
     <div class="row d-flex justify-content-center">
       <md-card style="width: 85%;">

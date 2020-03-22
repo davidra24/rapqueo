@@ -4,10 +4,7 @@
       <Loading />
     </div>
     <div v-else class="col-12 d-flex justify-content-center">
-      <md-card
-        style="min-width: 50%; max-width: 100%;"
-        @click="goPromo(promo._id)"
-      >
+      <md-card style="min-width: 50%; max-width: 100%;" @click="goPromo(promo._id)">
         <b-overlay :show="show" rounded="sm">
           <md-card-header>
             <md-card-header-text>
@@ -17,24 +14,21 @@
               <div class="md-subhead">{{ data.peso }} {{ data.unidad }}</div>
               <br />
               <b-card-text class="small text-muted">
-                <span class="md-body-2" style="text-decoration: line-through;"
-                  >${{ data.caracteristicas.precio }}</span
-                >
+                <span
+                  class="md-body-2"
+                  style="text-decoration: line-through;"
+                >${{ data.caracteristicas.precio }}</span>
               </b-card-text>
               <div>
                 ${{
-                  data.caracteristicas.precio *
-                    (1 - promo.porcentaje / 100) *
-                    cantidad
+                data.caracteristicas.precio *
+                (1 - promo.porcentaje / 100) *
+                cantidad
                 }}
               </div>
             </md-card-header-text>
             <md-card-media md-big>
-              <img
-                class="img-fluid resize-img"
-                v-bind:src="data.foto"
-                v-bind:alt="data.nombre"
-              />
+              <img class="img-fluid resize-img" v-bind:src="data.foto" v-bind:alt="data.nombre" />
             </md-card-media>
           </md-card-header>
           <b-card-text>
@@ -42,10 +36,7 @@
           </b-card-text>
           <div class="row">
             <div class="col-4">
-              <md-button
-                class="md-fab md-mini-mini md-primary"
-                @click="resta()"
-              >
+              <md-button class="md-fab md-mini-mini md-primary" @click="resta()">
                 <md-icon>remove</md-icon>
               </md-button>
             </div>
@@ -64,9 +55,7 @@
               @click="agregarCarrito(), (myVar = agregado())"
               :disabled="show"
               variant="primary"
-            >
-              Agregar
-            </button>
+            >Agregar</button>
           </div>
           <template v-slot:overlay>
             <div class="text-center">
@@ -81,12 +70,12 @@
 </template>
 
 <script>
-import { apiurl, products } from '../../util/constants';
-import Loading from '../loading';
-import { addToCart } from '../../util';
+import { apiurl, products } from "../../util/constants";
+import Loading from "../loading";
+import { addToCart } from "../../util";
 export default {
-  name: 'Promos',
-  props: ['promo'],
+  name: "Promos",
+  props: ["promo"],
   components: {
     Loading
   },
