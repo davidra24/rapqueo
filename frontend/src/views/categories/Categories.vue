@@ -19,8 +19,8 @@
 import CarouselPromo from "@/components/promos";
 import Loading from "@/components/loading";
 import Categories from "@/components/categories/Categories.vue";
-import { categories, promos, products } from "@/util/constants";
-import { getApi, getOneOrManyApi } from "@/util/api";
+import { categories, promos } from "@/util/constants";
+import { getApi } from "@/util/api";
 import { mapState, mapActions } from "vuex";
 export default {
   name: "CategoriesContainer",
@@ -30,7 +30,7 @@ export default {
     CarouselPromo
   },
   computed: {
-    ...mapState(["categories", "promos", "productsPromos"])
+    ...mapState(["categories", "promos"])
   },
   data() {
     return {
@@ -39,12 +39,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions([
-      "setCategories",
-      "setError",
-      "setPromos",
-      "setProductsPromos"
-    ]),
+    ...mapActions(["setCategories", "setError", "setPromos"]),
     async fetchCategories() {
       this.loadingCategories = true;
       await getApi(categories)
@@ -63,35 +58,11 @@ export default {
         .then(res => {
           this.setPromos(res.data);
           this.loadingPromos = false;
-          this.fetchProductPromos();
         })
         .catch(err => {
           this.setError(err);
           this.loadingPromos = false;
         });
-    },
-    async fetchProductPromos() {
-      this.loadingPromos = true;
-      var productsFetched = [];
-      await this.promos.map(async promo => {
-        await getOneOrManyApi(products, promo.idProducto)
-          .then(response => {
-            const data = {
-              ...response.data,
-              idPromo: promo._id,
-              fechaInicio: promo.fechaInicio,
-              fechaFin: promo.fechaFin,
-              porcentaje: promo.porcentaje,
-              mensaje: promo.mensaje
-            };
-            productsFetched.push(data);
-          })
-          .catch(err => {
-            this.setError(err);
-          });
-      });
-      this.setProductsPromos(productsFetched);
-      this.loadingPromos = false;
     }
   },
   created() {

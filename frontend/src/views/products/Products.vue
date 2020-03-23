@@ -57,7 +57,10 @@ export default {
   },
   created() {
     const id = this.$route.params.id;
-    if (!this.productsCategorie || this.productsCategorie.idCategoria != id) {
+    if (
+      !this.productsCategorie ||
+      this.productsCategorie[0].idCategoria != id
+    ) {
       this.fetch(id);
     }
   }

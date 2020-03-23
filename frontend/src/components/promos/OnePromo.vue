@@ -1,19 +1,19 @@
 <template>
-  <div class="container">
-    <div class="row">
-      <div class="col-12 col-md-6 col-lg-4" v-for="promo in promos" :key="promo._id">
+  <div>
+    <div class="container">
+      <div class="row">
         <Promos v-bind:promo="promo" />
       </div>
     </div>
   </div>
 </template>
 <script>
-import Promos from "./Promos";
 import { mapState } from "vuex";
+import Promos from "@/components/promos/Promos";
 export default {
-  name: "AllPromos",
+  name: "OnePromo",
   computed: {
-    ...mapState(["promos"])
+    ...mapState(["promo"])
   },
   components: {
     Promos
@@ -26,3 +26,5 @@ export default {
   cursor: pointer;
 }
 </style>
+
+<style scoped></style>
