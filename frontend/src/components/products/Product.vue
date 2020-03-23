@@ -102,6 +102,7 @@ export default {
         unidad: this.unidad,
         precio: this.precio
       };
+
       addToCart(cart);
       this.addCart(cart);
     },

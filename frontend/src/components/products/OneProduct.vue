@@ -59,10 +59,12 @@
 
 <script>
 import { addToCart } from "@/util";
-import { mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
 export default {
   name: "OneProduct",
-  props: ["product"],
+  computed: {
+    ...mapState(["product"])
+  },
   data() {
     return {
       cantidad: 1,

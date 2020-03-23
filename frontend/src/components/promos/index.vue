@@ -1,13 +1,16 @@
 <template>
   <div class="container">
     <div class="row">
-      <div v-if="promos[0]" class="col-12">
+      <div v-if="!productsPromos" class="col-12">
+        <Loading />
+      </div>
+      <div v-if="productsPromos && productsPromos.length != 0" class="col-12">
         <h2 class="text-center">
           <strong>APROVECHA NUESTRAS PROMOCIONES</strong>
         </h2>
         <CarouselCard :interval="2000" height="300px" type="card" arrow="always">
-          <CarouselCardItem v-for="promo in promos" :key="promo._id">
-            <Promo />
+          <CarouselCardItem v-for="product in productsPromos" :key="product._id">
+            <Promo v-show="validateFecha(promo.fechaInicio)" />
           </CarouselCardItem>
         </CarouselCard>
         <md-button class="md-primary ml-auto p-2 bd-highlight" @click="goPromos()">VER TODO</md-button>
@@ -21,19 +24,26 @@ import Promo from "./Promo.vue";
 import { CarouselCard, CarouselCardItem } from "vue-carousel-card";
 import "vue-carousel-card/styles/index.css";
 import { mapState } from "vuex";
+import { Loading } from "@/components/loading";
 export default {
   name: "CarouselPromo",
   components: {
+    Loading,
     Promo,
     CarouselCard,
     CarouselCardItem
   },
   computed: {
-    ...mapState(["promos"])
+    ...mapState(["productsPromos"])
   },
   methods: {
     goPromos() {
       this.$router.push({ path: `/promociones` });
+    },
+    validateFecha(fechaInicio) {
+      var inicialDate = new Date(fechaInicio);
+      var actualDate = new Date();
+      return inicialDate.getTime() < actualDate.getTime();
     }
   }
 };

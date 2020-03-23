@@ -10,7 +10,7 @@
             <div class="md-title">
               <p>{{ item.nombre }}</p>
             </div>
-            <md-button class="ml-auto p-2 md-icon-button" @click="quitarProducto(this.item.id)">
+            <md-button class="ml-auto p-2 md-icon-button" @click="quitarProducto(item.id)">
               <md-icon>delete_outline</md-icon>
             </md-button>
           </div>
@@ -25,16 +25,16 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapActions } from "vuex";
+import { deleteItemInCart } from "../../util";
 export default {
   name: "CartContent",
-  computed: {
-    ...mapState(["cart"])
-  },
+  computed: {},
   methods: {
+    ...mapActions(["deleteItemInCart"]),
     quitarProducto(id) {
       console.log(id);
-      //Quitar objeto de carrito, buena :v
+      deleteItemInCart(id);
     }
   }
 };
