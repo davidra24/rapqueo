@@ -51,7 +51,7 @@ export default {
   },
   created() {
     const id = this.$route.params.id;
-    if (!this.product || this.product.id != id) {
+    if (!this.product || this.product._id != id) {
       this.fetch(id);
     }
   }

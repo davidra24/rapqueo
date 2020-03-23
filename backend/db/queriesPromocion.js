@@ -1,6 +1,7 @@
-require("dotenv/config");
+require('dotenv/config');
 
-const Promociones = require("../models/Promociones");
+const Promociones = require('../models/Promociones');
+const Productos = require('../models/Productos');
 
 getAllPromos = (req, res) => {
   Promociones.find().then(data => {
@@ -15,10 +16,14 @@ getOnePromo = (req, res) => {
   });
 };
 
-postPromo = (req, res) => {
-  Promociones.create(req.body).then(data => {
-    res.send(data);
-  });
+postPromo = async (req, res) => {
+  const producto = await Productos.findById(req.body.idProducto);
+  const promocion = new Promociones(req.body);
+  promocion.producto = producto;
+  promocion.markModified('producto');
+  await promocion.save();
+  await promocion.update();
+  await res.send(promocion);
 };
 
 pullPromo = (req, res) => {

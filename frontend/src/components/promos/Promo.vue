@@ -1,16 +1,19 @@
 <template>
   <div class="row">
-    <div class="col-12">
+    <div v-if="!promo" class="col-12">
+      <Loading />
+    </div>
+    <div v-else class="col-12">
       <div class="row d-flex justify-content-center" style="width: 100%; max-height: 100%;">
-        <b-card style="min-height:18rem;max-width:20rem;" @click="goPromo(productsPromos._id)">
-          <span class="md-title">{{ productsPromos.nombre }}</span>
+        <b-card style="min-height:18rem;max-width:20rem;" @click="goPromo(promo._id)">
+          <span class="md-title">{{ promo.producto.nombre }}</span>
           <br />
           <div class="row">
             <div class="col-8">
               <img
                 class="resize-img"
-                v-bind:src="productsPromos.foto"
-                v-bind:alt="productsPromos.nombre"
+                v-bind:src="promo.producto.foto"
+                v-bind:alt="promo.producto.nombre"
               />
             </div>
             <div class="d-flex align-items-start flex-column bd-highlight mb-3">
@@ -19,13 +22,13 @@
                 <span
                   class="md-body-2"
                   style="text-decoration: line-through;"
-                >${{ productsPromos.caracteristicas.precio }}</span>
+                >${{ promo.producto.caracteristicas.precio }}</span>
               </b-card-text>
               <b-card-text>
                 <span class="md-subheading">
                   <strong>
                     ${{
-                    productsPromos.caracteristicas.precio * (1 - productsPromos.porcentaje / 100)
+                    promo.producto.caracteristicas.precio * (1 - promo.porcentaje / 100)
                     }}
                   </strong>
                 </span>
@@ -33,7 +36,7 @@
             </div>
           </div>
           <b-card-text>
-            <span class="md-body-1">{{ productsPromos.mensaje }}</span>
+            <span class="md-body-1">{{ promo.mensaje }}</span>
           </b-card-text>
         </b-card>
       </div>
@@ -42,12 +45,12 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-
+import Loading from "@/components/loading";
 export default {
   name: "Promo",
-  computed: {
-    ...mapState(["productsPromos"])
+  props: ["promo"],
+  components: {
+    Loading
   },
   data() {
     return {

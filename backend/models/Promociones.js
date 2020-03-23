@@ -2,11 +2,14 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const promocion = new Schema({
-  idProducto: String,
   fechaInicio: Date,
   fechaFin: Date,
   porcentaje: Number,
-  mensaje: String
+  mensaje: String,
+  producto: {
+    type: Schema.Types.Mixed,
+    ref: 'producto'
+  }
 });
 
 module.exports = mongoose.model("promocione", promocion);
