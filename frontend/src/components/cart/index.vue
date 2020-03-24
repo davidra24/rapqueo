@@ -1,6 +1,6 @@
 <template>
   <div class="col-12">
-    <md-steppers :md-active-step.sync="active" md-alternative>
+    <!--  <md-steppers :md-active-step.sync="active" md-alternative>
       <md-step id="first" md-label="CONFIRMAR EL PEDIDO" :md-done.sync="first">
         <div v-for="item in items" :key="item.id">
           <b-card
@@ -112,14 +112,15 @@
           >Done</md-button
         >
       </md-step>
-    </md-steppers>
+    </md-steppers>-->
+    Hola
   </div>
 </template>
 
 <script>
-import { getCart } from '../../util';
+import { getCart } from "../../util";
 export default {
-  name: 'CartComponent',
+  name: "CartComponent",
   data() {
     return {
       items: [],

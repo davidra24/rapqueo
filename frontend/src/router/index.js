@@ -47,11 +47,6 @@ const routes = [
     component: AllProductsContainer
   },
   {
-    path: '/carrito',
-    name: 'Cart',
-    component: Cart
-  },
-  {
     path: '/promociones',
     name: 'Promoscontainer',
     component: PromosContainer
@@ -69,6 +64,12 @@ const routes = [
   {
     path: '/**',
     redirect: '/404'
+  },
+
+  {
+    path: '/carrito',
+    name: 'Cart',
+    component: Cart
   }
 ];
 

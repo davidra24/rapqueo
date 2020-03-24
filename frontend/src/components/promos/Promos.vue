@@ -1,39 +1,42 @@
 <template>
   <div class="d-flex justify-content-center">
-    <md-card class="card-config" @click="goPromo(promo._id)">
+    <md-card class="card-config">
       <b-overlay :show="show" rounded="sm">
-        <md-card-header>
-          <md-card-header-text>
-            <h6>
-              <strong>{{ promo.producto.nombre }}</strong>
-            </h6>
-            <div class="md-subhead">{{ promo.producto.peso }} {{ promo.producto.unidad }}</div>
-            <br />
-            <b-card-text class="small text-muted">
-              <span
-                class="md-body-2"
-                style="text-decoration: line-through;"
-              >${{ promo.producto.caracteristicas.precio }}</span>
-            </b-card-text>
-            <div>
-              ${{
-              promo.producto.caracteristicas.precio *
-              (1 - promo.porcentaje / 100) *
-              cantidad
-              }}
-            </div>
-          </md-card-header-text>
-          <md-card-media md-big>
-            <img
-              class="img-fluid resize-img"
-              v-bind:src="promo.producto.foto"
-              v-bind:alt="promo.producto.nombre"
-            />
-          </md-card-media>
-        </md-card-header>
-        <b-card-text>
-          <span class="md-body-1">{{ promo.mensaje }}</span>
-        </b-card-text>
+        <div style="cursor: pointer;" @click="goPromo(promo._id)">
+          <md-card-header>
+            <md-card-header-text>
+              <h6>
+                <strong>{{ promo.producto.nombre }}</strong>
+              </h6>
+              <div class="md-subhead">{{ promo.producto.peso }} {{ promo.producto.unidad }}</div>
+              <br />
+              <b-card-text class="small text-muted">
+                <span
+                  class="md-body-2"
+                  style="text-decoration: line-through;"
+                >${{ promo.producto.caracteristicas.precio }}</span>
+              </b-card-text>
+              <div>
+                ${{
+                promo.producto.caracteristicas.precio *
+                (1 - promo.porcentaje / 100) *
+                cantidad
+                }}
+              </div>
+            </md-card-header-text>
+            <md-card-media md-big>
+              <md-badge class="md-primary badge-percent" v-bind:md-content="promo.porcentaje+'%'"></md-badge>
+              <img
+                class="img-fluid resize-img"
+                v-bind:src="promo.producto.foto"
+                v-bind:alt="promo.producto.nombre"
+              />
+            </md-card-media>
+          </md-card-header>
+          <b-card-text>
+            <span class="md-body-1">{{ promo.mensaje }}</span>
+          </b-card-text>
+        </div>
         <div class="row">
           <div class="col-4">
             <md-button class="md-fab md-mini-mini md-primary" @click="resta()">
@@ -70,6 +73,8 @@
 
 <script>
 import { addToCart } from "../../util";
+
+import { mapActions } from "vuex";
 export default {
   name: "Promos",
   props: ["promo"],
@@ -81,29 +86,19 @@ export default {
       loading: true,
       slide: 0,
       sliding: null,
-      data: {},
-      precio: 0
+      data: {}
     };
   },
   methods: {
+    ...mapActions(["addCart"]),
     goPromo(id) {
       this.$router.push({ path: `/promociones/${id}` });
     },
     resta() {
       this.cantidad = this.cantidad > 1 ? this.cantidad - 1 : this.cantidad;
-      this.precio =
-        this.cantidad > 0
-          ? this.cantidad *
-            this.data.caracteristicas.precio *
-            (1 - this.promo.porcentaje / 100)
-          : this.precio;
     },
     suma() {
       this.cantidad = this.cantidad >= 0 ? this.cantidad + 1 : this.cantidad;
-      this.precio =
-        this.cantidad *
-        this.data.caracteristicas.precio *
-        (1 - this.promo.porcentaje / 100);
     },
     agregado() {
       this.show = true;
@@ -112,16 +107,20 @@ export default {
       }, 3000);
     },
     agregarCarrito() {
-      addToCart({
-        id: this.data._id,
-        nombre: this.data.nombre,
-        imagen: this.data.foto,
+      const cart = {
+        id: this.promo._id,
+        nombre: this.promo.producto.nombre,
+        imagen: this.promo.producto.foto,
         cantidad: this.cantidad,
-        peso: this.data.caracteristicas.peso,
-        unidad: this.data.caracteristicas.unidad,
+        peso: this.promo.producto.caracteristicas.peso,
+        unidad: this.promo.producto.caracteristicas.unidad,
         precio:
-          this.data.caracteristicas.precio * (1 - this.promo.porcentaje / 100)
-      });
+          this.promo.producto.caracteristicas.precio *
+          (1 - this.promo.porcentaje / 100) *
+          this.cantidad
+      };
+      addToCart(cart);
+      this.addCart(cart);
     }
   }
 };
@@ -143,5 +142,11 @@ export default {
 .card-config {
   width: 100%;
   margin: 2%;
+}
+
+.badge-percent {
+  width: 2rem;
+  height: 2rem;
+  font-size: 1em;
 }
 </style>

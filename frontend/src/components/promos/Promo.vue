@@ -3,13 +3,14 @@
     <div v-if="!promo" class="col-12">
       <Loading />
     </div>
-    <div v-else class="col-12">
+    <div v-else class="col-12 clickable">
       <div class="row d-flex justify-content-center" style="width: 100%; max-height: 100%;">
         <b-card style="min-height:18rem;max-width:20rem;" @click="goPromo(promo._id)">
           <span class="md-title">{{ promo.producto.nombre }}</span>
           <br />
           <div class="row">
             <div class="col-8">
+              <md-badge class="md-primary badge-percent" v-bind:md-content="promo.porcentaje+'%'"></md-badge>
               <img
                 class="resize-img"
                 v-bind:src="promo.producto.foto"
@@ -27,7 +28,7 @@
               <b-card-text>
                 <span class="md-subheading">
                   <strong>
-                    ${{
+                    {{
                     promo.producto.caracteristicas.precio * (1 - promo.porcentaje / 100)
                     }}
                   </strong>

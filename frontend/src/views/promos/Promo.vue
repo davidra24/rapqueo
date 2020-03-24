@@ -5,7 +5,7 @@
         <Loading />
       </div>
       <div v-else class="col-12">
-        <OnePromo />
+        <OnePromo v-bind:promo="promo" />
       </div>
     </div>
   </div>
@@ -19,6 +19,10 @@ import Loading from "@/components/loading";
 import OnePromo from "@/components/promos/OnePromo";
 export default {
   name: "Promo",
+  components: {
+    Loading,
+    OnePromo
+  },
   computed: {
     ...mapState(["promo"])
   },
@@ -27,17 +31,13 @@ export default {
       loading: false
     };
   },
-  components: {
-    Loading,
-    OnePromo
-  },
   methods: {
     ...mapActions(["setPromo", "setError"]),
     async fetch(id) {
       this.loading = true;
       await getOneOrManyApi(promos, id)
-        .then(response => {
-          this.setPromo(response.data);
+        .then(res => {
+          this.setPromo(res.data);
           this.loading = false;
         })
         .catch(error => {
@@ -54,3 +54,4 @@ export default {
   }
 };
 </script>
+<style lang="stylus" scoped></style>

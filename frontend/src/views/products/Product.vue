@@ -15,11 +15,11 @@
 </template>
 
 <script>
+import { mapState, mapActions } from "vuex";
 import { products } from "@/util/constants";
 import { getOneOrManyApi } from "@/util/api";
 import Loading from "@/components/loading";
 import OneProduct from "@/components/products/OneProduct.vue";
-import { mapState, mapActions } from "vuex";
 export default {
   name: "OneProducts",
   components: {
