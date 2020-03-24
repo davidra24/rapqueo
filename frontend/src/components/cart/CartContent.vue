@@ -25,16 +25,19 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
 import { deleteItemInCart } from "../../util";
+import { getCart } from "@/util";
 export default {
   name: "CartContent",
-  computed: {},
+  computed: {
+    ...mapState(["cart"])
+  },
   methods: {
-    ...mapActions(["deleteItemInCart"]),
+    ...mapActions(["setCart"]),
     quitarProducto(id) {
-      console.log(id);
       deleteItemInCart(id);
+      this.setCart(getCart());
     }
   }
 };

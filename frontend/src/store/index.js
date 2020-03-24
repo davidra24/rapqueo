@@ -20,6 +20,9 @@ const store = new Vuex.Store({
   getters: {
     getCountCart(state) {
       return state.cart ? state.cart.length : 0;
+    },
+    getCart(state) {
+      return state.cart;
     }
   },
   //Methods
