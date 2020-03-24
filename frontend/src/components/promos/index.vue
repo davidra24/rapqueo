@@ -39,6 +39,11 @@ export default {
   methods: {
     goPromos() {
       this.$router.push({ path: `/promociones` });
+    },
+    validateFecha(fechaInicio) {
+      var inicialDate = new Date(fechaInicio);
+      var actualDate = new Date();
+      return inicialDate.getTime() < actualDate.getTime();
     }
   }
 };

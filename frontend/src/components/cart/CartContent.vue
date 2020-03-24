@@ -6,8 +6,13 @@
           <md-avatar>
             <img v-bind:src="item.imagen" v-bind:alt="item.nombre" />
           </md-avatar>
-          <div class="md-title">
-            <p>{{ item.nombre }}</p>
+          <div class="d-flex">
+            <div class="md-title">
+              <p>{{ item.nombre }}</p>
+            </div>
+            <md-button class="ml-auto p-2 md-icon-button" @click="quitarProducto(item.id)">
+              <md-icon>delete_outline</md-icon>
+            </md-button>
           </div>
           <div class="d-flex">
             <div class="md-subhead p-2 bd-highlight">{{ item.cantidad }}</div>
@@ -20,11 +25,17 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapActions } from "vuex";
+import { deleteItemInCart } from "../../util";
 export default {
   name: "CartContent",
-  computed: {
-    ...mapState(["cart"])
+  computed: {},
+  methods: {
+    ...mapActions(["deleteItemInCart"]),
+    quitarProducto(id) {
+      console.log(id);
+      deleteItemInCart(id);
+    }
   }
 };
 </script>
