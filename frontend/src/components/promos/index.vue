@@ -4,11 +4,12 @@
       <div v-if="!promos || promos.length === 0" class="col-12">
         <Loading />
       </div>
-      <div v-if="promos && promos.length != 0" class="col-12">
+      <div class="col-1"></div>
+      <div v-if="promos && promos.length != 0" class="col-10">
         <h2 class="text-center">
           <strong>APROVECHA NUESTRAS PROMOCIONES</strong>
         </h2>
-        <CarouselCard :interval="2000" height="300px" type="card" arrow="always">
+        <CarouselCard :interval="2000" height="300px" type="card" arrow="hover">
           <CarouselCardItem v-for="promo in promos" :key="promo._id">
             <Promo :promo="promo" />
           </CarouselCardItem>

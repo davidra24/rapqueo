@@ -28,12 +28,12 @@ export const deleteItemInCart = id => {
   let cart = localStorage.getItem("cart");
   if (cart) {
     const items = JSON.parse(cart);
-    items.map(element => {
+    items.map((element, index) => {
       if (element.id === id) {
-        items.splice(element);
+        items.splice(index, 1);
       }
     });
     cart = items;
   }
-  return cart;
+  localStorage.setItem("cart", JSON.stringify(cart));
 };

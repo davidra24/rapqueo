@@ -6,10 +6,8 @@
           <md-avatar>
             <img v-bind:src="item.imagen" v-bind:alt="item.nombre" />
           </md-avatar>
-          <div class="d-flex">
-            <div class="md-title">
-              <p>{{ item.nombre }}</p>
-            </div>
+          <div class="d-flex bd-highlight mb-3">
+            <p class="bd-highlight texter">{{ item.nombre }}</p>
             <md-button class="ml-auto p-2 md-icon-button" @click="quitarProducto(item.id)">
               <md-icon>delete_outline</md-icon>
             </md-button>
@@ -25,16 +23,20 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
 import { deleteItemInCart } from "../../util";
+import { getCart } from "@/util";
 export default {
   name: "CartContent",
-  computed: {},
+  computed: {
+    ...mapState(["cart"])
+  },
   methods: {
-    ...mapActions(["deleteItemInCart"]),
+    ...mapActions(["setCart"]),
     quitarProducto(id) {
       console.log(id);
       deleteItemInCart(id);
+      this.setCart(getCart());
     }
   }
 };
@@ -45,5 +47,10 @@ export default {
   max-width: 400px;
   max-height: 200px;
   overflow: auto;
+}
+.texter {
+  max-width: 180px;
+  overflow-x: hidden;
+  word-break: normal;
 }
 </style>
