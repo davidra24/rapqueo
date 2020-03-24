@@ -8,6 +8,7 @@ import NotFound from '../components/notfound';
 import Cart from '../views/cart';
 import PromosContainer from '../views/promos/AllPromos.vue';
 import Promo from '../views/promos/Promo.vue';
+import Login from '../views/login';
 
 const linkActiveClass = 'my-link-active-class';
 
@@ -19,6 +20,11 @@ const routes = [
     path: '/',
     name: 'CategoriesContainer',
     component: CategoriesContainer
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login
   },
   {
     path: '/categorias',
