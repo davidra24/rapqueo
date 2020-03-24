@@ -98,6 +98,7 @@ export default {
       };
       addToCart(cart);
       this.addCart(cart);
+      this.precio = this.product.caracteristicas.precio;
       this.cantidad = 1;
     },
     resta() {

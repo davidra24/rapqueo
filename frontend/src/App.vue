@@ -2,7 +2,7 @@
   <div id="app">
     <div class="page-container md-layout-column full-screen">
       <Navbar id="nav" />
-      <CartSlider class="full-cart" />
+      <CartSlider />
       <md-content class="md-scrollbar">
         <router-view class="app" />
       </md-content>

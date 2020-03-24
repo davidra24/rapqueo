@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import CartContent from "../cart/CartContent";
+import CartContent from "./CartContent";
 import { mapState, mapActions } from "vuex";
 
 export default {

@@ -34,7 +34,6 @@ export default {
   methods: {
     ...mapActions(["setCart"]),
     quitarProducto(id) {
-      console.log(id);
       deleteItemInCart(id);
       this.setCart(getCart());
     }
