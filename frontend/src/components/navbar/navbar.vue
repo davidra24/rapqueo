@@ -4,7 +4,7 @@
       <md-bottom-bar md-type="shift" :md-theme="'bottom-bar-' + theme">
         <b-navbar-nav class="ml-auto">
           <router-link class="no-link" to="/">
-            <md-bottom-bar-item md-label="Inicio" md-icon="home" @click="theme = 'teal'"></md-bottom-bar-item>
+            <md-bottom-bar-item md-label="Inicio" md-icon="home" @click="theme = 'blue'"></md-bottom-bar-item>
           </router-link>
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto">
@@ -22,14 +22,14 @@
         <b-navbar-nav class="ml-auto">
           <router-link class="no-link" to="/usuario">
             <div v-if="logged">
-              <md-bottom-bar-item md-label="Perfil" @click="theme = 'blue'">
+              <md-bottom-bar-item md-label="Perfil" @click="theme = 'teal'">
                 <md-avatar class="md-avatar-icon">
                   <img src="https://placeimg.com/40/40/people/1" alt="People" />
                 </md-avatar>
               </md-bottom-bar-item>
             </div>
             <div v-else>
-              <md-bottom-bar-item md-label="Perfil" md-icon="face" @click="theme = 'blue'"></md-bottom-bar-item>
+              <md-bottom-bar-item md-label="Perfil" md-icon="face" @click="theme = 'teal'"></md-bottom-bar-item>
             </div>
           </router-link>
         </b-navbar-nav>
@@ -49,7 +49,7 @@ export default {
   data() {
     return {
       logged: true,
-      theme: "teal",
+      theme: "blue",
       checkInterval: null,
       showSidepanel: false,
       count: 0
@@ -72,15 +72,15 @@ export default {
       this.count = el ? el.length : 0;
     },
     validatePath() {
-      switch (this.$router.path) {
+      switch (this.$route.path) {
         case "/":
-          return "teal;";
+          return "blue";
         case "/productos":
           return "orange";
         case "/carrito":
           return "red";
         default:
-          return "blue";
+          return "teal";
       }
     }
   }
