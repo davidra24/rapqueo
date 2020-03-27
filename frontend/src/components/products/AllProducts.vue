@@ -12,7 +12,7 @@
         <div class="col-12">
           <div class="row">
             <div class="col-12 col-md-6 col-lg-4" v-for="product in products" :key="product._id">
-              <Product v-bind:product="product" />
+              <Product v-blur="product.caracteristicas.cantidad" v-bind:product="product" />
             </div>
           </div>
         </div>

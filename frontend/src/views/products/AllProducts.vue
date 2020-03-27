@@ -1,22 +1,25 @@
 <template>
-  <div class="row">
-    <div v-if="loading" class="col-12">
-      <Loading />
-    </div>
-    <div v-else class="col-12">
-      <AllProducts />
+  <div>
+    <br />
+    <div class="row">
+      <div v-if="loading" class="col-12">
+        <Loading />
+      </div>
+      <div v-else class="col-12">
+        <AllProducts />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { products } from '@/util/constants';
-import AllProducts from '@/components/products/AllProducts.vue';
-import Loading from '@/components/loading';
-import { getApi } from '@/util/api';
-import { mapState, mapActions } from 'vuex';
+import { products } from "@/util/constants";
+import AllProducts from "@/components/products/AllProducts.vue";
+import Loading from "@/components/loading";
+import { getApi } from "@/util/api";
+import { mapState, mapActions } from "vuex";
 export default {
-  name: 'ProductsContainer',
+  name: "ProductsContainer",
   data() {
     return {
       loading: false
@@ -27,10 +30,10 @@ export default {
     Loading
   },
   computed: {
-    ...mapState(['products'])
+    ...mapState(["products"])
   },
   methods: {
-    ...mapActions(['setProducts']),
+    ...mapActions(["setProducts"]),
     async fetch() {
       this.loading = true;
       await getApi(products)

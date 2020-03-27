@@ -8,7 +8,10 @@
           </md-avatar>
           <div class="d-flex bd-highlight mb-3">
             <p class="bd-highlight texter">{{ item.nombre }}</p>
-            <md-button class="ml-auto p-2 md-icon-button" @click="quitarProducto(item.id)">
+            <md-button
+              class="ml-auto p-2 md-icon-button md-accent"
+              @click="quitarProducto(item.id)"
+            >
               <md-icon>delete_outline</md-icon>
             </md-button>
           </div>
