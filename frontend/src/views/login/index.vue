@@ -1,7 +1,11 @@
-<template></template>
+<template>
+  <div>HOLA LOGIN</div>
+</template>
 
 <script>
-export default {};
+export default {
+  name: "Login"
+};
 </script>
 
 <style scoped>
