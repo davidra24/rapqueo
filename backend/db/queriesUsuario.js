@@ -1,6 +1,7 @@
-require("dotenv/config");
-
-const Usuarios = require("../models/Usuarios");
+require('dotenv/config');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const Usuarios = require('../models/Usuarios');
 
 getAllUsers = (req, res) => {
   Usuarios.find().then(data => {
@@ -35,10 +36,59 @@ deleteUser = (req, res) => {
   });
 };
 
+signup = async (req, res) => {
+  const data = {
+    telefono: req.body.telefono,
+    nombre: req.body.nombre,
+    apellido: req.body.apellido,
+    contrasena: await bcrypt.hash(req.body.contrasena, 10),
+    admin: false
+  };
+  Usuarios.create(data)
+    .then(response => {
+      res.send({ code: '200', msg: '¡Usuario creado con éxito! :)' });
+    })
+    .catch(err => {
+      if (err.code === 11000) {
+        res.send({
+          code: '401',
+          msg:
+            'El Usuario con ese número de teléfono ya existe en la base de datos'
+        });
+      } else {
+        res.send({ code: '500', msg: 'Error de servidor' });
+      }
+    });
+};
+
+login = async (req, res) => {
+  const { telefono, contrasena } = req.body;
+  await Usuarios.findOne({ telefono })
+    .then(data => {
+      if (!bcrypt.compare(contrasena, data.contrasena)) {
+        res.send({ code: '402', msg: 'Usuario o contraseña incorrecto' });
+      } else {
+        const secretKey = process.env.KEY;
+        const token = jwt.sign({ id: data._id }, secretKey);
+        res.send({
+          code: '200',
+          msg: 'Sesión iniciada correctamente',
+          token,
+          admin: data.admin
+        });
+      }
+    })
+    .catch(err => {
+      res.send({ code: '404', msg: 'Usuario o contraseña incorrecto' });
+    });
+};
+
 module.exports = {
   getAllUsers,
   getOneUser,
   postUser,
   pullUser,
-  deleteUser
+  deleteUser,
+  login,
+  signup
 };

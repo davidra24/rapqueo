@@ -9,6 +9,7 @@ import Cart from '../views/cart';
 import PromosContainer from '../views/promos/AllPromos.vue';
 import Promo from '../views/promos/Promo.vue';
 import Login from '../views/login';
+import Register from '../views/register';
 
 const linkActiveClass = 'my-link-active-class';
 
@@ -25,6 +26,11 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: Login
+  },
+  {
+    path: '/registro',
+    name: 'Register',
+    component: Register
   },
   {
     path: '/categorias',

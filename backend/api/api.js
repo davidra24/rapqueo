@@ -7,12 +7,12 @@ const queryPromocion = require('../db/queriesPromocion');
 const queryPedido = require('../db/queriesPedido');
 const queryRol = require('../db/queriesRol');
 const mongoose = require('mongoose');
-const cors = require('cors');
 
 mongoose
   .connect(process.env.MONGOLAB_ONYX_URI, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useCreateIndex: true
   })
   .then(db => {
     console.log('CONNECTED DATABASE');
@@ -232,7 +232,52 @@ api.put('/users/:id', queryUsuario.pullUser);
  *          {description: Internal Server Error}
  */
 api.delete('/users/:id', queryUsuario.deleteUser);
-
+/**
+ * @swagger
+ *  /api/signup/:
+ *    post:
+ *      tags: ['Usuarios']
+ *      description: Agrega un Usuario
+ *      summary: Add a new User
+ *      requestBody:
+ *        description: Agrega un Usuario
+ *        required: true
+ *      parameters:
+ *        - name: Usuario
+ *          description: Users Object
+ *          in:  body
+ *          required: true
+ *          type: object
+ *      responses:
+ *        '200':
+ *          {description: Successful}
+ *        '500':
+ *          {description: Internal Server Error}
+ */
+api.post('/signup', queryUsuario.signup);
+/**
+ * @swagger
+ *  /api/signup/:
+ *    post:
+ *      tags: ['Usuarios']
+ *      description: Inicia sesión
+ *      summary: Log In
+ *      requestBody:
+ *        description: Inicia Sesión
+ *        required: true
+ *      parameters:
+ *        - name: Usuario
+ *          description: Users Object
+ *          in:  body
+ *          required: true
+ *          type: object
+ *      responses:
+ *        '200':
+ *          {description: Successful}
+ *        '500':
+ *          {description: Internal Server Error}
+ */
+api.post('/login', queryUsuario.login);
 // ---------------------------- Productos --------------------------------//
 /**
  * @swagger
@@ -247,6 +292,7 @@ api.delete('/users/:id', queryUsuario.deleteUser);
  *        '500':
  *          {description: Internal Server Error}
  */
+//------------------------------- PRODUCTOS ----------------------------///
 api.get('/products', queryProducto.getAllProducts);
 /**
  * @swagger

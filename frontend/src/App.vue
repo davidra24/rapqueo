@@ -1,5 +1,14 @@
 <template style="height: 100%">
   <div id="app">
+    <div>
+      <div v-if="$installer.canInstall">
+        <button @click="$installer.prompt" />
+      </div>
+      <p v-if="$installer.choice">User {{ $installer.choice }} prompt.</p>
+      <p v-if="$installer.hasInstalled">
+        App installed successfully.
+      </p>
+    </div>
     <div class="page-container md-layout-column full-screen">
       <Navbar id="nav" />
       <CartSlider />
@@ -11,25 +20,42 @@
 </template>
 
 <script>
-import CartSlider from "./components/cart/CartSlider";
-import Vue from "vue";
-import Navbar from "./components/navbar/navbar";
-import { getCart } from "./util";
+import CartSlider from './components/cart/CartSlider';
+import Vue from 'vue';
+import Navbar from './components/navbar/navbar';
+import { getCart } from './util';
 
-import VueMaterial from "vue-material";
-import "vue-material/dist/vue-material.min.css";
-import "vue-material/dist/theme/default.css";
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
+import VueMaterial from 'vue-material';
+import 'vue-material/dist/vue-material.min.css';
+import 'vue-material/dist/theme/default.css';
 
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { faShoppingCart, faUser } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
-import { mapActions } from "vuex";
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faShoppingCart, faUser } from '@fortawesome/free-solid-svg-icons';
 
+import { mapActions } from 'vuex';
+import Vuelidate from 'vuelidate';
+
+import VueSweetalert2 from 'vue-sweetalert2';
+
+import vueCookies from 'vue-cookies';
+
+// If you don't need the styles, do not connect
+import 'sweetalert2/dist/sweetalert2.min.css';
+import VueInstaller from 'vue-pwa-installer';
+
+Vue.use(VueInstaller, {
+  /* options */
+});
+Vue.use(vueCookies);
+Vue.$cookies.config('7d');
 library.add([faShoppingCart, faUser]);
-Vue.component("font-awesome-icon", FontAwesomeIcon);
+Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.config.productionTip = false;
 
+Vue.use(VueSweetalert2);
+Vue.use(Vuelidate);
 // Install BootstrapVue
 Vue.use(BootstrapVue);
 // Optionally install the BootstrapVue icon components plugin
@@ -46,7 +72,7 @@ export default {
     this.loadCart();
   },
   methods: {
-    ...mapActions(["closeCart", "setCart"]),
+    ...mapActions(['closeCart', 'setCart']),
     close() {
       this.closeCart();
     },
@@ -58,11 +84,11 @@ export default {
 </script>
 
 <style lang="scss">
-@import "node_modules/bootstrap/scss/bootstrap";
-@import "node_modules/bootstrap-vue/src/index.scss";
+@import 'node_modules/bootstrap/scss/bootstrap';
+@import 'node_modules/bootstrap-vue/src/index.scss';
 
 #app {
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;

@@ -1,6 +1,6 @@
-require("dotenv/config");
+require('dotenv/config');
 
-const Categorias = require("../models/Categorias");
+const Categorias = require('../models/Categorias');
 
 getAllCategories = (req, res) => {
   Categorias.find().then(data => {
@@ -17,7 +17,7 @@ getOneCategorie = (req, res) => {
       res.send(data);
     })
     .catch(err => {
-      res.send("404");
+      res.send('404');
     });
 };
 
@@ -28,7 +28,7 @@ postCategorie = (req, res) => {
       res.send(data);
     })
     .catch(err => {
-      console.log("Error");
+      console.log('Error');
       console.log(err);
     });
 };
