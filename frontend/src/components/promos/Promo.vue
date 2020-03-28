@@ -4,7 +4,7 @@
       <Loading />
     </div>
     <div v-else class="col-12 clickable">
-      <b-card style="height:100%;width:100%;" @click="goPromo(promo._id)">
+      <b-card style="min-height:18rem;max-width:20rem;" @click="goPromo(promo._id)">
         <span class="md-title">{{ promo.producto.nombre }}</span>
         <br />
         <div class="row">
@@ -81,5 +81,11 @@ export default {
 .mrg-btn {
   margin-top: 5%;
   margin-bottom: 5%;
+}
+
+.badge-percent {
+  width: 2rem;
+  height: 2rem;
+  font-size: 1em;
 }
 </style>

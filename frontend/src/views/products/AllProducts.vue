@@ -1,55 +1,77 @@
 <template>
-  <div>
-    <br />
-    <div class="row">
-      <div v-if="loading" class="col-12">
-        <Loading />
-      </div>
-      <div v-else class="col-12">
-        <AllProducts />
-      </div>
+  <div class="row">
+    <div v-if="loadingPromos" class="col-12">
+      <Loading />
+    </div>
+    <div v-else class="col-12">
+      <CarouselPromo />
+    </div>
+    <div v-if="loadingProducts" class="col-12">
+      <Loading />
+    </div>
+    <div v-else class="col-12">
+      <AllProducts />
     </div>
   </div>
 </template>
 
+
 <script>
-import { products } from "@/util/constants";
+import CarouselPromo from "@/components/promos";
+import { products, promos } from "@/util/constants";
 import AllProducts from "@/components/products/AllProducts.vue";
 import Loading from "@/components/loading";
 import { getApi } from "@/util/api";
 import { mapState, mapActions } from "vuex";
 export default {
   name: "ProductsContainer",
-  data() {
-    return {
-      loading: false
-    };
-  },
   components: {
-    AllProducts,
-    Loading
+    Loading,
+    CarouselPromo,
+    AllProducts
   },
   computed: {
-    ...mapState(["products"])
+    ...mapState(["products", "promos"])
+  },
+  data() {
+    return {
+      loadingPromos: false,
+      loadingCategories: false
+    };
   },
   methods: {
-    ...mapActions(["setProducts"]),
-    async fetch() {
-      this.loading = true;
+    ...mapActions(["setProducts", "setError", "setPromos"]),
+    async fetchProducts() {
+      this.loadingProducts = true;
       await getApi(products)
         .then(res => {
           this.setProducts(res.data);
-          this.loading = false;
+          this.loadingProducts = false;
         })
         .catch(err => {
           this.setError(err);
-          this.loading = false;
+          this.loadingProducts = false;
+        });
+    },
+    async fetchPromos() {
+      this.loadingPromos = true;
+      await getApi(promos)
+        .then(res => {
+          this.setPromos(res.data);
+          this.loadingPromos = false;
+        })
+        .catch(err => {
+          this.setError(err);
+          this.loadingPromos = false;
         });
     }
   },
   created() {
     if (!this.products) {
-      this.fetch();
+      this.fetchProducts();
+    }
+    if (!this.promos) {
+      this.fetchPromos();
     }
   }
 };

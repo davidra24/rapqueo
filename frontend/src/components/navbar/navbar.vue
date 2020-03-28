@@ -8,8 +8,8 @@
           </router-link>
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto">
-          <router-link class="no-link" to="/productos">
-            <md-bottom-bar-item md-label="Productos" md-icon="pages" @click="theme = 'orange'"></md-bottom-bar-item>
+          <router-link class="no-link" to="/categorias">
+            <md-bottom-bar-item md-label="Categorias" md-icon="pages" @click="theme = 'orange'"></md-bottom-bar-item>
           </router-link>
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto">
