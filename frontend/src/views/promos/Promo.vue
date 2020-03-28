@@ -1,11 +1,16 @@
 <template>
-  <div class="container">
-    <div class="row">
-      <div v-if="loading" class="col-12">
-        <Loading />
-      </div>
-      <div v-else class="col-12">
-        <OnePromo v-bind:promo="promo" />
+  <div>
+    <br />
+
+    <br />
+    <div class="container">
+      <div class="row">
+        <div v-if="loading" class="col-12">
+          <Loading />
+        </div>
+        <div v-else class="col-12">
+          <OnePromo v-bind:promo="promo" />
+        </div>
       </div>
     </div>
   </div>

@@ -44,6 +44,9 @@ import vueCookies from 'vue-cookies';
 // If you don't need the styles, do not connect
 import 'sweetalert2/dist/sweetalert2.min.css';
 import VueInstaller from 'vue-pwa-installer';
+import responsive from "vue-responsive";
+  Vue.use(responsive);
+  
 
 Vue.use(VueInstaller, {
   /* options */
@@ -75,12 +78,12 @@ export default {
     ...mapActions(['closeCart', 'setCart']),
     close() {
       this.closeCart();
-    },
+      },
     loadCart() {
-      this.setCart(getCart());
+        this.setCart(getCart());
+      }
     }
   }
-};
 </script>
 
 <style lang="scss">

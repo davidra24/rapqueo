@@ -1,5 +1,5 @@
 {
-  "name": "frontend",
+  "name": "mercarchevere",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -22,6 +22,7 @@
     "vue-cookies": "^1.7.0",
     "vue-material": "^1.0.0-beta-11",
     "vue-pwa-installer": "^0.2.0",
+    "vue-responsive": "^1.1.0",
     "vue-router": "^3.1.5",
     "vue-sweetalert2": "^3.0.3",
     "vuelidate": "^0.7.5",

@@ -11,20 +11,20 @@ import Promo from '../views/promos/Promo.vue';
 import Login from '../views/login';
 import Register from '../views/register';
 
-const linkActiveClass = 'my-link-active-class';
+const linkActiveClass = "my-link-active-class";
 
 Vue.use(VueRouter);
 Vue.material.router.linkActiveClass = linkActiveClass;
 
 const routes = [
   {
-    path: '/',
-    name: 'CategoriesContainer',
-    component: CategoriesContainer
+    path: "/",
+    name: "ProductContainer",
+    component: AllProductsContainer
   },
   {
-    path: '/login',
-    name: 'Login',
+    path: "/login",
+    name: "Login",
     component: Login
   },
   {
@@ -38,48 +38,48 @@ const routes = [
     component: CategoriesContainer
   },
   {
-    path: '/categorias/:id',
-    name: 'ProductContainer',
+    path: "/categorias/:id",
+    name: "ProductContainer",
     component: ProductsContainer
   },
   {
-    path: '/productos/:id',
-    name: 'Product',
+    path: "/productos/:id",
+    name: "Product",
     component: Product
   },
   {
-    path: '/productos',
-    name: 'ProductContainer',
+    path: "/productos",
+    name: "ProductContainer",
     component: AllProductsContainer
   },
   {
-    path: '/promociones',
-    name: 'Promoscontainer',
+    path: "/promociones",
+    name: "Promoscontainer",
     component: PromosContainer
   },
   {
-    path: '/promociones/:id',
-    name: 'Promo',
+    path: "/promociones/:id",
+    name: "Promo",
     component: Promo
   },
   {
-    path: '/404',
-    name: 'NotFound',
+    path: "/404",
+    name: "NotFound",
     component: NotFound
   },
   {
-    path: '/**',
-    redirect: '/404'
+    path: "/**",
+    redirect: "/404"
   },
 
   {
-    path: '/carrito',
-    name: 'Cart',
+    path: "/carrito",
+    name: "Cart",
     component: Cart
   }
 ];
 
-const mode = 'history';
+const mode = "history";
 
 const router = new VueRouter({
   routes,

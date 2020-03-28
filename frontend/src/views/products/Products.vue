@@ -1,18 +1,21 @@
 <template>
-  <div class="row">
-    <div v-if="loading" class="col-12">
-      <Loading />
-    </div>
-    <div v-else-if="productsCategorie.length === 0" class="col-12">
-      <h2>
-        <strong>
-          NO HAY PRODUCTOS PARA ESTA CATEGORÍA
-          <br />:(
-        </strong>
-      </h2>
-    </div>
-    <div v-else class="col-12">
-      <Products />
+  <div>
+    <br />
+    <div class="row">
+      <div v-if="loading" class="col-12">
+        <Loading />
+      </div>
+      <div v-else-if="productsCategorie.length === 0" class="col-12">
+        <h2>
+          <strong>
+            NO HAY PRODUCTOS PARA ESTA CATEGORÍA
+            <br />:(
+          </strong>
+        </h2>
+      </div>
+      <div v-else class="col-12">
+        <Products />
+      </div>
     </div>
   </div>
 </template>

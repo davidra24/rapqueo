@@ -10,7 +10,7 @@
               v-for="product in productsCategorie"
               :key="product._id"
             >
-              <Product v-bind:product="product" />
+              <Product v-blur="product.caracteristicas.cantidad" v-bind:product="product" />
             </div>
           </div>
         </div>
@@ -19,12 +19,12 @@
   </div>
 </template>
 <script>
-import Product from './Product';
-import { mapState } from 'vuex';
+import Product from "./Product";
+import { mapState } from "vuex";
 export default {
-  name: 'Products',
+  name: "Products",
   computed: {
-    ...mapState(['productsCategorie'])
+    ...mapState(["productsCategorie"])
   },
   components: {
     Product
