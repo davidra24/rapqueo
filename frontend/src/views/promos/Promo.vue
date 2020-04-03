@@ -17,19 +17,19 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
-import { promos } from "@/util/constants";
-import { getOneOrManyApi } from "@/util/api";
-import Loading from "@/components/loading";
-import OnePromo from "@/components/promos/OnePromo";
+import { mapState, mapActions } from 'vuex';
+import { promos } from '@/util/constants';
+import { getOneOrManyApi } from '@/util/api';
+import Loading from '@/components/loading';
+import OnePromo from '@/components/promos/OnePromo';
 export default {
-  name: "Promo",
+  name: 'Promo',
   components: {
     Loading,
     OnePromo
   },
   computed: {
-    ...mapState(["promo"])
+    ...mapState(['promo'])
   },
   data() {
     return {
@@ -37,7 +37,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["setPromo", "setError"]),
+    ...mapActions(['setPromo', 'setError']),
     async fetch(id) {
       this.loading = true;
       await getOneOrManyApi(promos, id)
@@ -51,7 +51,7 @@ export default {
         });
     }
   },
-  created() {
+  mounted() {
     const id = this.$route.params.id;
     if (!this.promo || this.promo._id != id) {
       this.fetch(id);

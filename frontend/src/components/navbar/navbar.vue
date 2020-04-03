@@ -69,7 +69,7 @@ export default {
     ...mapState(["openedCart"]),
     ...mapGetters(["getCountCart"])
   },
-  created() {
+  mounted() {
     this.theme = this.validatePath();
   },
   methods: {

@@ -1,3 +1,4 @@
+require('dotenv').config();
 const http = require('http');
 const express = require('express');
 const api = require('../api/api');
@@ -5,16 +6,20 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
+const notification = require('../other/notification');
+const morgan = require('morgan');
 
 const app = express();
 const server = http.createServer(app);
 const port = process.env.PORT || 3000;
 
+//Middlewares
+app.use(morgan('dev'));
 app.use(cors());
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(bodyParser.json({ limit: '50mb' }));
-
 app.use('/api', api);
+app.use('/notification', notification);
 
 server.listen(port, () => {
   console.log(`Server listen in port ${port}`);
@@ -33,10 +38,5 @@ const swaggerOptions = {
   apis: ['api/api.js']
 };
 
-app.use(cors());
-app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
-app.use(bodyParser.json({ limit: '50mb' }));
-app.use('/api', api);
-
-const swaggerDocs = swaggerJsDoc(swaggerOptions);
-app.use(swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+//const swaggerDocs = swaggerJsDoc(swaggerOptions);
+//app.use(swaggerUi.serve, swaggerUi.setup(swaggerDocs));

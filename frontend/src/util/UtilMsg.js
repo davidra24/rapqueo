@@ -20,3 +20,13 @@ export const successMsg = (title, text) => {
     timer: 3000
   });
 };
+export const warningMsg = (title, text) => {
+  Vue.swal({
+    title,
+    text,
+    icon: 'warning',
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000
+  });
+};

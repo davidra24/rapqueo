@@ -37,14 +37,15 @@ export const getOneOrManyApi = async (service, id, params = {}) => {
 };
 
 export const postApi = async (service, body) => {
-  console.log('body', body);
+  //console.log('body', body);
   var info = {};
   const params = {
     method: 'POST',
     body: JSON.stringify(body),
-    mode: 'cors',
+    //mode: 'cors',
     headers: new Headers({
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*'
     })
   };
   await fetch(`${apiUrl}/${service}`, params)

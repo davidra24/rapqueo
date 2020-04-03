@@ -11,7 +11,6 @@
         <p>SELECCIONE LA DIRECCION</p>
         <div>
           <md-list>
-            
             <md-list-item @click="setDone('first', 'second')">Button</md-list-item>
           </md-list>
         </div>
@@ -178,7 +177,7 @@ export default {
       this.items = getCart();
     }
   },
-  created() {
+  mounted() {
     this.getItem();
   }
 };

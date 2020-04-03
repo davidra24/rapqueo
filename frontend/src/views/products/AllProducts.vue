@@ -15,23 +15,22 @@
   </div>
 </template>
 
-
 <script>
-import CarouselPromo from "@/components/promos";
-import { products, promos } from "@/util/constants";
-import AllProducts from "@/components/products/AllProducts.vue";
-import Loading from "@/components/loading";
-import { getApi } from "@/util/api";
-import { mapState, mapActions } from "vuex";
+import CarouselPromo from '@/components/promos';
+import { products, promos } from '@/util/constants';
+import AllProducts from '@/components/products/AllProducts.vue';
+import Loading from '@/components/loading';
+import { getApi } from '@/util/api';
+import { mapState, mapActions } from 'vuex';
 export default {
-  name: "ProductsContainer",
+  name: 'ProductsContainer',
   components: {
     Loading,
     CarouselPromo,
     AllProducts
   },
   computed: {
-    ...mapState(["products", "promos"])
+    ...mapState(['products', 'promos'])
   },
   data() {
     return {
@@ -40,7 +39,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["setProducts", "setError", "setPromos"]),
+    ...mapActions(['setProducts', 'setError', 'setPromos']),
     async fetchProducts() {
       this.loadingProducts = true;
       await getApi(products)
@@ -66,7 +65,7 @@ export default {
         });
     }
   },
-  created() {
+  mounted() {
     if (!this.products) {
       this.fetchProducts();
     }
