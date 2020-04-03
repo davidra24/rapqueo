@@ -22,13 +22,13 @@
 
 <script>
 // @ is an alias to /src
-import Loading from "@/components/loading";
-import { getOneOrManyApi } from "@/util/api";
-import { productsByCategorie } from "@/util/constants";
-import Products from "@/components/products/Products.vue";
-import { mapState, mapActions } from "vuex";
+import Loading from '@/components/loading';
+import { getOneOrManyApi } from '@/util/api';
+import { productsByCategorie } from '@/util/constants';
+import Products from '@/components/products/Products.vue';
+import { mapState, mapActions } from 'vuex';
 export default {
-  name: "ProductsContainer",
+  name: 'ProductsContainer',
   components: {
     Loading,
     Products
@@ -39,10 +39,10 @@ export default {
     };
   },
   computed: {
-    ...mapState(["productsCategorie"])
+    ...mapState(['productsCategorie'])
   },
   methods: {
-    ...mapActions(["setProductsCategorie", "setError"]),
+    ...mapActions(['setProductsCategorie', 'setError']),
     async fetch(id) {
       this.loading = true;
       await getOneOrManyApi(productsByCategorie, id)
@@ -58,7 +58,7 @@ export default {
         });
     }
   },
-  created() {
+  mounted() {
     const id = this.$route.params.id;
     if (
       !this.productsCategorie ||

@@ -60,7 +60,7 @@ import Promo from './Promo.vue';
 import { CarouselCard, CarouselCardItem } from 'vue-carousel-card';
 import 'vue-carousel-card/styles/index.css';
 import { mapState } from 'vuex';
-import { Loading } from '@/components/loading';
+import Loading from '../../components/loading';
 export default {
   name: 'CarouselPromo',
   components: {
@@ -71,11 +71,6 @@ export default {
   },
   computed: {
     ...mapState(['promos'])
-  },
-  mounted() {
-    if (this.promos) {
-      console.log(this.promos);
-    }
   },
   methods: {
     goPromos() {

@@ -7,17 +7,42 @@ const queryPromocion = require('../db/queriesPromocion');
 const queryPedido = require('../db/queriesPedido');
 const queryRol = require('../db/queriesRol');
 const mongoose = require('mongoose');
+const apiMsg = require('./apiMsg');
 
 mongoose
   .connect(process.env.MONGOLAB_ONYX_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useCreateIndex: true
+    useCreateIndex: true,
+    useFindAndModify: false
   })
   .then(db => {
     console.log('CONNECTED DATABASE');
   })
   .catch(err => console.log('Error: ', err));
+/**
+ * @swagger
+ *  /api/send/:
+ *    post:
+ *      tags: ['WhatsApp']
+ *      description: Envía un Whatsapp
+ *      summary: Send a WhatsApp
+ *      requestBody:
+ *        description: Envía un WhatsApp
+ *        required: true
+ *      parameters:
+ *        - name: msg
+ *          description: msg Object
+ *          in:  body
+ *          required: true
+ *          type: object
+ *      responses:
+ *        '200':
+ *          {description: Successful}
+ *        '500':
+ *          {description: Internal Server Error}
+ */
+api.post('/send', apiMsg.sendMsg);
 
 // ---------------------------- Categorías --------------------------------//
 /**

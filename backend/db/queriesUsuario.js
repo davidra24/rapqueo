@@ -44,11 +44,13 @@ signup = async (req, res) => {
     contrasena: await bcrypt.hash(req.body.contrasena, 10),
     admin: false
   };
-  Usuarios.create(data)
+  await Usuarios.create(data)
     .then(response => {
+      console.log(response);
       res.send({ code: '200', msg: '¡Usuario creado con éxito! :)' });
     })
     .catch(err => {
+      console.log('error:...', err.message);
       if (err.code === 11000) {
         res.send({
           code: '401',
@@ -74,7 +76,7 @@ login = async (req, res) => {
           code: '200',
           msg: 'Sesión iniciada correctamente',
           token,
-          admin: data.admin
+          id: data._id
         });
       }
     })

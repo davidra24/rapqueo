@@ -58,9 +58,8 @@
                 :disabled="sending"
                 class="md-accent"
                 @click="irSignUp()"
+                >No tengo cuenta</md-button
               >
-                No tengo cuenta
-              </md-button>
               <md-button type="submit" class="md-primary" :disabled="sending"
                 >Iniciar Sesión</md-button
               >
@@ -79,6 +78,8 @@ import { login } from '@/util/constants';
 import { postApi } from '@/util/api';
 import { mapActions } from 'vuex';
 import { errorMsg, successMsg } from '@/util/UtilMsg';
+import { urlBase64ToUint8Array, subscription } from '@/util';
+import { public_key, notificationRegister } from '@/util/constants';
 
 const isPhone = value => /^3(0|1|2|5)\d{8}$/.test(value); //phone valid
 export default {
@@ -124,28 +125,33 @@ export default {
       this.form.phone = null;
       this.form.password = null;
     },
-    saveUser() {
+    async subscribeNotification(id) {
+      const subscribe = await subscription(urlBase64ToUint8Array(public_key));
+      await console.log('subs', subscribe);
+      await postApi(notificationRegister, { id, subscribe }).then(result => {
+        console.log('Status: ', result);
+      });
+    },
+    async saveUser() {
       this.sending = true;
       const data = {
         telefono: `+57${this.form.phone}`,
         contrasena: this.form.password
       };
-      postApi(login, data)
-        .then(result => {
-          console.log('result', result);
-          console.log('result.data', result.data);
+      await postApi(login, data)
+        .then(async result => {
           if (result.data) {
-            console.log('data', result.data);
-            const { code, msg, token, _id } = result.data;
-            this.$cookies.set('token', token);
-            localStorage.setItem('user', _id);
+            const { code, msg, token, id } = await result.data;
+            await this.$cookies.set('token', token);
+            await this.$cookies.set('user', id);
             if (parseInt(code) === 200) {
-              successMsg('Mercar Chevere', msg);
-              this.$router.push(this.redireccionamiento);
+              await this.subscribeNotification(id);
+              await successMsg('Mercar Chevere', msg);
+              await this.$router.push(this.redireccionamiento);
             } else {
               errorMsg('Mercar Chevere', msg);
             }
-            this.sending = false;
+            this.sending = await false;
           } else {
             errorMsg(
               'Mercar Chevere',

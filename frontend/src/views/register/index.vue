@@ -145,7 +145,7 @@ export default {
   name: 'Register',
   mixins: [validationMixin],
   data: () => ({
-    redireccionamiento: '/',
+    redireccionamiento: '/login',
     form: {
       phone: null,
       firstName: null,

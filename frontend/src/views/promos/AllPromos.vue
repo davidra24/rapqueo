@@ -10,19 +10,19 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
-import { promos } from "@/util/constants";
-import { getApi } from "@/util/api";
-import Loading from "@/components/loading";
-import AllPromos from "@/components/promos/AllPromos.vue";
+import { mapState, mapActions } from 'vuex';
+import { promos } from '@/util/constants';
+import { getApi } from '@/util/api';
+import Loading from '@/components/loading';
+import AllPromos from '@/components/promos/AllPromos.vue';
 export default {
-  name: "PromosContainer",
+  name: 'PromosContainer',
   components: {
     AllPromos,
     Loading
   },
   computed: {
-    ...mapState(["promos"])
+    ...mapState(['promos'])
   },
   data() {
     return {
@@ -30,7 +30,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["setPromos", "setError"]),
+    ...mapActions(['setPromos', 'setError']),
     async fetch() {
       this.loading = true;
       await getApi(promos)
@@ -44,7 +44,7 @@ export default {
         });
     }
   },
-  created() {
+  mounted() {
     if (!this.promos) {
       this.fetch();
     }

@@ -7,9 +7,9 @@ const usuario = new Schema({
   apellido: String,
   contrasena: String,
   direccion: Array,
-  metPago: Array,
   admin: Boolean,
-  foto: String
+  foto: String,
+  displayNotifications: Array
 });
 
 module.exports = mongoose.model('usuario', usuario);

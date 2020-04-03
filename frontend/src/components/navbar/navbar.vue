@@ -20,7 +20,7 @@
           </div>
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto">
-          <router-link class="no-link" to="/usuario">
+          <router-link class="no-link" to="/login">
             <div v-if="logged">
               <md-bottom-bar-item md-label="Perfil" @click="theme = 'teal'">
                 <md-avatar class="md-avatar-icon">
@@ -59,7 +59,7 @@ export default {
     ...mapState(["openedCart"]),
     ...mapGetters(["getCountCart"])
   },
-  created() {
+  mounted() {
     this.theme = this.validatePath();
   },
   methods: {

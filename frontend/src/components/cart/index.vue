@@ -118,9 +118,9 @@
 </template>
 
 <script>
-import { getCart } from "../../util";
+import { getCart } from '../../util';
 export default {
-  name: "CartComponent",
+  name: 'CartComponent',
   data() {
     return {
       items: [],
@@ -133,7 +133,7 @@ export default {
       this.items = getCart();
     }
   },
-  created() {
+  mounted() {
     this.getItem();
   }
 };
