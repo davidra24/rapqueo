@@ -7,20 +7,12 @@
         <div v-if="!promos" class="col-12">
           <Loading />
         </div>
-        <div
-          v-else-if="promos.length > 0 && validarAllPromos()"
-          class="col-12 col-md-10 col-lg-8"
-        >
+        <div v-else-if="promos.length > 0 && validarAllPromos()" class="col-12 col-md-10 col-lg-8">
           <h2 class="text-center">
             <strong>APROVECHA NUESTRAS PROMOCIONES</strong>
           </h2>
           <div v-responsive="['hidden-xs', 'hidden-sm']">
-            <CarouselCard
-              :interval="2000"
-              height="300px"
-              type="card"
-              arrow="hover"
-            >
+            <CarouselCard :interval="2000" height="300px" type="card" arrow="hover">
               <CarouselCardItem
                 class="d-flex justify-content-center"
                 v-for="promo in promos"
@@ -41,28 +33,22 @@
               </CarouselCardItem>
             </CarouselCard>
           </div>
-          <md-button
-            class="md-primary ml-auto p-2 bd-highlight"
-            @click="goPromos()"
-            >VER TODO</md-button
-          >
+          <md-button class="md-primary ml-auto p-2 bd-highlight" @click="goPromos()">VER TODO</md-button>
         </div>
-        <div v-else>
-          NO HAY PROMOCIONES ACTIVAS EN EL MOMENTO
-        </div>
+        <div v-else>NO HAY PROMOCIONES ACTIVAS EN EL MOMENTO</div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import Promo from './Promo.vue';
-import { CarouselCard, CarouselCardItem } from 'vue-carousel-card';
-import 'vue-carousel-card/styles/index.css';
-import { mapState } from 'vuex';
-import { Loading } from '@/components/loading';
+import Promo from "./Promo.vue";
+import { CarouselCard, CarouselCardItem } from "vue-carousel-card";
+import "vue-carousel-card/styles/index.css";
+import { mapState } from "vuex";
+import { Loading } from "@/components/loading";
 export default {
-  name: 'CarouselPromo',
+  name: "CarouselPromo",
   components: {
     Loading,
     Promo,
@@ -70,12 +56,7 @@ export default {
     CarouselCardItem
   },
   computed: {
-    ...mapState(['promos'])
-  },
-  mounted() {
-    if (this.promos) {
-      console.log(this.promos);
-    }
+    ...mapState(["promos"])
   },
   methods: {
     goPromos() {

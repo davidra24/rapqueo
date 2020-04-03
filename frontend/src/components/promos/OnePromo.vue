@@ -96,7 +96,7 @@ export default {
     },
     agregarCarrito() {
       const cart = {
-        id: this.promo._id,
+        id: this.promo.producto._id,
         nombre: this.promo.producto.nombre,
         imagen: this.promo.producto.foto,
         cantidad: this.cantidad,

@@ -1,5 +1,43 @@
 <template>
   <div class="col-12">
+    <div v-if="logged"></div>
+    <md-steppers :md-active-step.sync="active" md-vertical md-linear>
+      <md-step
+        id="first"
+        md-description="Direccion del cliente"
+        :md-editable="true"
+        :md-done.sync="first"
+      >
+        <p>SELECCIONE LA DIRECCION</p>
+        <div>
+          <md-list>
+            
+            <md-list-item @click="setDone('first', 'second')">Button</md-list-item>
+          </md-list>
+        </div>
+      </md-step>
+
+      <md-step
+        id="second"
+        md-label="Second Step"
+        :md-error="secondStepError"
+        :md-editable="false"
+        :md-done.sync="second"
+      >
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias doloribus eveniet quaerat modi cumque quos sed, temporibus nemo eius amet aliquid, illo minus blanditiis tempore, dolores voluptas dolore placeat nulla.</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias doloribus eveniet quaerat modi cumque quos sed, temporibus nemo eius amet aliquid, illo minus blanditiis tempore, dolores voluptas dolore placeat nulla.</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias doloribus eveniet quaerat modi cumque quos sed, temporibus nemo eius amet aliquid, illo minus blanditiis tempore, dolores voluptas dolore placeat nulla.</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias doloribus eveniet quaerat modi cumque quos sed, temporibus nemo eius amet aliquid, illo minus blanditiis tempore, dolores voluptas dolore placeat nulla.</p>
+        <md-button class="md-raised md-primary" @click="setDone('second', 'third')">Continue</md-button>
+        <md-button class="md-raised md-primary" @click="setError()">Set error!</md-button>
+      </md-step>
+
+      <md-step id="third" md-label="Third Step" :md-editable="false" :md-done.sync="third">
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias doloribus eveniet quaerat modi cumque quos sed, temporibus nemo eius amet aliquid, illo minus blanditiis tempore, dolores voluptas dolore placeat nulla.</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias doloribus eveniet quaerat modi cumque quos sed, temporibus nemo eius amet aliquid, illo minus blanditiis tempore, dolores voluptas dolore placeat nulla.</p>
+        <md-button class="md-raised md-primary" @click="setDone('third')">Done</md-button>
+      </md-step>
+    </md-steppers>
     <!--  <md-steppers :md-active-step.sync="active" md-alternative>
       <md-step id="first" md-label="CONFIRMAR EL PEDIDO" :md-done.sync="first">
         <div v-for="item in items" :key="item.id">
@@ -119,12 +157,19 @@
 
 <script>
 import { getCart } from "../../util";
+import { mapState, mapActions } from "vuex";
+import { products } from "@/util/constants";
+import { getOneOrManyApi } from "@/util/api";
+import Loading from "@/components/loading";
 export default {
   name: "CartComponent",
+  props: ["user"],
   data() {
     return {
+      logged: true,
       items: [],
-      radio: false
+      radio: false,
+      direccion: [this.user.direccion]
     };
   },
   computed: {},

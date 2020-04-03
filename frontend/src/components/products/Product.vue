@@ -11,7 +11,25 @@
                 </h6>
                 <div class="md-subhead">{{ peso }} {{ unidad }}</div>
                 <br />
-                <div>${{ precio }}</div>
+                <div v-for="promo in promos" :key="promo._id">
+                  <div
+                    v-if="(promo.producto._id===product._id )&&(validateFecha(promo.fechaInicio,promo.fechaFin))"
+                  >
+                    {{promoVerify()}}
+                    <b-card-text class="small text-muted">
+                      <span
+                        class="md-body-2"
+                        style="text-decoration: line-through;"
+                      >${{ promo.producto.caracteristicas.precio }}</span>
+                    </b-card-text>
+                    <div>
+                      ${{cambioPrecio(promo.producto.caracteristicas.precio *
+                      (1 - promo.porcentaje / 100) *
+                      cantidad,(promo.porcentaje / 100))}}
+                    </div>
+                  </div>
+                </div>
+                <div v-if="!promoV">${{precio}}</div>
               </md-card-header-text>
               <md-card-media md-big>
                 <img
@@ -40,26 +58,26 @@
           <div class="col-12">
             <button
               class="btn mrg-btn btn-success btn-block"
-              @click="agregarCarrito(), (myVar = agregado())"
+              @click="agregarCarrito(), agregado()"
               :disabled="false"
               variant="primary"
             >Agregar</button>
           </div>
           <template v-slot:overlay>
             <div class="text-center">
-              <b-icon icon="check" font-scale="3"></b-icon>
-              <p>Articulo agregado al carrito</p>
-            </div>
-          </template>
-          <template v-slot:overlay>
-            <div class="text-center">
-              <p>{{product.nombre}}</p>
-              <p>{{peso}}{{unidad}}</p>
+              <p>{{ product.nombre }}</p>
+              <p>{{ peso }}{{ unidad }}</p>
               <b-icon icon="x" font-scale="3"></b-icon>
               <p>Este producto se encuentra agotado</p>
             </div>
           </template>
         </b-overlay>
+        <template v-slot:overlay>
+          <div class="text-center">
+            <b-icon icon="check" font-scale="3"></b-icon>
+            <p>Articulo agregado al carrito</p>
+          </div>
+        </template>
       </b-overlay>
     </md-card>
   </div>
@@ -67,27 +85,59 @@
 
 <script>
 import Loading from "../loading";
+import { promos } from "@/util/constants";
 import { addToCart } from "../../util";
-import { mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
+import { getApi } from "@/util/api";
 export default {
   name: "Product",
-  props: ["product"],
+  props: ["product", "promo"],
   component: {
-    Loading
+    Loading,
+    promos
   },
   data() {
     return {
       cantidad: 1,
+      promoV: false,
       precio: this.product.caracteristicas.precio,
       peso: this.product.caracteristicas.peso,
       unidad: this.product.caracteristicas.unidad,
       foto: this.product.foto,
+      descuento: 1,
       show: false,
       producto: this.productVerify()
     };
   },
   methods: {
-    ...mapActions(["addCart"]),
+    ...mapActions(["addCart", "setPromos", "setError"]),
+    async fetchPromos() {
+      await getApi(promos)
+        .then(res => {
+          this.setPromos(res.data);
+        })
+        .catch(err => {
+          this.setError(err);
+        });
+    },
+    validateFecha(fechaInicio, fechaFin) {
+      var initialDate = new Date(fechaInicio);
+      var finalDate = new Date(fechaFin);
+      var actualDate = new Date();
+      console.log(finalDate);
+      return (
+        initialDate.getTime() < actualDate.getTime() &&
+        finalDate.getTime() > actualDate.getTime()
+      );
+    },
+    cambioPrecio(precioNuevo, porcentaje) {
+      this.Precio = precioNuevo;
+      this.descuento = 1 - porcentaje;
+      return this.Precio;
+    },
+    promoVerify() {
+      this.promoV = true;
+    },
     productVerify() {
       if (this.product.caracteristicas.cantidad == 0) {
         return true;
@@ -111,7 +161,7 @@ export default {
         cantidad: this.cantidad,
         peso: this.peso,
         unidad: this.unidad,
-        precio: this.precio
+        precio: this.precio * this.descuento
       };
       addToCart(cart);
       this.addCart(cart);
@@ -131,6 +181,14 @@ export default {
           ? this.cantidad + 1
           : this.cantidad;
       this.precio = this.cantidad * this.product.caracteristicas.precio;
+    }
+  },
+  computed: {
+    ...mapState(["promos"])
+  },
+  created() {
+    if (!this.promos) {
+      this.fetchPromos();
     }
   }
 };

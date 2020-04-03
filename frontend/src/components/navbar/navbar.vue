@@ -20,18 +20,28 @@
           </div>
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto">
-          <router-link class="no-link" to="/usuario">
-            <div v-if="logged">
-              <md-bottom-bar-item md-label="Perfil" @click="theme = 'teal'">
+          <div v-if="logged">
+            <md-menu md-size="auto" md-align-trigger>
+              <md-bottom-bar-item md-menu-trigger md-label="Perfil" @click="theme = 'teal'">
                 <md-avatar class="md-avatar-icon">
                   <img src="https://placeimg.com/40/40/people/1" alt="People" />
                 </md-avatar>
               </md-bottom-bar-item>
-            </div>
-            <div v-else>
+              <md-menu-content class="row">
+                <md-menu-item class="col-12" to="/usuario">Mi perfil</md-menu-item>
+                <md-menu-item class="col-12" @click="cerrarSesion()">Cerrar Sesión</md-menu-item>
+              </md-menu-content>
+            </md-menu>
+          </div>
+          <div v-else>
+            <md-menu md-size="auto" md-align-trigger>
               <md-bottom-bar-item md-label="Perfil" md-icon="face" @click="theme = 'teal'"></md-bottom-bar-item>
-            </div>
-          </router-link>
+              <md-menu-content class="row">
+                <md-menu-item class="col-12" to="/login">Iniciar sesión</md-menu-item>
+                <md-menu-item class="col-12" to="/registro">Registro</md-menu-item>
+              </md-menu-content>
+            </md-menu>
+          </div>
         </b-navbar-nav>
       </md-bottom-bar>
     </div>
@@ -66,6 +76,9 @@ export default {
     ...mapActions(["openCart", "closeCart"]),
     slideCart() {
       this.openedCart ? this.closeCart() : this.openCart();
+    },
+    cerrarSesion() {
+      this.logged = false;
     },
     countElements() {
       const el = JSON.parse(localStorage.getItem("cart"));

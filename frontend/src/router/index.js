@@ -1,15 +1,15 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
-import CategoriesContainer from '../views/categories/Categories.vue';
-import ProductsContainer from '../views/products/Products.vue';
-import AllProductsContainer from '../views/products/AllProducts.vue';
-import Product from '../views/products/Product.vue';
-import NotFound from '../components/notfound';
-import Cart from '../views/cart';
-import PromosContainer from '../views/promos/AllPromos.vue';
-import Promo from '../views/promos/Promo.vue';
-import Login from '../views/login';
-import Register from '../views/register';
+import Vue from "vue";
+import VueRouter from "vue-router";
+import CategoriesContainer from "../views/categories/Categories.vue";
+import ProductsContainer from "../views/products/Products.vue";
+import AllProductsContainer from "../views/products/AllProducts.vue";
+import Product from "../views/products/Product.vue";
+import NotFound from "../components/notfound";
+import Cart from "../views/cart";
+import PromosContainer from "../views/promos/AllPromos.vue";
+import Promo from "../views/promos/Promo.vue";
+import Login from "../views/login";
+import Register from "../views/register";
 
 const linkActiveClass = "my-link-active-class";
 
@@ -28,13 +28,13 @@ const routes = [
     component: Login
   },
   {
-    path: '/registro',
-    name: 'Register',
+    path: "/registro",
+    name: "Register",
     component: Register
   },
   {
-    path: '/categorias',
-    name: 'CategoriesContainer',
+    path: "/categorias",
+    name: "CategoriesContainer",
     component: CategoriesContainer
   },
   {
@@ -63,6 +63,11 @@ const routes = [
     component: Promo
   },
   {
+    path: "/carrito",
+    name: "Cart",
+    component: Cart
+  },
+  {
     path: "/404",
     name: "NotFound",
     component: NotFound
@@ -70,12 +75,6 @@ const routes = [
   {
     path: "/**",
     redirect: "/404"
-  },
-
-  {
-    path: "/carrito",
-    name: "Cart",
-    component: Cart
   }
 ];
 

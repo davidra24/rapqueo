@@ -36,7 +36,7 @@ export default {
   data() {
     return {
       loadingPromos: false,
-      loadingCategories: false
+      loadingProducts: false
     };
   },
   methods: {
