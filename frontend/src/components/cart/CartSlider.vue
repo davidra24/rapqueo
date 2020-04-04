@@ -5,17 +5,25 @@
         <strong>Carrito</strong>
       </span>
     </md-toolbar>
-    <md-list>
-      <md-list-item class="d-flex justify-content-center">
+    <md-list class="d-flex justify-content-center">
+      <md-list-item>
         <h4>
           <strong>CARRITO DE COMPRAS</strong>
         </h4>
       </md-list-item>
-      <md-list-item>
+      <md-list-item v-show="getCountCart > 0">
         <CartContent />
       </md-list-item>
-      <md-list-item>
+      <md-list-item v-show="getCountCart > 0">
         <button class="btn btn-block btn-success" @click="irACarrito()">Comprar</button>
+      </md-list-item>
+      <md-list-item v-show="getCountCart === 0">
+        <div class="d-flex bd-highlight mb-3">
+          <h5 class="bd-highlight texter">
+            En este momento no existen
+            <br />productos en el carrito.
+          </h5>
+        </div>
       </md-list-item>
     </md-list>
   </md-drawer>
@@ -23,12 +31,13 @@
 
 <script>
 import CartContent from "./CartContent";
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapGetters } from "vuex";
 
 export default {
   name: "CartSlider",
   computed: {
-    ...mapState(["openedCart"])
+    ...mapState(["openedCart"]),
+    ...mapGetters(["getCountCart"])
   },
   components: {
     CartContent
@@ -45,4 +54,9 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.texter {
+  width: 200px;
+  word-wrap: break-word;
+}
+</style>

@@ -45,20 +45,27 @@ signup = async (req, res) => {
     admin: false
   };
   await Usuarios.create(data)
-    .then(response => {
-      console.log(response);
-      res.send({ code: '200', msg: '¡Usuario creado con éxito! :)' });
+    .then(data => {
+      console.log(data);
+      res.send({
+        code: 200,
+        msg: '¡Usuario creado con éxito! :)',
+        data: {
+          telefono: req.body.telefono,
+          contrasena: req.body.contrasena
+        }
+      });
     })
     .catch(err => {
       console.log('error:...', err.message);
       if (err.code === 11000) {
         res.send({
-          code: '401',
+          code: 401,
           msg:
             'El Usuario con ese número de teléfono ya existe en la base de datos'
         });
       } else {
-        res.send({ code: '500', msg: 'Error de servidor' });
+        res.send({ code: 500, msg: 'Error de servidor' });
       }
     });
 };
@@ -68,20 +75,27 @@ login = async (req, res) => {
   await Usuarios.findOne({ telefono })
     .then(data => {
       if (!bcrypt.compare(contrasena, data.contrasena)) {
-        res.send({ code: '402', msg: 'Usuario o contraseña incorrecto' });
+        res.send({ code: 402, msg: 'Usuario o contraseña incorrecto' });
       } else {
         const secretKey = process.env.KEY;
         const token = jwt.sign({ id: data._id }, secretKey);
         res.send({
-          code: '200',
+          code: 200,
           msg: 'Sesión iniciada correctamente',
           token,
-          id: data._id
+          data: {
+            id: data._id,
+            telefono: data.telefono,
+            nombre: data.nombre,
+            apellido: data.apellido,
+            admin: data.admin
+          }
         });
       }
     })
     .catch(err => {
-      res.send({ code: '404', msg: 'Usuario o contraseña incorrecto' });
+      console.log(err);
+      res.send({ code: 404, msg: 'Usuario o contraseña incorrecto' });
     });
 };
 

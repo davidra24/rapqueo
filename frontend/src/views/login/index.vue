@@ -77,9 +77,10 @@ import { required, minLength } from 'vuelidate/lib/validators';
 import { login } from '@/util/constants';
 import { postApi } from '@/util/api';
 import { mapActions } from 'vuex';
-import { errorMsg, successMsg } from '@/util/UtilMsg';
+import { errorMsg, successMsg } from '@/util/utilMsg';
 import { urlBase64ToUint8Array, subscription } from '@/util';
 import { public_key, notificationRegister } from '@/util/constants';
+import { crypt, decrypt } from '@/util/utilCrypt';
 
 const isPhone = value => /^3(0|1|2|5)\d{8}$/.test(value); //phone valid
 export default {
@@ -108,7 +109,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setError']),
+    ...mapActions(['setError', 'setSession', 'setUser']),
     getValidationClass(fieldName) {
       const field = this.$v.form[fieldName];
       if (field) {
@@ -141,12 +142,14 @@ export default {
       await postApi(login, data)
         .then(async result => {
           if (result.data) {
-            const { code, msg, token, id } = await result.data;
-            await this.$cookies.set('token', token);
-            await this.$cookies.set('user', id);
+            const { code, msg, token, data } = await result.data;
             if (parseInt(code) === 200) {
-              await this.subscribeNotification(id);
+              await this.$cookies.set('token', token);
+              const crypted = await crypt(await JSON.stringify(data));
+              await this.$cookies.set('session', crypted);
+              //await this.subscribeNotification(data.id);
               await successMsg('Mercar Chevere', msg);
+              await this.createSession();
               await this.$router.push(this.redireccionamiento);
             } else {
               errorMsg('Mercar Chevere', msg);
@@ -163,6 +166,7 @@ export default {
         .catch(err => {
           this.setError(err);
           this.sending = false;
+          console.log('error', err);
           errorMsg(
             'Mercar Chevere',
             `${err}: Error de conexión con el servidor`
@@ -173,6 +177,19 @@ export default {
       this.$v.$touch();
       if (!this.$v.$invalid) {
         this.saveUser();
+      }
+    },
+    async createSession() {
+      const localSession = (await this.$cookies.get('session'))
+        ? await this.$cookies.get('session')
+        : null;
+      const localToken = (await this.$cookies.get('token'))
+        ? await this.$cookies.get('token')
+        : null;
+      this.setSession(localSession);
+      if (localSession && localToken) {
+        const decryptedSession = JSON.parse(decrypt(localSession));
+        this.setUser(decryptedSession);
       }
     }
   }

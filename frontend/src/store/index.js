@@ -15,6 +15,7 @@ const store = new Vuex.Store({
     promos: null,
     promo: null,
     user: null,
+    session: null,
     error: null
   },
   getters: {
@@ -81,6 +82,12 @@ const store = new Vuex.Store({
     },
     setCloseCart(state) {
       state.openedCart = false;
+    },
+    setUser(state, user) {
+      state.user = user;
+    },
+    setSession(state, session) {
+      state.session = session;
     }
   },
   actions: {
@@ -116,6 +123,12 @@ const store = new Vuex.Store({
     },
     closeCart({ commit }) {
       commit('setCloseCart');
+    },
+    setUser({ commit }, user) {
+      commit('setUser', user);
+    },
+    setSession({ commit }, session) {
+      commit('setSession', session);
     }
   },
   modules: {}

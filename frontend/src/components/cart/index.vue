@@ -156,10 +156,10 @@
 
 <script>
 import { getCart } from "../../util";
-import { mapState, mapActions } from "vuex";
-import { products } from "@/util/constants";
-import { getOneOrManyApi } from "@/util/api";
-import Loading from "@/components/loading";
+//import { mapState, mapActions } from "vuex";
+//import { products } from "@/util/constants";
+//import { getOneOrManyApi } from "@/util/api";
+//import Loading from "@/components/loading";
 export default {
   name: "CartComponent",
   props: ["user"],

@@ -34,15 +34,11 @@ import vueCookies from "vue-cookies";
 
 // If you don't need the styles, do not connect
 import "sweetalert2/dist/sweetalert2.min.css";
-import VueInstaller from "vue-pwa-installer";
 import responsive from "vue-responsive";
 
 Vue.use(responsive);
-
-Vue.use(VueInstaller, {
-  /* options */
-});
 Vue.use(vueCookies);
+
 Vue.$cookies.config("7d");
 library.add([faShoppingCart, faUser]);
 Vue.component("font-awesome-icon", FontAwesomeIcon);
