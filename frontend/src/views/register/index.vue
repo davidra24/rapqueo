@@ -135,11 +135,17 @@
 <script>
 import { validationMixin } from 'vuelidate';
 import { required, minLength } from 'vuelidate/lib/validators';
-import { signup, login } from '@/util/constants';
+import {
+  signup,
+  login,
+  public_key,
+  notificationRegister
+} from '@/util/constants';
 import { postApi } from '@/util/api';
 import { mapActions } from 'vuex';
 import { errorMsg, successMsg } from '@/util/utilMsg';
 import { crypt, decrypt } from '@/util/utilCrypt';
+import { urlBase64ToUint8Array, subscription } from '@/util';
 
 const isPhone = value => /^3(0|1|2|5)\d{8}$/.test(value); //phone valid
 export default {
@@ -179,6 +185,9 @@ export default {
       }
     }
   },
+  mounted() {
+    this.validateSession();
+  },
   methods: {
     ...mapActions(['setError', 'setSession', 'setUser']),
     getValidationClass(fieldName) {
@@ -191,6 +200,14 @@ export default {
     },
     irLogin() {
       this.$router.push('/login');
+    },
+
+    async subscribeNotification(id) {
+      const subscribe = await subscription(urlBase64ToUint8Array(public_key));
+      await console.log('subs', subscribe);
+      await postApi(notificationRegister, { id, subscribe }).then(result => {
+        console.log('Status: ', result);
+      });
     },
     clearForm() {
       this.$v.$reset();
@@ -299,6 +316,16 @@ export default {
         const decryptedSession = JSON.parse(decrypt(localSession));
         this.setUser(decryptedSession);
       }
+    },
+    async validateSession() {
+      const localSession = (await this.$cookies.get('session'))
+        ? await this.$cookies.get('session')
+        : null;
+      const localToken = (await this.$cookies.get('token'))
+        ? await this.$cookies.get('token')
+        : null;
+      this.setSession(localSession);
+      if (localSession && localToken) await this.$router.push('/');
     }
   }
 };

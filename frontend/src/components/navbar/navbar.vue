@@ -35,18 +35,9 @@
           </div>
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto">
-          <!----->
           <div v-if="user" class="md-toolbar-section-end">
             <md-menu md-size="auto" md-align-trigger>
-              <md-avatar
-                v-if="user.foto"
-                md-menu-trigger
-                class="md-avatar-icon"
-              >
-                <img :src="user.foto" alt="People" />
-              </md-avatar>
               <md-bottom-bar-item
-                v-else
                 md-menu-trigger
                 :md-label="user.nombre"
                 md-icon="account_circle"
@@ -55,8 +46,14 @@
                 <md-menu-item
                   >{{ user.nombre }} {{ user.apellido }}</md-menu-item
                 >
-                <md-menu-item>Perfil</md-menu-item>
-                <md-menu-item>Mis pedidos</md-menu-item>
+
+                <md-menu-item @click="irPerfil(user.id)">Perfil</md-menu-item>
+                <md-menu-item v-if="user.admin" @click="irPedidos()"
+                  >Pedidos</md-menu-item
+                >
+                <md-menu-item v-else @click="irPedido(user.id)"
+                  >Mis pedidos</md-menu-item
+                >
                 <md-menu-item @click="cerrarSesion()"
                   >Cerrar Sesión</md-menu-item
                 >
@@ -71,16 +68,13 @@
                 md-icon="face"
               ></md-bottom-bar-item>
               <md-menu-content>
-                <router-link class="no-link" to="/login">
-                  <md-menu-item>Iniciar Sesión</md-menu-item>
-                </router-link>
-                <router-link class="no-link" to="/registro">
-                  <md-menu-item>Registrarse</md-menu-item>
-                </router-link>
+                <md-menu-item @click="irInicioSesion()"
+                  >Iniciar Sesión</md-menu-item
+                >
+                <md-menu-item @click="irRegistro()">Registrarse</md-menu-item>
               </md-menu-content>
             </md-menu>
           </div>
-          <!----->
         </b-navbar-nav>
       </md-bottom-bar>
     </div>
@@ -146,10 +140,25 @@ export default {
     },
     async cerrarSesion() {
       await this.$cookies.remove('session');
-      await this.$cookies.remove('tokern');
+      await this.$cookies.remove('token');
       await this.setSession(null);
       await this.setUser(null);
-      await this.$router.push('/');
+      if (this.$route.path != '/') await this.$router.push('/');
+    },
+    irPerfil(id) {
+      this.$router.push(`/perfil/${id}`);
+    },
+    irPedidos() {
+      this.$router.push(`/pedidos`);
+    },
+    irPedido(id) {
+      this.$router.push(`/pedidos/${id}`);
+    },
+    irInicioSesion() {
+      this.$router.push(`/login`);
+    },
+    irRegistro() {
+      this.$router.push(`/registro`);
     }
   }
 };

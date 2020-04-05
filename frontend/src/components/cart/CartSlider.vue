@@ -5,7 +5,7 @@
         <strong>Carrito</strong>
       </span>
     </md-toolbar>
-    <md-list class="d-flex justify-content-center">
+    <md-list class="d-flex justify-content-center col-12">
       <md-list-item>
         <h4>
           <strong>CARRITO DE COMPRAS</strong>
@@ -15,7 +15,12 @@
         <CartContent />
       </md-list-item>
       <md-list-item v-show="getCountCart > 0">
-        <button class="btn btn-block btn-success" @click="irACarrito()">Comprar</button>
+        <h6><strong> Precio Total:</strong> ${{ totalPriece }}</h6>
+      </md-list-item>
+      <md-list-item v-show="getCountCart > 0">
+        <button class="btn btn-block btn-success" @click="irACarrito()">
+          Comprar
+        </button>
       </md-list-item>
       <md-list-item v-show="getCountCart === 0">
         <div class="d-flex bd-highlight mb-3">
@@ -30,25 +35,25 @@
 </template>
 
 <script>
-import CartContent from "./CartContent";
-import { mapState, mapActions, mapGetters } from "vuex";
+import CartContent from './CartContent';
+import { mapState, mapActions, mapGetters } from 'vuex';
 
 export default {
-  name: "CartSlider",
+  name: 'CartSlider',
   computed: {
-    ...mapState(["openedCart"]),
-    ...mapGetters(["getCountCart"])
+    ...mapState(['openedCart']),
+    ...mapGetters(['getCountCart', 'totalPriece'])
   },
   components: {
     CartContent
   },
   methods: {
-    ...mapActions(["closeCart"]),
+    ...mapActions(['closeCart']),
     irACarrito() {
       if (this.openedCart) {
         this.closeCart();
       }
-      this.$router.push("/carrito");
+      this.$router.push('/carrito');
     }
   }
 };

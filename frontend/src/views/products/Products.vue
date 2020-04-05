@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <br />
     <div class="row">
       <div v-if="loading" class="col-12">
@@ -69,3 +69,5 @@ export default {
   }
 };
 </script>
+
+<style scoped></style>

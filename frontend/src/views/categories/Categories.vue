@@ -1,10 +1,12 @@
 <template>
-  <div class="row">
-    <div v-if="loadingCategories" class="col-12">
-      <Loading />
-    </div>
-    <div v-else class="col-12">
-      <Categories />
+  <div class="container">
+    <div class="row">
+      <div v-if="loadingCategories" class="col-12">
+        <Loading />
+      </div>
+      <div v-else class="col-12">
+        <Categories />
+      </div>
     </div>
   </div>
 </template>
@@ -51,3 +53,5 @@ export default {
   }
 };
 </script>
+
+<style></style>

@@ -74,24 +74,28 @@ login = async (req, res) => {
   const { telefono, contrasena } = req.body;
   await Usuarios.findOne({ telefono })
     .then(data => {
-      if (!bcrypt.compare(contrasena, data.contrasena)) {
-        res.send({ code: 402, msg: 'Usuario o contraseña incorrecto' });
-      } else {
-        const secretKey = process.env.KEY;
-        const token = jwt.sign({ id: data._id }, secretKey);
-        res.send({
-          code: 200,
-          msg: 'Sesión iniciada correctamente',
-          token,
-          data: {
-            id: data._id,
-            telefono: data.telefono,
-            nombre: data.nombre,
-            apellido: data.apellido,
-            admin: data.admin
-          }
-        });
-      }
+      bcrypt.compare(contrasena, data.contrasena).then(result => {
+        if (!result) {
+          res.send({ code: 402, msg: 'Usuario o contraseña incorrecto' });
+        } else {
+          const secretKey = process.env.KEY;
+          const token = jwt.sign({ id: data._id }, secretKey);
+          res.send({
+            code: 200,
+            msg: 'Sesión iniciada correctamente',
+            token,
+            data: {
+              id: data._id,
+              telefono: data.telefono,
+              nombre: data.nombre,
+              apellido: data.apellido,
+              admin: data.admin,
+              foto: data.foto ? data.foto : null,
+              direccion: data.direccion ? data.direccion : null
+            }
+          });
+        }
+      });
     })
     .catch(err => {
       console.log(err);

@@ -26,10 +26,10 @@ const store = new Vuex.Store({
       return state.cart;
     },
     totalPriece(state) {
-      let total = 0;
+      var total = 0;
       if (state.cart) {
         state.cart.map(c => {
-          total += c.precio * c.cantidad;
+          total += c.precio;
         });
       }
       return total;

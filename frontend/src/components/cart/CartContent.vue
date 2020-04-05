@@ -16,8 +16,12 @@
             </md-button>
           </div>
           <div class="d-flex">
-            <div class="md-subhead p-2 bd-highlight">{{ item.cantidad }}</div>
-            <div class="ml-auto p-2 bd-highlight">{{ item.precio }}</div>
+            <div class="md-subhead p-2 bd-highlight">
+              <strong>Cantidad: </strong>{{ item.cantidad }}
+            </div>
+            <div class="ml-auto p-2 bd-highlight">
+              <strong>Precio: </strong>${{ item.precio }}
+            </div>
           </div>
         </md-card-header>
       </md-card>
@@ -26,16 +30,16 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
-import { deleteItemInCart } from "../../util";
-import { getCart } from "@/util";
+import { mapState, mapActions } from 'vuex';
+import { deleteItemInCart } from '../../util';
+import { getCart } from '@/util';
 export default {
-  name: "CartContent",
+  name: 'CartContent',
   computed: {
-    ...mapState(["cart"])
+    ...mapState(['cart'])
   },
   methods: {
-    ...mapActions(["setCart"]),
+    ...mapActions(['setCart']),
     quitarProducto(id) {
       deleteItemInCart(id);
       this.setCart(getCart());
