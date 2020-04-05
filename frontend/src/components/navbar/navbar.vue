@@ -48,12 +48,21 @@
                 >
 
                 <md-menu-item @click="irPerfil(user.id)">Perfil</md-menu-item>
-                <md-menu-item v-if="user.admin" @click="irPedidos()"
-                  >Pedidos</md-menu-item
-                >
-                <md-menu-item v-else @click="irPedido(user.id)"
-                  >Mis pedidos</md-menu-item
-                >
+                <div v-if="user.admin">
+                  <md-menu-item @click="irCategorias()"
+                    >Categorías</md-menu-item
+                  >
+                  <md-menu-item @click="irPromociones()"
+                    >Promociones</md-menu-item
+                  >
+                  <md-menu-item @click="irProductos()">Productos</md-menu-item>
+                  <md-menu-item @click="irPedidos()">Pedidos</md-menu-item>
+                </div>
+                <div v-else>
+                  <md-menu-item @click="irPedido(user.id)"
+                    >Mis pedidos</md-menu-item
+                  >
+                </div>
                 <md-menu-item @click="cerrarSesion()"
                   >Cerrar Sesión</md-menu-item
                 >
@@ -156,6 +165,15 @@ export default {
     },
     irInicioSesion() {
       this.$router.push(`/login`);
+    },
+    irCategorias() {
+      this.$router.push(`/admin/categorias`);
+    },
+    irPromociones() {
+      this.$router.push(`/admin/promociones`);
+    },
+    irProductos() {
+      this.$router.push(`/admin/procuctos`);
     },
     irRegistro() {
       this.$router.push(`/registro`);
