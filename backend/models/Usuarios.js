@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const usuario = new Schema({
@@ -8,8 +8,7 @@ const usuario = new Schema({
   contrasena: String,
   direccion: Array,
   admin: Boolean,
-  foto: String,
   displayNotifications: Array
 });
 
-module.exports = mongoose.model("usuario", usuario);
+module.exports = mongoose.model('usuario', usuario);

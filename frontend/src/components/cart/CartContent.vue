@@ -1,26 +1,32 @@
 <template>
   <div class="container">
-    <div class style="margin-bottom: 4%;">
-      <div v-for="item in cart" :key="item.id">
-        <md-card>
-          <md-card-header>
-            <md-avatar>
-              <img v-bind:src="item.imagen" v-bind:alt="item.nombre" />
-            </md-avatar>
-            <div class="d-flex bd-highlight mb-3">
-              <p class="texter bd-highlight col-10 text-truncate">{{ item.nombre }}</p>
-              <md-button
-                class="ml-auto p-2 md-icon-button md-accent col-1"
-                @click="quitarProducto(item.id)"
-              >
-                <md-icon>delete_outline</md-icon>
-              </md-button>
+    <div v-for="item in cart" :key="item.id">
+      <md-card overlay style>
+        <md-card-header>
+          <md-avatar>
+            <img v-bind:src="item.imagen" v-bind:alt="item.nombre" />
+          </md-avatar>
+          <div class="d-flex bd-highlight mb-3">
+            <p class="bd-highlight texter">{{ item.nombre }}</p>
+            <md-button
+              class="ml-auto p-2 md-icon-button md-accent"
+              @click="quitarProducto(item.id)"
+            >
+              <md-icon>delete_outline</md-icon>
+            </md-button>
+          </div>
+          <div class="d-flex">
+            <div class="md-subhead p-2 bd-highlight">
+              <strong>Cantidad:</strong>
+              {{ item.cantidad }}
             </div>
-            <div class="md-subhead p-2">Cantidad: {{ item.cantidad }}</div>
-            <div class="ml-auto p-2">${{ item.precio }}</div>
-          </md-card-header>
-        </md-card>
-      </div>
+            <div class="ml-auto p-2 bd-highlight">
+              <strong>Precio:</strong>
+              ${{ item.precio }}
+            </div>
+          </div>
+        </md-card-header>
+      </md-card>
     </div>
   </div>
 </template>

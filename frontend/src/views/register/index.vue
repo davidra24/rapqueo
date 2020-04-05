@@ -135,17 +135,24 @@
 <script>
 import { validationMixin } from 'vuelidate';
 import { required, minLength } from 'vuelidate/lib/validators';
-import { signup } from '@/util/constants';
+import {
+  signup,
+  login,
+  public_key,
+  notificationRegister
+} from '@/util/constants';
 import { postApi } from '@/util/api';
 import { mapActions } from 'vuex';
-import { errorMsg, successMsg } from '@/util/UtilMsg';
+import { errorMsg, successMsg } from '@/util/utilMsg';
+import { crypt, decrypt } from '@/util/utilCrypt';
+import { urlBase64ToUint8Array, subscription } from '@/util';
 
 const isPhone = value => /^3(0|1|2|5)\d{8}$/.test(value); //phone valid
 export default {
   name: 'Register',
   mixins: [validationMixin],
   data: () => ({
-    redireccionamiento: '/login',
+    redireccionamiento: '/',
     form: {
       phone: null,
       firstName: null,
@@ -178,8 +185,11 @@ export default {
       }
     }
   },
+  mounted() {
+    this.validateSession();
+  },
   methods: {
-    ...mapActions(['setError']),
+    ...mapActions(['setError', 'setSession', 'setUser']),
     getValidationClass(fieldName) {
       const field = this.$v.form[fieldName];
       if (field) {
@@ -190,6 +200,14 @@ export default {
     },
     irLogin() {
       this.$router.push('/login');
+    },
+
+    async subscribeNotification(id) {
+      const subscribe = await subscription(urlBase64ToUint8Array(public_key));
+      await console.log('subs', subscribe);
+      await postApi(notificationRegister, { id, subscribe }).then(result => {
+        console.log('Status: ', result);
+      });
     },
     clearForm() {
       this.$v.$reset();
@@ -209,14 +227,14 @@ export default {
           contrasena: this.form.password
         };
         postApi(signup, data)
-          .then(result => {
+          .then(async result => {
             console.log('result', result);
             console.log('result.data', result.data);
             if (result.data) {
-              const { code, msg } = result.data;
-              if (code === '200') {
-                successMsg('Mercar Chevere', msg);
-                this.$router.push(this.redireccionamiento);
+              const { code, msg, data } = result.data;
+              if (parseInt(code) === 200) {
+                await successMsg('Mercar Chevere', msg);
+                await this.loginNow(data);
               } else {
                 errorMsg('Mercar Chevere', msg);
               }
@@ -245,11 +263,69 @@ export default {
         );
       }
     },
+    async loginNow(data) {
+      await postApi(login, data)
+        .then(async result => {
+          if (result.data) {
+            const { code, msg, token, data } = await result.data;
+            if (parseInt(code) === 200) {
+              await this.$cookies.set('token', token);
+              const crypted = await crypt(await JSON.stringify(data));
+              await this.$cookies.set('session', crypted);
+              //await this.subscribeNotification(data.id);
+              await successMsg('Mercar Chevere', msg);
+              await this.createSession();
+              await this.$router.push(this.redireccionamiento);
+            } else {
+              errorMsg('Mercar Chevere', msg);
+            }
+            this.sending = await false;
+          } else {
+            errorMsg(
+              'Mercar Chevere',
+              'No se ha podido crear el usuario, error de conexión al servidor'
+            );
+            this.sending = false;
+          }
+        })
+        .catch(err => {
+          this.setError(err);
+          this.sending = false;
+          console.log('error', err);
+          errorMsg(
+            'Mercar Chevere',
+            `${err}: Error de conexión con el servidor`
+          );
+        });
+    },
     validateUser() {
       this.$v.$touch();
       if (!this.$v.$invalid) {
         this.saveUser();
       }
+    },
+    async createSession() {
+      const localSession = (await this.$cookies.get('session'))
+        ? await this.$cookies.get('session')
+        : null;
+      const localToken = (await this.$cookies.get('token'))
+        ? await this.$cookies.get('token')
+        : null;
+      this.setSession(localSession);
+      if (localSession && localToken) {
+        const decryptedSession = JSON.parse(decrypt(localSession));
+        this.setUser(decryptedSession);
+      }
+    },
+    async validateSession() {
+      const localSession = (await this.$cookies.get('session'))
+        ? await this.$cookies.get('session')
+        : null;
+      const localToken = (await this.$cookies.get('token'))
+        ? await this.$cookies.get('token')
+        : null;
+      this.setSession(localSession);
+      if (localSession && localToken) await this.$router.push('/');
     }
   }
 };

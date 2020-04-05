@@ -74,12 +74,12 @@
 <script>
 import { validationMixin } from 'vuelidate';
 import { required, minLength } from 'vuelidate/lib/validators';
-import { login } from '@/util/constants';
+import { login, public_key, notificationRegister } from '@/util/constants';
 import { postApi } from '@/util/api';
 import { mapActions } from 'vuex';
-import { errorMsg, successMsg } from '@/util/UtilMsg';
+import { errorMsg, successMsg } from '@/util/utilMsg';
 import { urlBase64ToUint8Array, subscription } from '@/util';
-import { public_key, notificationRegister } from '@/util/constants';
+import { crypt, decrypt } from '@/util/utilCrypt';
 
 const isPhone = value => /^3(0|1|2|5)\d{8}$/.test(value); //phone valid
 export default {
@@ -107,8 +107,11 @@ export default {
       }
     }
   },
+  mounted() {
+    this.validateSession();
+  },
   methods: {
-    ...mapActions(['setError']),
+    ...mapActions(['setError', 'setSession', 'setUser']),
     getValidationClass(fieldName) {
       const field = this.$v.form[fieldName];
       if (field) {
@@ -141,17 +144,23 @@ export default {
       await postApi(login, data)
         .then(async result => {
           if (result.data) {
-            const { code, msg, token, id } = await result.data;
-            await this.$cookies.set('token', token);
-            await this.$cookies.set('user', id);
+            const { code, msg, token, data } = await result.data;
             if (parseInt(code) === 200) {
-              await this.subscribeNotification(id);
+              const str = await JSON.stringify(data);
+              console.log(str);
+              console.log(data);
+              const crypted = await crypt(str);
+              await this.$cookies.set('session', crypted);
+              await this.$cookies.set('token', token);
+              //await this.subscribeNotification(data.id);
+              await this.createSession();
               await successMsg('Mercar Chevere', msg);
+              this.sending = await false;
               await this.$router.push(this.redireccionamiento);
             } else {
+              this.sending = await false;
               errorMsg('Mercar Chevere', msg);
             }
-            this.sending = await false;
           } else {
             errorMsg(
               'Mercar Chevere',
@@ -163,6 +172,7 @@ export default {
         .catch(err => {
           this.setError(err);
           this.sending = false;
+          console.log('error', err);
           errorMsg(
             'Mercar Chevere',
             `${err}: Error de conexión con el servidor`
@@ -174,6 +184,31 @@ export default {
       if (!this.$v.$invalid) {
         this.saveUser();
       }
+    },
+    async createSession() {
+      const localSession = (await this.$cookies.get('session'))
+        ? await this.$cookies.get('session')
+        : null;
+      const localToken = (await this.$cookies.get('token'))
+        ? await this.$cookies.get('token')
+        : null;
+      this.setSession(localSession);
+      console.log('localsesion', localSession);
+
+      if (localSession && localToken) {
+        const decryptedSession = await JSON.parse(decrypt(localSession));
+        await this.setUser(decryptedSession);
+      }
+    },
+    async validateSession() {
+      const localSession = (await this.$cookies.get('session'))
+        ? await this.$cookies.get('session')
+        : null;
+      const localToken = (await this.$cookies.get('token'))
+        ? await this.$cookies.get('token')
+        : null;
+      this.setSession(localSession);
+      if (localSession && localToken) await this.$router.push('/');
     }
   }
 };
