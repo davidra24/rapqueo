@@ -1,5 +1,5 @@
 <template>
-  <div>Categorías</div>
+  <div>CATEGORÍAS</div>
 </template>
 
 <script>
