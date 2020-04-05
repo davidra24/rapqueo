@@ -1,165 +1,45 @@
 <template>
-  <div class="col-12">
-    <div v-if="logged"></div>
-    <md-steppers :md-active-step.sync="active" md-vertical md-linear>
-      <md-step
-        id="first"
-        md-description="Direccion del cliente"
-        :md-editable="true"
-        :md-done.sync="first"
-      >
-        <p>SELECCIONE LA DIRECCION</p>
-        <div>
-          <md-list>
-            <md-list-item @click="setDone('first', 'second')">Button</md-list-item>
-          </md-list>
-        </div>
-      </md-step>
-
-      <md-step
-        id="second"
-        md-label="Second Step"
-        :md-error="secondStepError"
-        :md-editable="false"
-        :md-done.sync="second"
-      >
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias doloribus eveniet quaerat modi cumque quos sed, temporibus nemo eius amet aliquid, illo minus blanditiis tempore, dolores voluptas dolore placeat nulla.</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias doloribus eveniet quaerat modi cumque quos sed, temporibus nemo eius amet aliquid, illo minus blanditiis tempore, dolores voluptas dolore placeat nulla.</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias doloribus eveniet quaerat modi cumque quos sed, temporibus nemo eius amet aliquid, illo minus blanditiis tempore, dolores voluptas dolore placeat nulla.</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias doloribus eveniet quaerat modi cumque quos sed, temporibus nemo eius amet aliquid, illo minus blanditiis tempore, dolores voluptas dolore placeat nulla.</p>
-        <md-button class="md-raised md-primary" @click="setDone('second', 'third')">Continue</md-button>
-        <md-button class="md-raised md-primary" @click="setError()">Set error!</md-button>
-      </md-step>
-
-      <md-step id="third" md-label="Third Step" :md-editable="false" :md-done.sync="third">
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias doloribus eveniet quaerat modi cumque quos sed, temporibus nemo eius amet aliquid, illo minus blanditiis tempore, dolores voluptas dolore placeat nulla.</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias doloribus eveniet quaerat modi cumque quos sed, temporibus nemo eius amet aliquid, illo minus blanditiis tempore, dolores voluptas dolore placeat nulla.</p>
-        <md-button class="md-raised md-primary" @click="setDone('third')">Done</md-button>
-      </md-step>
-    </md-steppers>
-    <!--  <md-steppers :md-active-step.sync="active" md-alternative>
-      <md-step id="first" md-label="CONFIRMAR EL PEDIDO" :md-done.sync="first">
-        <div v-for="item in items" :key="item.id">
-          <b-card
-            bg-variant="light"
-            text-variant="dark"
-            v-bind:title="item.nombre"
-          >
-            <b-card-text
-              >With supporting text below as a natural lead-in to additional
-              content.</b-card-text
-            >
-            <b-button href="#" variant="primary">Go somewhere</b-button>
-          </b-card>
-        </div>
-        <md-button
-          class="md-raised md-primary"
-          @click="setDone('first', 'second')"
-          >Continuar</md-button
-        >
-      </md-step>
-      <md-step id="second" md-label="AGREGAR DIRECCION" :md-done.sync="second">
-        <div>
-          <div class="d-flex justify-content-center">
-            <md-radio
-              v-model="radio"
-              value="Casa"
-              class="d-flex justify-content-start md-primary col-1"
-              >Casa</md-radio
-            >
-            <md-field class="d-flex justify-content-end col-4">
-              <label>Direccion</label>
-              <md-input
-                class="d-flex justify-content-end"
-                v-model="type"
-              ></md-input>
-              <span class="md-helper-text">Help! :v</span>
-            </md-field>
+  <div class="d-flex justify-content-center">
+    <div class="col-8">
+      <div v-if="logged"></div>
+      <md-steppers :md-active-step.sync="active" md-vertical md-linear>
+        <md-step id="first" md-label="Confirmar productos" :md-done.sync="first">
+          <p>PRODUCTOS DEL PEDIDO</p>
+          <div class="container">
+            <div class="row">
+              <md-list class="col-12 col-lg-6" v-for="item in cart" :key="item._id">
+                <md-list-item style="margin-left:-8%;margin-right:-12%">
+                  <BuyContent v-bind:item="item" />
+                </md-list-item>
+              </md-list>
+            </div>
           </div>
-          <div class="d-flex justify-content-center">
-            <md-radio
-              v-model="radio"
-              value="Apartamento"
-              class="md-primary col-1"
-              >Apto</md-radio
-            >
+          <md-button class="md-primary" @click="setDone('first', 'second')">CONTINUAR</md-button>
+        </md-step>
 
-            <md-field class="d-flex justify-content-end col-4">
-              <label>Barrio</label>
-              <md-input v-model="type"></md-input>
-              <span class="md-helper-text">Help! :v</span>
-            </md-field>
+        <md-step id="second" md-label="Second Step" :md-editable="true" :md-done.sync="second">
+          <p>SELECCIONE LA DIRECCION</p>
+          <div>
+            <md-list>
+              <md-list-item @click="setDone('first', 'second')">Button</md-list-item>
+            </md-list>
           </div>
-          <div class="d-flex justify-content-center">
-            <md-radio v-model="radio" value="Otro" class="md-primary col-1"
-              >Otro</md-radio
-            >
+        </md-step>
 
-            <md-field class="d-flex justify-content-end col-4">
-              <label>Informacion adicional</label>
-              <md-input v-model="type"></md-input>
-              <span class="md-helper-text">Ej: Apto 603</span>
-            </md-field>
-          </div>
-        </div>
-        <md-button
-          class="md-raised md-primary"
-          @click="setDone('second', 'third')"
-          >Continue</md-button
-        >
-      </md-step>
-
-      <md-step
-        id="third"
-        md-label="SELECCIONAR MEDIO DE PAGO"
-        :md-done.sync="third"
-      >
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias
-          doloribus eveniet quaerat modi cumque quos sed, temporibus nemo eius
-          amet aliquid, illo minus blanditiis tempore, dolores voluptas dolore
-          placeat nulla.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias
-          doloribus eveniet quaerat modi cumque quos sed, temporibus nemo eius
-          amet aliquid, illo minus blanditiis tempore, dolores voluptas dolore
-          placeat nulla.
-        </p>
-        <md-button
-          class="md-raised md-primary"
-          @click="setDone('third', 'fourth')"
-          >Done</md-button
-        >
-      </md-step>
-      <md-step id="fourth" md-label="FINALIZAR COMPRA" :md-done.sync="fourth">
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias
-          doloribus eveniet quaerat modi cumque quos sed, temporibus nemo eius
-          amet aliquid, illo minus blanditiis tempore, dolores voluptas dolore
-          placeat nulla.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias
-          doloribus eveniet quaerat modi cumque quos sed, temporibus nemo eius
-          amet aliquid, illo minus blanditiis tempore, dolores voluptas dolore
-          placeat nulla.
-        </p>
-        <md-button class="md-raised md-primary" @click="setDone('fourth')"
-          >Done</md-button
-        >
-      </md-step>
-    </md-steppers>-->
-    Hola
+        <md-step id="third" md-label="Third Step" :md-editable="false" :md-done.sync="third">
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias doloribus eveniet quaerat modi cumque quos sed, temporibus nemo eius amet aliquid, illo minus blanditiis tempore, dolores voluptas dolore placeat nulla.</p>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias doloribus eveniet quaerat modi cumque quos sed, temporibus nemo eius amet aliquid, illo minus blanditiis tempore, dolores voluptas dolore placeat nulla.</p>
+          <md-button class="md-raised md-primary" @click="setDone('third')">Done</md-button>
+        </md-step>
+      </md-steppers>
+    </div>
   </div>
 </template>
 
 <script>
-import { getCart } from "../../util";
 import { mapState, mapActions } from "vuex";
-import { products } from "@/util/constants";
-import { getOneOrManyApi } from "@/util/api";
-import Loading from "@/components/loading";
+import BuyContent from "./Buycontent";
+import { getCart } from "../../util";
 export default {
   name: "CartComponent",
   props: ["user"],
@@ -168,13 +48,27 @@ export default {
       logged: true,
       items: [],
       radio: false,
-      direccion: [this.user.direccion]
+      direccion: [this.user.direccion],
+      active: "second",
+      first: false,
+      second: false,
+      third: false
     };
   },
-  computed: {},
+  components: {
+    BuyContent
+  },
+  computed: {
+    ...mapState(["cart"])
+  },
   methods: {
+    ...mapActions(["setCart"]),
     getItem() {
       this.items = getCart();
+    },
+    setDone(id, index) {
+      this[id] = true;
+      this.active = index;
     }
   },
   mounted() {

@@ -1,12 +1,14 @@
-<template style="height: 100vh;">
-  <CartComponent />
+<template>
+  <div class="col-12">
+    <CartComponent />
+  </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import CartComponent from '@/components/cart/';
+import CartComponent from "@/components/cart/";
 export default {
-  name: 'Cart',
+  name: "Cart",
   components: {
     CartComponent
   }

@@ -10,19 +10,19 @@
 </template>
 
 <script>
-import Loading from '@/components/loading';
-import Categories from '@/components/categories/Categories.vue';
-import { categories } from '@/util/constants';
-import { getApi } from '@/util/api';
-import { mapState, mapActions } from 'vuex';
+import Loading from "@/components/loading";
+import Categories from "@/components/categories/Categories.vue";
+import { categories } from "@/util/constants";
+import { getApi } from "@/util/api";
+import { mapState, mapActions } from "vuex";
 export default {
-  name: 'CategoriesContainer',
+  name: "CategoriesContainer",
   components: {
     Loading,
     Categories
   },
   computed: {
-    ...mapState(['categories'])
+    ...mapState(["categories"])
   },
   data() {
     return {
@@ -30,7 +30,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['setCategories', 'setError', 'setPromos']),
+    ...mapActions(["setCategories", "setError", "setPromos"]),
     async fetchCategories() {
       this.loadingCategories = true;
       await getApi(categories)
