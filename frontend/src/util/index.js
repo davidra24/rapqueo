@@ -1,11 +1,11 @@
-export const addToCart = item => {
-  let cart = localStorage.getItem('cart');
+export const addToCart = (item) => {
+  let cart = localStorage.getItem("cart");
   if (!cart) {
-    localStorage.setItem('cart', JSON.stringify([]));
+    localStorage.setItem("cart", JSON.stringify([]));
   }
-  cart = JSON.parse(localStorage.getItem('cart'));
+  cart = JSON.parse(localStorage.getItem("cart"));
   let added = false;
-  cart.map(itemCart => {
+  cart.map((itemCart) => {
     if (itemCart.id === item.id) {
       itemCart.cantidad += item.cantidad;
       itemCart.precio += item.precio;
@@ -15,17 +15,17 @@ export const addToCart = item => {
   if (!added) {
     cart.push(item);
   }
-  localStorage.setItem('cart', JSON.stringify(cart));
+  localStorage.setItem("cart", JSON.stringify(cart));
 };
 
 export const getCart = () => {
-  return localStorage.getItem('cart')
-    ? JSON.parse(localStorage.getItem('cart'))
+  return localStorage.getItem("cart")
+    ? JSON.parse(localStorage.getItem("cart"))
     : [];
 };
 
-export const deleteItemInCart = id => {
-  let cart = localStorage.getItem('cart');
+export const deleteItemInCart = (id) => {
+  let cart = localStorage.getItem("cart");
   if (cart) {
     const items = JSON.parse(cart);
     items.map((element, index) => {
@@ -35,14 +35,13 @@ export const deleteItemInCart = id => {
     });
     cart = items;
   }
-  localStorage.setItem('cart', JSON.stringify(cart));
+  localStorage.setItem("cart", JSON.stringify(cart));
 };
-4;
 
 // Service worker
-export const urlBase64ToUint8Array = base64String => {
-  const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
-  const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+export const urlBase64ToUint8Array = (base64String) => {
+  const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+  const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
 
   const rawData = window.atob(base64);
   const outputArray = new Uint8Array(rawData.length);
@@ -53,12 +52,12 @@ export const urlBase64ToUint8Array = base64String => {
   return outputArray;
 };
 
-export const subscription = async uint8Array => {
-  const register = await navigator.serviceWorker.register('sw.js', {
-    scope: '/'
+export const subscription = async (uint8Array) => {
+  const register = await navigator.serviceWorker.register("sw.js", {
+    scope: "/",
   });
   return await register.pushManager.subscribe({
     userVisibleOnly: true,
-    applicationServerKey: uint8Array
+    applicationServerKey: uint8Array,
   });
 };

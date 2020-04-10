@@ -7,7 +7,6 @@ const queryPromocion = require('../db/queriesPromocion');
 const queryPedido = require('../db/queriesPedido');
 const queryRol = require('../db/queriesRol');
 const mongoose = require('mongoose');
-const apiMsg = require('./apiMsg');
 
 mongoose
   .connect(process.env.MONGOLAB_ONYX_URI, {
@@ -42,7 +41,6 @@ mongoose
  *        '500':
  *          {description: Internal Server Error}
  */
-api.post('/send', apiMsg.sendMsg);
 
 // ---------------------------- Categorías --------------------------------//
 /**
