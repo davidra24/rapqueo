@@ -12,5 +12,5 @@ Vue.use(blur);
 new Vue({
   router,
   store,
-  render: h => h(App)
-}).$mount('#app');
+  render: (h) => h(App),
+}).$mount("#app");

@@ -26,13 +26,22 @@
 <script>
 import { deleteItemInCart } from "../../util";
 import { getCart } from "../../util";
+import { mapState, mapActions, mapGetters } from "vuex";
 export default {
   name: "BuyContent",
   props: ["item"],
+  computed: {
+    ...mapState(["cart"]),
+    ...mapGetters(["getCountCart"])
+  },
   methods: {
+    ...mapActions(["setCart"]),
     quitarProducto(id) {
       deleteItemInCart(id);
       this.setCart(getCart());
+      if (this.getCountCart == 0) {
+        this.$router.push("/");
+      }
     }
   }
 };
