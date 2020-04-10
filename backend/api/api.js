@@ -14,12 +14,12 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
-    useFindAndModify: false
+    useFindAndModify: false,
   })
-  .then(db => {
+  .then((db) => {
     console.log('CONNECTED DATABASE');
   })
-  .catch(err => console.log('Error: ', err));
+  .catch((err) => console.log('Error: ', err));
 /**
  * @swagger
  *  /api/send/:
@@ -236,7 +236,7 @@ api.post('/users', queryUsuario.postUser);
  *        '500':
  *          {description: Internal Server Error}
  */
-api.put('/users/:id', queryUsuario.pullUser);
+api.put('/users/:id', queryUsuario.putUser);
 /**
  * @swagger
  *  /api/users/{id}:
@@ -303,6 +303,29 @@ api.post('/signup', queryUsuario.signup);
  *          {description: Internal Server Error}
  */
 api.post('/login', queryUsuario.login);
+/**
+ * @swagger
+ *  /api/verifyPassword/:
+ *    post:
+ *      tags: ['Usuarios']
+ *      description: Verifica una contraseña
+ *      summary: Log In
+ *      requestBody:
+ *        description: VErifica contraseña
+ *        required: true
+ *      parameters:
+ *        - name: Usuario
+ *          description: Users Object
+ *          in:  body
+ *          required: true
+ *          type: object
+ *      responses:
+ *        '200':
+ *          {description: Successful}
+ *        '500':
+ *          {description: Internal Server Error}
+ */
+api.post('/verifyPassword', queryUsuario.verifyPassword);
 // ---------------------------- Productos --------------------------------//
 /**
  * @swagger

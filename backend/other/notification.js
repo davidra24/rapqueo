@@ -12,39 +12,47 @@ webpush.setVapidDetails(
 //var pushSubscription = null;
 
 router.post('/subscribe', async (req, res) => {
-  const subscription = await req.body.subscription;
-  const usuario = await Usuarios.findById(req.body.id);
-  var displayNotifications = usuario.displayNotifications
-    ? usuario.displayNotifications
-    : [];
+  console.log(req.body);
+  const { id, subscribe } = await req.body;
+  const usuario = await Usuarios.findById(id);
+  var displayNotifications =
+    usuario.displayNotifications && usuario.displayNotifications.length > 0
+      ? usuario.displayNotifications
+      : [];
+  console.log('display', displayNotifications);
   var exist = false;
-  await displayNotifications.forEach(element => {
-    if (element.keys.p256dh === subscription.keys.p256dh) {
-      exist = true;
-    }
-  });
-  if (!exist) {
-    await displayNotifications.push(subscription);
-    await Usuarios.findByIdAndUpdate(
-      { _id: req.body.id },
-      {
-        displayNotifications
+  if (displayNotifications.length > 0) {
+    await displayNotifications.forEach((element) => {
+      if (element.keys.p256dh === subscription.keys.p256dh) {
+        exist = true;
       }
-    );
-    res.send({ status: 200, msg: 'Suscripción exitosa' });
+    });
+  }
+  if (!exist) {
+    if (subscribe) {
+      await displayNotifications.push(subscribe);
+      await Usuarios.findOneAndUpdate(
+        { _id: req.body.id },
+        {
+          displayNotifications,
+        }
+      );
+      res.send({ status: 200, msg: 'Suscripción exitosa' });
+    }
+    res.send({ status: 401, msg: 'Suscripción nula' });
   } else {
     res.send({ status: 201, msg: 'Suscripción previamente existente' });
   }
 });
 
 router.post('/sendNotification', async (req, res) => {
-  const payload = JSON.stringify({
+  const payload = await JSON.stringify({
     title: 'MercarChevere.com',
     msg: req.body.msg,
-    url: req.body.url
+    url: req.body.url,
   });
-  const pushSubscription = req.body.pushSubscription;
-  pushSubscription.forEach(async element => {
+  const pushSubscription = await req.body.pushSubscription;
+  await pushSubscription.forEach(async (element) => {
     try {
       await webpush.sendNotification(element, payload);
     } catch (error) {
