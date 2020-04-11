@@ -38,5 +38,8 @@ const swaggerOptions = {
   apis: ['api/api.js'],
 };
 
+app.get('/', (req, res) => {
+  res.json({ info: 'HOLA MUNDO' });
+});
 //const swaggerDocs = swaggerJsDoc(swaggerOptions);
 //app.use(swaggerUi.serve, swaggerUi.setup(swaggerDocs));
