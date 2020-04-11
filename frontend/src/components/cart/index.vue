@@ -459,7 +459,8 @@ export default {
             const { code, msg } = response.data;
             if (parseInt(code) === 200) {
               successMsg("Mercar Chevere", msg);
-              localStorage.removeItem("cart");
+              localStorage.setItem("cart", "[]");
+              this.setCart([]);
               this.$router.push("/");
             } else {
               errorMsg("Mercar Chevere", msg);
