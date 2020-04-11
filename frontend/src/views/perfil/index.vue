@@ -578,7 +578,11 @@ export default {
     },
     guardarDireccion() {
       this.editardireccion = false;
-      const data = {
+      const direccion = this.datosDireccion();
+      this.save(direccion);
+    },
+    datosDireccion() {
+      return {
         barrio: this.form.barrio,
         direccion:
           this.form.Via +
@@ -593,11 +597,12 @@ export default {
           this.form.letra2,
         datos_adicionales: this.form.info
       };
-      console.log(data);
-      //var direccion = this.user.direccion;
-      //direccion.push(body.direccion);
-      //await putApi(usuarios, body.id_usuario, { direccion });
-      //this.actualizarDatos(data);
+    },
+    async save(body) {
+      var direccion = this.user.direccion;
+      direccion.push(body);
+      //await putApi(usuarios, body.id_usuario, { direccion })
+      this.actualizarDatos({ direccion });
     },
     getValidationClass(fieldName) {
       const field = this.$v.form[fieldName];
@@ -693,6 +698,8 @@ export default {
         .then(result => {
           if (result.data) {
             const { code, msg, data } = result.data;
+            console.log(result.data);
+
             if (parseInt(code) === 200) {
               const usuario = { ...data, ...body };
               this.actualizarStorage(usuario);

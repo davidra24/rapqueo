@@ -484,7 +484,17 @@ export default {
     getOtherDirection() {
       return {
         barrio: this.form.barrio,
-        direccion: `${this.form.Via}+" "+${this.form.numero}+" "+${this.form.letra}+" # "+${this.form.numero1}+" "+${this.form.letra1}+" "+${this.form.numero2}+" "${this.form.letra2}`,
+        direccion:
+          this.form.Via +
+          " " +
+          this.form.numeroVia +
+          this.form.letra +
+          " #" +
+          this.form.numero1 +
+          this.form.letra1 +
+          "-" +
+          this.form.numero2 +
+          this.form.letra2,
         datos_adicionales: this.form.info
       };
     },
