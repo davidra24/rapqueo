@@ -4,7 +4,7 @@
       <div v-if="logged">
         <md-steppers :md-active-step.sync="active" md-vertical md-linear>
           <md-step id="first" md-label="Confirmar productos" :md-done.sync="first">
-            <p>PRODUCTOS DEL PEDIDO</p>
+            <h3>PRODUCTOS DEL PEDIDO</h3>
             <div class="container">
               <div class="row">
                 <md-list class="col-12 col-lg-6" v-for="item in cart" :key="item._id">
@@ -12,9 +12,21 @@
                     <BuyContent v-bind:item="item" />
                   </md-list-item>
                 </md-list>
+                <div class="col-12">
+                  <h4>
+                    <strong>Precio Total:</strong>
+                    ${{ totalPriece }}
+                  </h4>
+                </div>
               </div>
             </div>
-            <md-button class="md-primary" @click="setDone('first', 'second')">SIGUIENTE</md-button>
+            <div class="d-flex">
+              <md-button class="mr-auto p-2 md-raised md-accent" @click="cancelar()">CANCELAR</md-button>
+              <md-button
+                class="ml-auto p-2 md-raised md-primary"
+                @click="setDone('first', 'second')"
+              >SIGUIENTE</md-button>
+            </div>
           </md-step>
           <md-step
             id="second"
@@ -25,9 +37,9 @@
             <p>SELECCIONE LA DIRECCION</p>
             <div>
               <div>
-                <div v-for="dir in user.direccion" :key="dir.direccion">
-                  <b-alert show :variant="alert">
-                    <div class="row">
+                <div v-for="(dir, index) in user.direccion" :key="index">
+                  <b-alert show :variant="Direccion===dir?selected:alert">
+                    <div class="row" @click="Direccion=dir" style="cursor:pointer;">
                       <div class="col-1">
                         <md-radio class="md-primary" v-model="Direccion" v-bind:value="dir"></md-radio>
                       </div>
@@ -40,8 +52,12 @@
                   </b-alert>
                 </div>
                 <div>
-                  <b-alert show :variant="alert">
-                    <div class="d-flex justify-content-start">
+                  <b-alert show :variant="Direccion==='otro'?selected:alert">
+                    <div
+                      class="d-flex justify-content-start"
+                      @click="Direccion='otro'"
+                      style="cursor:pointer;"
+                    >
                       <md-radio
                         class="md-primary"
                         v-model="Direccion"
@@ -50,11 +66,11 @@
                     </div>
                     <div v-if="Direccion==='otro'">
                       <form novalidate @submit.prevent="validateDirection">
-                        <div class="d-flex justify-content-center">
+                        <div class="d-flex justify-content-center row">
                           <md-autocomplete
                             name="Via"
                             id="Via"
-                            class="col-3"
+                            class="col-5 col-lg-2"
                             style="margin-right:3%;"
                             v-model="form.Via"
                             :md-options="via"
@@ -73,7 +89,7 @@
                             >El formato del nombre de la via es incorrecto</span>
                           </md-autocomplete>
                           <md-field
-                            class="col-1"
+                            class="col-3 col-lg-1"
                             style="margin-right:1%;"
                             name="numeroVia"
                             id="numeroVia"
@@ -90,7 +106,7 @@
                             >Formato incorrecto</span>
                           </md-field>
                           <md-field
-                            class="col-2"
+                            class="col-3 col-lg-2"
                             style="margin-right:3%;"
                             name="letra"
                             id="letra"
@@ -99,13 +115,13 @@
                             :class="getValidationClass('letra')"
                           >
                             <label>Especial</label>
-                            <span class="md-helper-text">Ej: A, SUR, A SUR</span>
+                            <span class="md-helper-text">Ej: A; SUR; B SUR</span>
                             <md-input v-model="form.letra" md-counter="false" maxlength="7"></md-input>
                             <span class="md-error" v-if="!$v.form.letra.ViaValid">Formato incorrecto</span>
                           </md-field>
-                          <div class="d-flex align-items-center" style="margin-right:1%;">#</div>
+                          <div class="d-flex align-items-center" style="margin-right:0.4%;">#</div>
                           <md-field
-                            class="col-1"
+                            class="col-4 col-md-2 col-lg-1"
                             style="margin-right:1%;"
                             name="numero1"
                             id="numero1"
@@ -122,7 +138,7 @@
                             >Formato incorrecto</span>
                           </md-field>
                           <md-field
-                            class="col-1"
+                            class="col-4 col-md-2 col-lg-1"
                             name="letra1"
                             id="letra1"
                             v-model="form.letra1"
@@ -138,7 +154,7 @@
                           </md-field>
                           <div class="d-flex align-items-center" style="margin-right:1%;">-</div>
                           <md-field
-                            class="col-1"
+                            class="col-4 col-md-2 col-lg-1"
                             style="margin-right:1%;"
                             name="numero2"
                             id="numero2"
@@ -155,7 +171,7 @@
                             >Formato incorrecto</span>
                           </md-field>
                           <md-field
-                            class="col-1"
+                            class="col-4 col-md-2"
                             name="letra2"
                             id="letra2"
                             v-model="form.letra2"
@@ -205,11 +221,11 @@
               </div>
               <div class="d-flex">
                 <md-button
-                  class="mr-auto p-2 md-primary"
+                  class="mr-auto p-2 md-raised md-accent"
                   @click="setDone('second', 'first')"
                 >ANTERIOR</md-button>
                 <md-button
-                  class="ml-auto p-2 md-primary"
+                  class="ml-auto p-2 md-raised md-primary"
                   @click="setDone('second', 'third')"
                 >SIGUIENTE</md-button>
               </div>
@@ -217,13 +233,52 @@
           </md-step>
 
           <md-step id="third" md-label="Third Step" :md-editable="true" :md-done.sync="third">
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias
-              doloribus eveniet quaerat modi cumque quos sed, temporibus nemo eius
-              amet aliquid, illo minus blanditiis tempore, dolores voluptas dolore
-              placeat nulla.
-            </p>
-            <md-button class="md-raised md-primary" @click="setDone('third')">Done</md-button>
+            <div class="row" style="margin-bottom: 2%;">
+              <div class="col-12">
+                <h3>Seleccione su medio de pago</h3>
+              </div>
+              <div class="col-12">
+                <div class="row">
+                  <div class="col-6" @click="pago='efectivo'">
+                    <md-card :class="pago==='efectivo'?'md-primary':''" md-with-hover>
+                      <md-ripple>
+                        <md-card-header>
+                          <div class="md-title">PAGO EN EFECTIVO</div>
+                        </md-card-header>
+                        <md-card-content>
+                          <font-awesome-icon icon="money-bill-wave" size="3x" />
+                        </md-card-content>
+                      </md-ripple>
+                    </md-card>
+                  </div>
+                  <div class="col-6" @click="pago='tarjeta'">
+                    <md-card :class="pago==='tarjeta'?'md-primary':''" md-with-hover>
+                      <md-ripple>
+                        <md-card-header>
+                          <div class="md-title">TARJETA EN SITIO</div>
+                        </md-card-header>
+                        <md-card-content>
+                          <font-awesome-icon icon="credit-card" size="3x" />
+                        </md-card-content>
+                      </md-ripple>
+                    </md-card>
+                  </div>
+                  <div class="col-12" v-if="verifyPago" style="color:red; margin-top: 2%;">
+                    <p>Debe seleccionar una direccion</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="d-flex">
+              <md-button
+                class="mr-auto p-2 md-raised md-accent"
+                @click="setDone('third', 'second')"
+              >ANTERIOR</md-button>
+              <md-button
+                class="ml-auto p-2 md-raised md-primary"
+                @click="setDone('third')"
+              >FINALIZAR</md-button>
+            </div>
           </md-step>
         </md-steppers>
       </div>
@@ -240,18 +295,20 @@ const validVias = value =>
   /(Calle|Carrera|Diagonal|Transversal|Avenida)$/.test(value);
 export default {
   name: "CartComponent",
-  props: ["user"],
   data: () => ({
     verify: false,
+    verifyPago: false,
     logged: false,
     items: [],
     radio: false,
-    Direccion: "no",
+    Direccion: "",
     active: "first",
     first: false,
     second: false,
     third: false,
     alert: "secondary",
+    selected: "primary",
+    pago: "",
     via: ["Calle", "Carrera", "Diagonal", "Transversal", "Avenida"],
     form: {
       Via: null,
@@ -306,7 +363,7 @@ export default {
   },
   computed: {
     ...mapState(["cart", "user"]),
-    ...mapGetters(["getCountCart"])
+    ...mapGetters(["getCountCart", "totalPriece"])
   },
   methods: {
     ...mapActions(["setCart"]),
@@ -318,16 +375,19 @@ export default {
     getItem() {
       this.items = getCart();
     },
+    cancelar() {
+      this.$router.push("/");
+    },
     setDone(id, index) {
-      if (id == "second" && index == "third") {
-        if (this.Direccion == "otro") {
+      if (id === "second" && index === "third") {
+        if (this.Direccion === "otro") {
           this.verify = false;
           if (this.validateDirection()) {
             this[id] = true;
             this.active = index;
           }
         } else {
-          if (this.Direccion == "no") {
+          if (!this.Direccion) {
             this.verify = true;
           } else {
             this.verify = false;
@@ -335,13 +395,48 @@ export default {
             this.active = index;
           }
         }
+      } else if (id === "third" && index !== "second") {
+        this.verifyPago = !this.pago;
+        if (!this.verifyPago) {
+          const direccion =
+            this.Direccion !== "otro"
+              ? this.Direccion
+              : this.getOtherDirection();
+          const data = {
+            telefono: this.user.telefono,
+            id_usuario: this.user.id,
+            nombre_usuario: `${this.user.nombre} ${this.user.apellido}`,
+            hora_fecha: new Date().toLocaleString(),
+            metodo_pago: this.pago,
+            productos: this.getProductos(),
+            direccion
+          };
+          console.log(data);
+          this.save(data);
+        }
       } else {
         this[id] = true;
         this.active = index;
       }
     },
+    getProductos() {
+      var productos = [];
+      this.cart.map(producto => {
+        productos.push({
+          nombre: producto.nombre,
+          caracteristicas: `${producto.peso}${producto.unidad}`,
+          cantidad: producto.cantidad,
+          precio: producto.precio
+        });
+      });
+      return productos;
+    },
+    descontarProductos() {},
     validateLoggin() {
       this.logged = this.$cookies.get("session") && this.$cookies.get("token");
+    },
+    save(data) {
+      console.log(data);
     },
     getValidationClass(fieldName) {
       const field = this.$v.form[fieldName];
@@ -351,19 +446,16 @@ export default {
         };
       }
     },
-    saveDirection() {
-      this.sending = true;
-      const data = {
+    getOtherDirection() {
+      return {
         barrio: this.form.barrio,
         direccion: `${this.form.Via}+" "+${this.form.numero}+" "+${this.form.letra}+" # "+${this.form.numero1}+" "+${this.form.letra1}+" "+${this.form.numero2}+" "${this.form.letra2}`,
         datos_adicionales: this.form.info
       };
-      console.log(data);
     },
     validateDirection() {
       this.$v.$touch();
       if (!this.$v.$invalid) {
-        //this.saveDirection();
         return true;
       }
     },
@@ -376,6 +468,8 @@ export default {
     }
   },
   mounted() {
+    console.log("date", new Date().toLocaleString());
+
     this.getItem();
     this.validateUser();
     this.validateLoggin();

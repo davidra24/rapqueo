@@ -16,7 +16,7 @@
             </md-button>
           </div>
           <div class="md-subhead p-2">Cantidad: {{ item.cantidad }}</div>
-          <div class="ml-auto p-2">${{ item.precio }}</div>
+          <div class="ml-auto p-2">$ {{ item.precio }}</div>
         </md-card-header>
       </md-card>
     </div>

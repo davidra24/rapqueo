@@ -24,7 +24,12 @@ import "vue-material/dist/vue-material.min.css";
 import "vue-material/dist/theme/default.css";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faShoppingCart, faUser } from "@fortawesome/free-solid-svg-icons";
+import {
+  faShoppingCart,
+  faUser,
+  faMoneyBillWave,
+  faCreditCard
+} from "@fortawesome/free-solid-svg-icons";
 
 import { mapActions } from "vuex";
 import Vuelidate from "vuelidate";
@@ -41,7 +46,8 @@ Vue.use(responsive);
 Vue.use(vueCookies);
 
 Vue.$cookies.config("7d");
-library.add([faShoppingCart, faUser]);
+
+library.add([faShoppingCart, faUser, faMoneyBillWave, faCreditCard]);
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 Vue.config.productionTip = false;
 
