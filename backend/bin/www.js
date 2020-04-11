@@ -28,15 +28,15 @@ const swaggerDefinition = {
   info: {
     title: 'MercarChevere API',
     version: '1.0.0',
-    description: 'API rest para aplicación MercarChevere.com'
+    description: 'API rest para aplicación MercarChevere.com',
   },
   host: `localhost:${port}`,
-  basePath: '/'
+  basePath: '/',
 };
 const swaggerOptions = {
   swaggerDefinition,
-  apis: ['api/api.js']
+  apis: ['api/api.js'],
 };
 
-//const swaggerDocs = swaggerJsDoc(swaggerOptions);
-//app.use(swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+app.use(swaggerUi.serve, swaggerUi.setup(swaggerDocs));
