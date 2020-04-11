@@ -12,6 +12,7 @@ export const signup = 'api/signup';
 export const login = 'api/login';
 export const verifyPassword = 'api/verifyPassword';
 export const usuarios = 'api/users';
+export const pedidos = 'api/orders';
 export const notificationRegister = 'notification/subscribe';
 
 //Service worker and notifications

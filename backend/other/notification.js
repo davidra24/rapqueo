@@ -23,7 +23,7 @@ router.post('/subscribe', async (req, res) => {
   var exist = false;
   if (displayNotifications.length > 0) {
     await displayNotifications.forEach((element) => {
-      if (element.keys.p256dh === subscription.keys.p256dh) {
+      if (element.keys.p256dh === subscribe.keys.p256dh) {
         exist = true;
       }
     });
@@ -48,7 +48,7 @@ router.post('/subscribe', async (req, res) => {
 router.post('/sendNotification', async (req, res) => {
   const payload = await JSON.stringify({
     title: 'MercarChevere.com',
-    msg: req.body.msg,
+    message: req.body.msg,
     url: req.body.url,
   });
   const pushSubscription = await req.body.pushSubscription;

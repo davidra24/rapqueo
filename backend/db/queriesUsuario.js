@@ -40,7 +40,6 @@ putUser = async (req, res) => {
           nombre: data.nombre,
           apellido: data.apellido,
           admin: data.admin,
-          foto: data.foto ? data.foto : null,
           direccion: data.direccion ? data.direccion : null,
         },
       });

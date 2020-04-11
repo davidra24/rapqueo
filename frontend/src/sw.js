@@ -12,9 +12,8 @@ self.addEventListener('push', event => {
     const options = {
       body: data.message,
       icon: '',
-      tag: 'push-notification-tag',
       data: {
-        url: JSON.parse(event.message).url
+        url: data.url
       }
     };
     event.waitUntil(self.registration.showNotification(data.title, options));

@@ -291,6 +291,10 @@ import { required, between, integer, alpha } from "vuelidate/lib/validators";
 import { mapState, mapActions, mapGetters } from "vuex";
 import BuyContent from "./Buycontent";
 import { getCart } from "../../util";
+import { postApi, putApi } from "../../util/api";
+import { errorMsg, successMsg } from "../../util/utilMsg";
+import { pedidos, usuarios } from "../../util/constants";
+
 const validVias = value =>
   /(Calle|Carrera|Diagonal|Transversal|Avenida)$/.test(value);
 export default {
@@ -403,15 +407,17 @@ export default {
               ? this.Direccion
               : this.getOtherDirection();
           const data = {
-            telefono: this.user.telefono,
             id_usuario: this.user.id,
+            telefono: this.user.telefono,
             nombre_usuario: `${this.user.nombre} ${this.user.apellido}`,
             hora_fecha: new Date().toLocaleString(),
             metodo_pago: this.pago,
             productos: this.getProductos(),
-            direccion
+            direccion,
+            total: this.totalPriece
           };
-          console.log(data);
+          console.log("data...", data);
+
           this.save(data);
         }
       } else {
@@ -423,6 +429,7 @@ export default {
       var productos = [];
       this.cart.map(producto => {
         productos.push({
+          id: producto.id,
           nombre: producto.nombre,
           caracteristicas: `${producto.peso}${producto.unidad}`,
           cantidad: producto.cantidad,
@@ -435,8 +442,32 @@ export default {
     validateLoggin() {
       this.logged = this.$cookies.get("session") && this.$cookies.get("token");
     },
-    save(data) {
-      console.log(data);
+    async save(body) {
+      if (this.Direccion === "otro") {
+        var direccion = this.user.direccion;
+        direccion.push(body.direccion);
+        await putApi(usuarios, body.id_usuario, { direccion });
+      }
+      await postApi(pedidos, body)
+        .then(response => {
+          if (response.data) {
+            console.log("response.data", response.data);
+            const { code, msg } = response.data;
+            if (parseInt(code) === 200) {
+              successMsg("Mercar Chevere", msg);
+              localStorage.removeItem("cart");
+              this.$router.push("/");
+            } else {
+              errorMsg("Mercar Chevere", msg);
+            }
+          } else {
+            errorMsg("Mercar Chevere", "Error de servidor");
+          }
+        })
+        .catch(error => {
+          console.log("err", error);
+          errorMsg("Mercar Chevere", "Error de servidor" + error.message);
+        });
     },
     getValidationClass(fieldName) {
       const field = this.$v.form[fieldName];
