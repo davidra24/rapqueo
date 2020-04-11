@@ -262,7 +262,7 @@ export default {
               await this.$cookies.set("token", token);
               const crypted = await crypt(await JSON.stringify(data));
               await this.$cookies.set("session", crypted);
-              //await this.subscribeNotification(data.id);
+              await this.subscribeNotification(data.id);
               await successMsg("Mercar Chevere", msg);
               await this.createSession();
               await this.$router.push(this.redireccionamiento);
