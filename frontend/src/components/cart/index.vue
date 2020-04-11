@@ -311,15 +311,15 @@ export default {
     pago: "",
     via: ["Calle", "Carrera", "Diagonal", "Transversal", "Avenida"],
     form: {
-      Via: null,
-      numeroVia: null,
-      numero1: null,
-      numero2: null,
-      letra: null,
-      letra1: null,
-      letra2: null,
-      barrio: null,
-      info: null
+      Via: "",
+      numeroVia: "",
+      numero1: "",
+      numero2: "",
+      letra: "",
+      letra1: "",
+      letra2: "",
+      barrio: "",
+      info: ""
     },
     sending: false
   }),
@@ -433,7 +433,11 @@ export default {
     },
     descontarProductos() {},
     validateLoggin() {
-      this.logged = this.$cookies.get("session") && this.$cookies.get("token");
+      if (this.$cookies.get("session") && this.$cookies.get("token")) {
+        this.logged = true;
+      } else {
+        this.$router.push("/login");
+      }
     },
     save(data) {
       console.log(data);
@@ -461,15 +465,19 @@ export default {
     },
     clearForm() {
       this.$v.$reset();
-      this.form.Via = null;
-      this.form.numeroVia = null;
-      this.form.numero1 = null;
-      this.form.numero2 = null;
+      this.form.Via = "";
+      this.form.numeroVia = "";
+      this.form.numero1 = "";
+      this.form.numero2 = "";
+      this.letra = "";
+      this.letra1 = "";
+      this.letra2 = "";
+      this.barrio = "";
+      this.info = "";
     }
   },
   mounted() {
     console.log("date", new Date().toLocaleString());
-
     this.getItem();
     this.validateUser();
     this.validateLoggin();
