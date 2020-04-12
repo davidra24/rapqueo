@@ -1,5 +1,5 @@
 <template style="height: 100%">
-  <div id="app">
+  <div id="myapp">
     <div class="page-container md-layout-column full-screen">
       <Navbar id="nav" />
       <CartSlider />
@@ -84,16 +84,19 @@ export default {
 @import "node_modules/bootstrap/scss/bootstrap";
 @import "node_modules/bootstrap-vue/src/index.scss";
 
-#app {
+#myapp {
   font-family: "Roboto", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  height: 100%;
+  width: 100%;
+  position: fixed;
 }
 .app {
   margin-top: 5%;
-  overflow: auto;
+  overflow: hidden;
   height: 100%;
   padding-bottom: 5%;
 }
