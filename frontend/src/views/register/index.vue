@@ -116,6 +116,9 @@
               <md-button type="submit" class="md-primary" :disabled="sending">Crear Usuario</md-button>
             </md-card-actions>
           </md-card>
+          <span
+            style="margin-top: 2%; color: #FF5252;"
+          >¡Para conocer el estado de tu pedido habilita nuestras notificaciones por favor!</span>
         </form>
       </div>
     </div>
