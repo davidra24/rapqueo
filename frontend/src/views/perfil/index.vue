@@ -221,7 +221,11 @@
                     <div class="row">
                       <p class="col-11 d-flex justify-content-center">Barrio: {{dir.barrio}}</p>
                       <div class="col-1 d-flex justify-content-end" v-if="editardireccion">
-                        <md-button class="md-icon-button md-accent" @click="quitarDireccion()">
+                        <md-button
+                          class="md-icon-button md-accent"
+                          @click="quitarDireccion(dir)"
+                          :disabled="sending"
+                        >
                           <md-icon>delete_outline</md-icon>
                         </md-button>
                       </div>
@@ -571,7 +575,25 @@ export default {
       this.editardireccion = true;
       this.$v.$reset();
     },
-    eliminarDireccion() {},
+    async quitarDireccion(dir) {
+      const direcciones = this.user.direccion;
+      var finalDir = [];
+      await direcciones.map(direccion => {
+        if (
+          direccion.direccion !== dir.direccion &&
+          direccion.barrio !== dir.barrio &&
+          direccion.datos_adicionales !== dir.datos_adicionales
+        ) {
+          finalDir.push(direccion);
+        }
+      });
+      const newUser = {
+        ...this.user,
+        direccion: finalDir
+      };
+      this.setUser(newUser);
+      this.actualizarDatos({ direccion: finalDir });
+    },
     cancelarDireccion() {
       this.editardireccion = false;
       this.clearForm();
@@ -601,7 +623,6 @@ export default {
     async save(body) {
       var direccion = this.user.direccion;
       direccion.push(body);
-      //await putApi(usuarios, body.id_usuario, { direccion })
       this.actualizarDatos({ direccion });
     },
     getValidationClass(fieldName) {
