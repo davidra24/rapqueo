@@ -9,6 +9,7 @@ const pedido = new Schema({
   metodo_pago: String,
   productos: Array,
   direccion: Object,
+  estado: { type: Number, default: 0 },
   total: String,
 });
 

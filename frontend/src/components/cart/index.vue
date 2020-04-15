@@ -232,15 +232,19 @@
             </div>
           </md-step>
 
-          <md-step id="third" md-label="Third Step" :md-editable="true" :md-done.sync="third">
+          <md-step id="third" md-label="Método de pago" :md-editable="true" :md-done.sync="third">
             <div class="row" style="margin-bottom: 2%;">
               <div class="col-12">
                 <h3>Seleccione su medio de pago</h3>
               </div>
               <div class="col-12">
                 <div class="row">
-                  <div class="col-6" @click="pago='efectivo'">
-                    <md-card :class="pago==='efectivo'?'md-primary':''" md-with-hover>
+                  <div class="col-12 col-md-6" style="margin-bottom:3%;" @click="pago='efectivo'">
+                    <md-card
+                      style="height:100%;"
+                      :class="pago==='efectivo'?'md-primary':''"
+                      md-with-hover
+                    >
                       <md-ripple>
                         <md-card-header>
                           <div class="md-title">PAGO EN EFECTIVO</div>
@@ -251,8 +255,12 @@
                       </md-ripple>
                     </md-card>
                   </div>
-                  <div class="col-6" @click="pago='tarjeta'">
-                    <md-card :class="pago==='tarjeta'?'md-primary':''" md-with-hover>
+                  <div class="col-12 col-md-6" style="margin-bottom:3%;" @click="pago='tarjeta'">
+                    <md-card
+                      style="height:100%;"
+                      :class="pago==='tarjeta'?'md-primary':''"
+                      md-with-hover
+                    >
                       <md-ripple>
                         <md-card-header>
                           <div class="md-title">TARJETA EN SITIO</div>
@@ -370,7 +378,7 @@ export default {
     ...mapGetters(["getCountCart", "totalPriece"])
   },
   methods: {
-    ...mapActions(["setCart"]),
+    ...mapActions(["setCart", "setProducts"]),
     validateUser() {
       if (!this.cart || this.getCountCart == 0) {
         this.$router.push("/");
@@ -461,6 +469,7 @@ export default {
               successMsg("Mercar Chevere", msg);
               localStorage.setItem("cart", "[]");
               this.setCart([]);
+              this.setProducts(null);
               this.$router.push("/");
             } else {
               errorMsg("Mercar Chevere", msg);

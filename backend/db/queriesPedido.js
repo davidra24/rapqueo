@@ -17,6 +17,13 @@ getAllOrders = (req, res) => {
   });
 };
 
+getAllOrdersByUser = (req, res) => {
+  const { id_usuario } = req.body;
+  Pedidos.find({ id_usuario }).then((data) => {
+    res.send(data);
+  });
+};
+
 getOneOrder = (req, res) => {
   const id = req.params.id;
   Pedidos.findById(id).then((data) => {
@@ -31,7 +38,7 @@ postOrder = async (req, res) => {
     .then(async (data) => {
       const info = {
         message: 'Se ha realizado un pedido',
-        url: `https://mercarchevere.com/pedidos/${data._id}}`,
+        url: `/pedidos/${data._id}`,
         id: data._id,
       };
       user.forEach(async (us) => {
@@ -40,7 +47,6 @@ postOrder = async (req, res) => {
           await sendNotification(notification, info);
         });
       });
-
       res.send({
         code: 200,
         msg: 'Pedido realizado exitosamente',
@@ -72,7 +78,7 @@ deleteOrder = (req, res) => {
 const sendNotification = async (notification, body) => {
   const { message, url, id } = body;
   const payload = JSON.stringify({
-    title: 'MercarChevere.com',
+    title: 'Mercar Chevere',
     message: {
       message,
       url,
@@ -97,6 +103,7 @@ const updatePorducts = async (products) => {
 module.exports = {
   getAllOrders,
   getOneOrder,
+  getAllOrdersByUser,
   postOrder,
   pullOrder,
   deleteOrder,
