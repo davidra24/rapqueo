@@ -7,7 +7,7 @@
           <Loading />
         </div>
         <div v-else class="col-12">
-          <OneProduct v-bind:product="product" />
+          <OneOrder v-bind:order="order" />
         </div>
       </div>
     </div>
@@ -16,18 +16,18 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
-import { products } from "@/util/constants";
+import { pedidos } from "@/util/constants";
 import { getOneOrManyApi } from "@/util/api";
 import Loading from "@/components/loading";
-import OneProduct from "@/components/products/OneProduct.vue";
+import OneOrder from "@/components/orders/OneOrder";
 export default {
-  name: "Product",
+  name: "Order",
   components: {
     Loading,
-    OneProduct
+    OneOrder
   },
   computed: {
-    ...mapState(["product"])
+    ...mapState(["order"])
   },
   data() {
     return {
@@ -35,12 +35,12 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["setProduct", "setError"]),
+    ...mapActions(["setOrder", "setError"]),
     async fetch(id) {
       this.loading = true;
-      await getOneOrManyApi(products, id)
+      await getOneOrManyApi(pedidos, id)
         .then(res => {
-          this.setProduct(res.data);
+          this.setOrder(res.data);
           this.loading = false;
         })
         .catch(err => {
@@ -50,8 +50,9 @@ export default {
     }
   },
   mounted() {
+    console.log(this.$route.params.id);
     const id = this.$route.params.id;
-    if (!this.product || this.product._id != id) {
+    if (!this.order || this.order._id != id) {
       this.fetch(id);
     }
   }

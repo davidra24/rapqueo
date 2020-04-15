@@ -16,6 +16,7 @@ import ProductosAdmin from "../views/admin/Productos";
 import CategoriasAdmin from "../views/admin/Categorias";
 import PromocionesAdmin from "../views/admin/Promociones";
 import Perfil from "../views/perfil";
+import Order from "../views/pedidos/Order.vue";
 
 const linkActiveClass = "my-link-active-class";
 
@@ -26,92 +27,98 @@ const routes = [
   {
     path: "/",
     name: "ProductContainer",
-    component: AllProductsContainer,
+    component: AllProductsContainer
   },
   {
     path: "/login",
     name: "Login",
-    component: Login,
+    component: Login
   },
   {
     path: "/registro",
     name: "Register",
-    component: Register,
+    component: Register
   },
   {
     path: "/categorias",
     name: "CategoriesContainer",
-    component: CategoriesContainer,
+    component: CategoriesContainer
   },
   {
     path: "/categorias/:id",
     name: "ProductContainer",
-    component: ProductsContainer,
+    component: ProductsContainer
   },
   {
     path: "/productos/:id",
     name: "Product",
-    component: Product,
+    component: Product
   },
   {
     path: "/productos",
     name: "ProductContainer",
-    component: AllProductsContainer,
+    component: AllProductsContainer
   },
   {
     path: "/promociones",
     name: "Promoscontainer",
-    component: PromosContainer,
+    component: PromosContainer
   },
   {
     path: "/promociones/:id",
     name: "Promo",
-    component: Promo,
+    component: Promo
   },
   {
     path: "/carrito",
     name: "Cart",
-    component: Cart,
+    component: Cart
+  },
+  {
+    path: "/pedido/:id",
+    name: "Order",
+    component: Order
   },
   {
     path: "/pedidos/:id",
     name: "PedidosUsuario",
-    component: PedidosUsuario,
+    component: PedidosUsuario
   },
+
   {
     path: "/pedidos",
     name: "PedidosAdmin",
-    component: PedidosAdmin,
+    component: PedidosAdmin
   },
   {
     path: "/perfil/:id",
     name: "Perfil",
-    component: Perfil,
+    component: Perfil
   },
   {
     path: "/admin/categorias",
     name: "CategoriasAdmin",
-    component: CategoriasAdmin,
+    component: CategoriasAdmin
   },
   {
     path: "/admin/promociones",
     name: "PromocionesAdmin",
-    component: PromocionesAdmin,
+    component: PromocionesAdmin
   },
   {
     path: "/admin/productos",
     name: "ProductosAdmin",
-    component: ProductosAdmin,
+    component: ProductosAdmin
   },
   {
     path: "/404",
     name: "NotFound",
-    component: NotFound,
+    component: NotFound
   },
   {
     path: "/**",
-    redirect: "/404",
-  },
+    redirect: "/404"
+  }
 ];
 
 const mode = "history";
@@ -119,7 +126,7 @@ const mode = "history";
 const router = new VueRouter({
   routes,
   linkActiveClass,
-  mode,
+  mode
 });
 
 export default router;

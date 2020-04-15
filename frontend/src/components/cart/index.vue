@@ -239,8 +239,8 @@
               </div>
               <div class="col-12">
                 <div class="row">
-                  <div class="col-6" @click="pago='efectivo'">
-                    <md-card :class="pago==='efectivo'?'md-primary':''" md-with-hover>
+                  <div class="col-6" @click="pago='Efectivo'">
+                    <md-card :class="pago==='Efectivo'?'md-primary':''" md-with-hover>
                       <md-ripple>
                         <md-card-header>
                           <div class="md-title">PAGO EN EFECTIVO</div>
@@ -251,8 +251,8 @@
                       </md-ripple>
                     </md-card>
                   </div>
-                  <div class="col-6" @click="pago='tarjeta'">
-                    <md-card :class="pago==='tarjeta'?'md-primary':''" md-with-hover>
+                  <div class="col-6" @click="pago='Tarjeta'">
+                    <md-card :class="pago==='Tarjeta'?'md-primary':''" md-with-hover>
                       <md-ripple>
                         <md-card-header>
                           <div class="md-title">TARJETA EN SITIO</div>
