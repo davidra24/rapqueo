@@ -7,6 +7,7 @@ const store = new Vuex.Store({
   //Data
   state: {
     categories: null,
+    categorie: null,
     products: null,
     product: null,
     productsCategorie: null,
@@ -16,7 +17,7 @@ const store = new Vuex.Store({
     promo: null,
     user: null,
     session: null,
-    error: null
+    error: null,
   },
   getters: {
     getCountCart(state) {
@@ -28,12 +29,12 @@ const store = new Vuex.Store({
     totalPriece(state) {
       var total = 0;
       if (state.cart) {
-        state.cart.map(c => {
+        state.cart.map((c) => {
           total += c.precio;
         });
       }
       return total;
-    }
+    },
   },
   //Methods
   mutations: {
@@ -42,6 +43,9 @@ const store = new Vuex.Store({
     },
     setCategories(state, categories) {
       state.categories = categories;
+    },
+    setCategorie(state, categorie) {
+      state.categorie = categorie;
     },
     setPromos(state, promos) {
       state.promos = promos;
@@ -66,7 +70,7 @@ const store = new Vuex.Store({
       if (!state.cart) {
         state.cart = [];
       }
-      state.cart.map(item => {
+      state.cart.map((item) => {
         if (item.id === oneCart.id) {
           item.cantidad += oneCart.cantidad;
           item.precio += oneCart.precio;
@@ -88,7 +92,7 @@ const store = new Vuex.Store({
     },
     setSession(state, session) {
       state.session = session;
-    }
+    },
   },
   actions: {
     setError({ commit }, error) {
@@ -96,6 +100,9 @@ const store = new Vuex.Store({
     },
     setCategories({ commit }, categories) {
       commit('setCategories', categories);
+    },
+    setCategorie({ commit }, categorie) {
+      commit('setCategorie', categorie);
     },
     setPromos({ commit }, promos) {
       commit('setPromos', promos);
@@ -129,9 +136,9 @@ const store = new Vuex.Store({
     },
     setSession({ commit }, session) {
       commit('setSession', session);
-    }
+    },
   },
-  modules: {}
+  modules: {},
 });
 
 export default store;
