@@ -596,6 +596,27 @@ api.get('/orders', queryPedido.getAllOrders);
 api.get('/orders/:id', queryPedido.getOneOrder);
 /**
  * @swagger
+ *  /api/orders/{id}:
+ *    post:
+ *      tags: ['Pedidos']
+ *      description: Trae los pedidos de usuario
+ *      summary: Get one order by user ID
+ *      parameters:
+ *      - in: path
+ *        name: id_user
+ *        in: body
+ *        type: string
+ *        required: true
+ *        description: Id de usuario
+ *      responses:
+ *        '200':
+ *          {description: Successful}
+ *        '500':
+ *          {description: Internal Server Error}
+ */
+api.post('/ordersbyuser', queryPedido.getAllOrdersByUser);
+/**
+ * @swagger
  *  /api/orders/:
  *    post:
  *      tags: ['Pedidos']

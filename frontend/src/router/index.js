@@ -75,12 +75,12 @@ const routes = [
     component: Cart
   },
   {
-    path: "/pedido/:id",
+    path: "/pedidos/:id",
     name: "Order",
     component: Order
   },
   {
-    path: "/pedidos/:id",
+    path: "/MisPedidos",
     name: "PedidosUsuario",
     component: PedidosUsuario
   },

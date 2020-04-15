@@ -34,9 +34,10 @@ self.addEventListener('notificationclick', e => {
           : false
       );
       // Otherwise, open a new tab to the applicable URL and focus it.
+      const { url } = e.notification.data;
       if (!hadWindowToFocus)
         clients
-          .openWindow(e.notification.data.url)
+          .openWindow(self.location.origin + url)
           .then(windowClient => (windowClient ? windowClient.focus() : null));
     })
   );

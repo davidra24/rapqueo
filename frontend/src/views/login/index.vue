@@ -59,6 +59,9 @@
               <md-button type="submit" class="md-primary" :disabled="sending">Iniciar Sesión</md-button>
             </md-card-actions>
           </md-card>
+          <span
+            style="margin-top: 2%; color: #FF5252;"
+          >¡Para conocer el estado de tu pedido habilita nuestras notificaciones por favor!</span>
         </form>
       </div>
     </div>
@@ -148,7 +151,7 @@ export default {
               const crypted = await crypt(str);
               await this.$cookies.set("session", crypted);
               await this.$cookies.set("token", token);
-              //   await this.subscribeNotification(data.id);
+              //await this.subscribeNotification(data.id);
               await this.createSession();
               await successMsg("Mercar Chevere", msg);
               this.sending = await false;
