@@ -38,12 +38,12 @@
             </div>
           </div>
           <div class="col-12 mrg-btn">
-            <button
-              class="btn btn-success btn-block"
+            <md-button
+              class="md-raised md-primary btn-block"
               @click="agregarCarrito(), (myVar = agregado())"
               :disabled="show"
               variant="primary"
-            >Agregar</button>
+            >Agregar</md-button>
           </div>
           <template v-slot:overlay>
             <div class="text-center">

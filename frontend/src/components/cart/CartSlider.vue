@@ -21,7 +21,7 @@
         </h6>
       </md-list-item>
       <md-list-item v-show="getCountCart > 0">
-        <button class="btn btn-block btn-success" @click="irACarrito()">Comprar</button>
+        <md-button class="md-raised md-primary btn-block" @click="irACarrito()">Comprar</md-button>
       </md-list-item>
       <md-list-item v-show="getCountCart === 0">
         <div class="d-flex bd-highlight mb-3">
