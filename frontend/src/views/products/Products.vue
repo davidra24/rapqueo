@@ -5,7 +5,10 @@
       <div v-if="loading" class="col-12">
         <Loading />
       </div>
-      <div v-else-if="!productsCategorie" class="col-12">
+      <div
+        v-else-if="!productsCategorie || productsCategorie.length === 0"
+        class="col-12"
+      >
         <h2>
           <strong>
             NO HAY PRODUCTOS PARA ESTA CATEGORÍA
@@ -22,53 +25,53 @@
 
 <script>
 // @ is an alias to /src
-import Loading from "@/components/loading";
-import { getOneOrManyApi } from "@/util/api";
-import { productsByCategorie } from "@/util/constants";
-import Products from "@/components/products/Products.vue";
-import { mapState, mapActions } from "vuex";
+import Loading from '@/components/loading';
+import { getOneOrManyApi } from '@/util/api';
+import { productsByCategorie } from '@/util/constants';
+import Products from '@/components/products/Products.vue';
+import { mapState, mapActions } from 'vuex';
 export default {
-  name: "ProductsContainer",
+  name: 'ProductsContainer',
   components: {
     Loading,
-    Products
+    Products,
   },
   data() {
     return {
-      loading: false
+      loading: false,
     };
   },
   computed: {
-    ...mapState(["productsCategorie"])
+    ...mapState(['productsCategorie']),
   },
   methods: {
-    ...mapActions(["setProductsCategorie", "setError"]),
+    ...mapActions(['setProductsCategorie', 'setError']),
     async fetch(id) {
       this.loading = true;
       await getOneOrManyApi(productsByCategorie, id)
-        .then(res => {
+        .then((res) => {
           this.setProductsCategorie(res.data);
           console.log(res.data);
-
           this.loading = false;
         })
-        .catch(err => {
+        .catch((err) => {
           this.setError(err);
           this.loading = false;
         });
-    }
+    },
   },
   mounted() {
     const id = this.$route.params.id;
-    if (
-      !this.productsCategorie ||
-      this.productsCategorie[0].idCategoria != id
-    ) {
+
+    if (!this.productsCategorie) {
+      this.fetch(id);
+    } else if (this.productsCategorie.length === 0) {
+      this.fetch(id);
+    } else if (this.productsCategorie[0].idCategoria != id) {
       this.fetch(id);
     }
-  }
+  },
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

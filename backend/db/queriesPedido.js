@@ -1,12 +1,12 @@
-require('dotenv/config');
+require("dotenv/config");
 
-const webpush = require('web-push');
-const Pedidos = require('../models/Pedidos');
-const Usuarios = require('../models/Usuarios');
-const Productos = require('../models/Productos');
+const webpush = require("web-push");
+const Pedidos = require("../models/Pedidos");
+const Usuarios = require("../models/Usuarios");
+const Productos = require("../models/Productos");
 
 webpush.setVapidDetails(
-  'mailto:mercachevere0@gmail.com',
+  "mailto:mercachevere0@gmail.com",
   process.env.PUBLIC_KEY,
   process.env.PRIVATE_KEY
 );
@@ -17,9 +17,9 @@ getAllOrders = (req, res) => {
   });
 };
 
-getAllOrdersByUser = (req, res) => {
-  const { id_usuario } = req.body;
-  Pedidos.find({ id_usuario }).then((data) => {
+getOrdersByUser = (req, res) => {
+  const id = req.params.id;
+  Pedidos.find({ id_usuario: id }).then((data) => {
     res.send(data);
   });
 };
@@ -37,19 +37,19 @@ postOrder = async (req, res) => {
   await Pedidos.create(req.body)
     .then(async (data) => {
       const info = {
-        message: 'Se ha realizado un pedido',
-        url: `/pedidos/${data._id}`,
+        message: "Se ha realizado un pedido",
+        url: `/pedido/${data._id}`,
         id: data._id,
       };
       user.forEach(async (us) => {
-        console.log('user');
+        console.log("user");
         await us.displayNotifications.forEach(async (notification) => {
           await sendNotification(notification, info);
         });
       });
       res.send({
         code: 200,
-        msg: 'Pedido realizado exitosamente',
+        msg: "Pedido realizado exitosamente",
         data,
       });
     })
@@ -78,7 +78,7 @@ deleteOrder = (req, res) => {
 const sendNotification = async (notification, body) => {
   const { message, url, id } = body;
   const payload = JSON.stringify({
-    title: 'Mercar Chevere',
+    title: "Mercar Chevere",
     message: {
       message,
       url,
@@ -95,7 +95,7 @@ const sendNotification = async (notification, body) => {
 const updatePorducts = async (products) => {
   return await products.map(async (producto) => {
     return await Productos.findByIdAndUpdate(producto.id, {
-      $inc: { 'caracteristicas.cantidad': -producto.cantidad },
+      $inc: { "caracteristicas.cantidad": -producto.cantidad },
     });
   });
 };
@@ -103,7 +103,7 @@ const updatePorducts = async (products) => {
 module.exports = {
   getAllOrders,
   getOneOrder,
-  getAllOrdersByUser,
+  getOrdersByUser,
   postOrder,
   pullOrder,
   deleteOrder,

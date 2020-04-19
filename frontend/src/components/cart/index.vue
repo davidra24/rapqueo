@@ -239,10 +239,10 @@
               </div>
               <div class="col-12">
                 <div class="row">
-                  <div class="col-12 col-md-6" style="margin-bottom:3%;" @click="pago='efectivo'">
+                  <div class="col-12 col-md-6" style="margin-bottom:3%;" @click="pago='Efectivo'">
                     <md-card
                       style="height:100%;"
-                      :class="pago==='efectivo'?'md-primary':''"
+                      :class="pago==='Efectivo'?'md-primary':''"
                       md-with-hover
                     >
                       <md-ripple>
@@ -255,10 +255,10 @@
                       </md-ripple>
                     </md-card>
                   </div>
-                  <div class="col-12 col-md-6" style="margin-bottom:3%;" @click="pago='tarjeta'">
+                  <div class="col-12 col-md-6" style="margin-bottom:3%;" @click="pago='Tarjeta'">
                     <md-card
                       style="height:100%;"
-                      :class="pago==='tarjeta'?'md-primary':''"
+                      :class="pago==='Tarjeta'?'md-primary':''"
                       md-with-hover
                     >
                       <md-ripple>

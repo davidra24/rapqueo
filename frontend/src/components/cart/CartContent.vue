@@ -5,9 +5,13 @@
         <md-card-header>
           <md-avatar>
             <img v-bind:src="item.imagen" v-bind:alt="item.nombre" />
+            <md-tooltip md-direction="top">{{ item.nombre }}</md-tooltip>
           </md-avatar>
           <div class="d-flex bd-highlight mb-3">
-            <p class="bd-highlight texter">{{ item.nombre }}</p>
+            <p class="bd-highlight texter">
+              <md-tooltip md-direction="top">{{ item.nombre }}</md-tooltip>
+              {{ item.nombre }}
+            </p>
             <md-button
               class="ml-auto p-2 md-icon-button md-accent"
               @click="quitarProducto(item.id)"

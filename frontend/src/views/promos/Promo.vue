@@ -9,7 +9,7 @@
           <Loading />
         </div>
         <div v-else class="col-12">
-          <OnePromo v-bind:promo="promo" />
+          <OnePromo />
         </div>
       </div>
     </div>
@@ -26,37 +26,38 @@ export default {
   name: 'Promo',
   components: {
     Loading,
-    OnePromo
+    OnePromo,
   },
   computed: {
-    ...mapState(['promo'])
+    ...mapState(['promo']),
   },
   data() {
     return {
-      loading: false
+      loading: true,
     };
   },
   methods: {
     ...mapActions(['setPromo', 'setError']),
     async fetch(id) {
-      this.loading = true;
       await getOneOrManyApi(promos, id)
-        .then(res => {
+        .then((res) => {
           this.setPromo(res.data);
           this.loading = false;
         })
-        .catch(error => {
+        .catch((error) => {
           this.setError(error);
           this.loading = false;
         });
-    }
+    },
   },
   mounted() {
     const id = this.$route.params.id;
     if (!this.promo || this.promo._id != id) {
       this.fetch(id);
+    } else {
+      this.loading = false;
     }
-  }
+  },
 };
 </script>
 <style lang="stylus" scoped></style>

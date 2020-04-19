@@ -15,13 +15,16 @@
               :key="categorie._id"
               @click="goProducts(categorie._id)"
             >
-              <b-card class="overflow-hidden" style="min-height:100%; max-height: 100%;">
+              <b-card
+                class="overflow-hidden"
+                style="min-height:100%; max-height: 100%;"
+              >
                 <b-row no-gutters class="d-flex align-items-center">
                   <b-col md="6" align-self="center">
                     <b-card-img
                       class="resize-img"
                       :alt="categorie.nombre"
-                      :src="require(`@/assets/img/${categorie.imagen}`)"
+                      :src="buscarImagen(categorie.imagen)"
                     ></b-card-img>
                   </b-col>
                   <b-col md="6">
@@ -44,18 +47,22 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState } from 'vuex';
+import { buscarImagen } from '../../../util/images';
 
 export default {
-  name: "CategoriesAdminComponent",
+  name: 'CategoriesAdminComponent',
   computed: {
-    ...mapState(["categories"])
+    ...mapState(['categories']),
   },
   methods: {
+    buscarImagen(name) {
+      return buscarImagen(name);
+    },
     goProducts(id) {
       this.$router.push({ path: `/admin/editar/categorias/${id}` });
-    }
-  }
+    },
+  },
 };
 </script>
 

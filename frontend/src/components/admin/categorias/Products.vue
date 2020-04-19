@@ -45,7 +45,7 @@ export default {
   methods: {
     async eliminar(id) {
       await questionMsg(
-        "¿Eliminar elemento?",
+        "Mercar Chevere",
         "¿Está seguro que desea eliminar este producto de la categoría?"
       ).then(result => {
         if (result.value) {

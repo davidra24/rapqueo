@@ -8,9 +8,10 @@
               <h6>
                 <strong>{{ product.nombre }}</strong>
               </h6>
-              <div
-                class="md-subhead"
-              >{{ product.caracteristicas.peso }} {{ product.caracteristicas.unidad }}</div>
+              <div class="md-subhead">
+                {{ product.caracteristicas.peso }}
+                {{ product.caracteristicas.unidad }}
+              </div>
               <br />
               <div>${{ precio }}</div>
             </md-card-header-text>
@@ -24,7 +25,10 @@
           </md-card-header>
           <div class="row">
             <div class="col-4">
-              <md-button class="md-fab md-mini-mini md-primary" @click="resta()">
+              <md-button
+                class="md-fab md-mini-mini md-primary"
+                @click="resta()"
+              >
                 <md-icon>remove</md-icon>
               </md-button>
             </div>
@@ -43,7 +47,8 @@
               @click="agregarCarrito(), (myVar = agregado())"
               :disabled="show"
               variant="primary"
-            >Agregar</md-button>
+              >Agregar</md-button
+            >
           </div>
           <template v-slot:overlay>
             <div class="text-center">
@@ -58,23 +63,25 @@
 </template>
 
 <script>
-import { addToCart } from "@/util";
-import { mapActions } from "vuex";
+import { addToCart } from '@/util';
+import { mapActions, mapState } from 'vuex';
 export default {
-  name: "OneProduct",
-  props: ["product"],
+  name: 'OneProduct',
+  computed: {
+    ...mapState(['product']),
+  },
   data() {
     return {
       cantidad: 1,
-      precio: this.product.caracteristicas.precio,
-      peso: this.product.caracteristicas.peso,
-      unidad: this.product.caracteristicas.unidad,
-      foto: this.product.foto,
-      show: false
+      precio: 0,
+      show: false,
     };
   },
+  mounted() {
+    this.precio = this.product.caracteristicas.precio;
+  },
   methods: {
-    ...mapActions(["addCart"]),
+    ...mapActions(['addCart']),
     resta() {
       this.cantidad = this.cantidad > 1 ? this.cantidad - 1 : this.cantidad;
       this.precio =
@@ -100,12 +107,12 @@ export default {
         cantidad: this.cantidad,
         peso: this.peso,
         unidad: this.unidad,
-        precio: this.precio
+        precio: this.precio,
       };
       addToCart(cart);
       this.addCart(cart);
-    }
-  }
+    },
+  },
 };
 </script>
 

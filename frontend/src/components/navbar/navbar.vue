@@ -165,7 +165,7 @@ export default {
       this.$router.push(`/admin/promociones`);
     },
     irProductos() {
-      this.$router.push(`/admin/productos`);
+      this.$router.push(`/admin/procuctos`);
     },
     irRegistro() {
       this.$router.push(`/registro`);
@@ -173,6 +173,7 @@ export default {
   },
 };
 </script>
+
 <style lang="scss">
 @import '~vue-material/dist/theme/engine';
 

@@ -12,47 +12,47 @@
 </template>
 
 <script>
-import Loading from "@/components/loading";
-import Categories from "@/components/categories/Categories.vue";
-import { categories } from "@/util/constants";
-import { getApi } from "@/util/api";
-import { mapState, mapActions } from "vuex";
+import Loading from '@/components/loading';
+import Categories from '@/components/categories/Categories.vue';
+import { categories } from '@/util/constants';
+import { getApi } from '@/util/api';
+import { mapState, mapActions } from 'vuex';
 export default {
-  name: "CategoriesContainer",
+  name: 'CategoriesContainer',
   components: {
     Loading,
-    Categories
+    Categories,
   },
   computed: {
-    ...mapState(["categories"])
+    ...mapState(['categories']),
   },
   data() {
     return {
-      loadingCategories: false
+      loadingCategories: true,
     };
   },
   methods: {
-    ...mapActions(["setCategories", "setError", "setPromos"]),
+    ...mapActions(['setCategories', 'setError', 'setPromos']),
     async fetchCategories() {
-      this.loadingCategories = true;
       await getApi(categories)
-        .then(res => {
+        .then(async (res) => {
           this.setCategories(res.data);
           this.loadingCategories = false;
         })
-        .catch(err => {
+        .catch((err) => {
           this.setError(err);
           this.loadingCategories = false;
         });
-    }
+    },
   },
   mounted() {
     if (!this.categories) {
       this.fetchCategories();
+    } else {
+      this.loadingCategories = false;
     }
-  }
+  },
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

@@ -10,7 +10,6 @@ import PromosContainer from '../views/promos/AllPromos.vue';
 import Promo from '../views/promos/Promo.vue';
 import Login from '../views/login';
 import Register from '../views/register';
-import PedidosUsuario from '../views/pedidos';
 import PedidosAdmin from '../views/admin/Pedidos';
 import ProductosAdmin from '../views/admin/productos/Productos';
 import CategoriasAdmin from '../views/admin/categorias/Categorias';
@@ -20,6 +19,8 @@ import AgregarCategoria from '../views/admin/categorias/AgregarCategoria';
 import AgregarProductos from '../views/admin/productos/AgregarProductos';
 import EditarProductos from '../views/admin/productos/EditarProductos';
 import Perfil from '../views/perfil';
+import PedidosUsuario from '../views/pedidos/Orders';
+import Order from '../views/pedidos/Order';
 
 const linkActiveClass = 'my-link-active-class';
 
@@ -78,10 +79,16 @@ const routes = [
     component: Cart,
   },
   {
+    path: '/pedido/:id',
+    name: 'Order',
+    component: Order,
+  },
+  {
     path: '/pedidos/:id',
     name: 'PedidosUsuario',
     component: PedidosUsuario,
   },
+
   {
     path: '/pedidos',
     name: 'PedidosAdmin',

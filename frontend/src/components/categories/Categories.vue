@@ -24,7 +24,7 @@
                     <b-card-img
                       class="resize-img"
                       :alt="categorie.nombre"
-                      :src="require(`@/assets/img/${categorie.imagen}`)"
+                      :src="buscarImagen(categorie.imagen)"
                     ></b-card-img>
                   </b-col>
                   <b-col md="6">
@@ -48,17 +48,22 @@
 
 <script>
 import { mapState } from 'vuex';
+import { buscarImagen } from '../../util/images';
 
 export default {
   name: 'Categories',
   computed: {
-    ...mapState(['categories'])
+    ...mapState(['categories']),
   },
   methods: {
+    buscarImagen(name) {
+      return buscarImagen(name);
+    },
     goProducts(id) {
       this.$router.push({ path: `/categorias/${id}` });
-    }
-  }
+    },
+  },
+  mounted() {},
 };
 </script>
 

@@ -7,13 +7,10 @@
           <div class="row">
             <div
               class="col-12 col-md-6 col-lg-4"
-              v-for="product in productsCategorie"
-              :key="product._id"
+              v-for="order in ordersUser"
+              :key="order._id"
             >
-              <Product
-                v-blur="product.caracteristicas.cantidad"
-                v-bind:product="product"
-              />
+              <Order v-bind:order="order" />
             </div>
           </div>
         </div>
@@ -22,20 +19,18 @@
   </div>
 </template>
 <script>
-  import Product from "./Product";
+  import Order from "./Order";
   import { mapState } from "vuex";
   export default {
-    name: "Products",
+    name: "Orders",
     computed: {
-      ...mapState(["productsCategorie"]),
+      ...mapState(["ordersUser"]),
     },
     components: {
-      Product,
+      Order,
     },
   };
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   .clickable {
     cursor: pointer;
