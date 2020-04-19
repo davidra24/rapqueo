@@ -3,11 +3,7 @@
     <md-card style="width: 85%;">
       <b-overlay :show="show" rounded="sm">
         <b-overlay :show="producto" rounded="sm">
-          <div
-            class="container-fluid"
-            @click="goProduct(product._id)"
-            style="cursor: pointer;"
-          >
+          <div class="container-fluid" @click="goProduct(product._id)" style="cursor: pointer;">
             <md-card-header>
               <md-card-header-text>
                 <h6>
@@ -27,17 +23,16 @@
                       <span
                         class="md-body-2"
                         style="text-decoration: line-through;"
-                        >${{ promo.producto.caracteristicas.precio }}</span
-                      >
+                      >${{ promo.producto.caracteristicas.precio }}</span>
                     </b-card-text>
                     <div>
                       ${{
-                        cambioPrecio(
-                          promo.producto.caracteristicas.precio *
-                            (1 - promo.porcentaje / 100) *
-                            cantidad,
-                          promo.porcentaje / 100
-                        )
+                      cambioPrecio(
+                      promo.producto.caracteristicas.precio *
+                      (1 - promo.porcentaje / 100) *
+                      cantidad,
+                      promo.porcentaje / 100
+                      )
                       }}
                     </div>
                   </div>
@@ -55,10 +50,7 @@
           </div>
           <div class="row">
             <div class="col-4">
-              <md-button
-                class="md-fab md-mini-mini md-primary"
-                @click="resta()"
-              >
+              <md-button class="md-fab md-mini-mini md-primary" @click="resta()">
                 <md-icon>remove</md-icon>
               </md-button>
             </div>
@@ -72,21 +64,17 @@
             </div>
           </div>
           <div class="col-12">
-            <button
-              class="btn mrg-btn btn-success btn-block"
+            <md-button
+              class="md-raised mrg-btn md-primary btn-block"
               @click="agregarCarrito(), agregado()"
               :disabled="false"
               variant="primary"
-            >
-              Agregar
-            </button>
+            >Agregar</md-button>
           </div>
           <template v-slot:overlay>
             <div class="text-center">
               <p>
-                <strong>
-                  {{ product.nombre }}
-                </strong>
+                <strong>{{ product.nombre }}</strong>
               </p>
               <p>{{ peso }}{{ unidad }}</p>
               <b-icon icon="x" font-scale="3"></b-icon>
@@ -106,14 +94,14 @@
 </template>
 
 <script>
-import Loading from '../loading';
-import { promos } from '@/util/constants';
-import { addToCart } from '../../util';
-import { mapActions, mapState } from 'vuex';
-import { getApi } from '@/util/api';
+import Loading from "../loading";
+import { promos } from "@/util/constants";
+import { addToCart } from "../../util";
+import { mapActions, mapState } from "vuex";
+import { getApi } from "@/util/api";
 export default {
-  name: 'Product',
-  props: ['product', 'promo'],
+  name: "Product",
+  props: ["product", "promo"],
   component: {
     Loading,
     promos
@@ -132,7 +120,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['addCart', 'setPromos', 'setError']),
+    ...mapActions(["addCart", "setPromos", "setError"]),
     async fetchPromos() {
       await getApi(promos)
         .then(res => {
@@ -206,7 +194,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['promos'])
+    ...mapState(["promos"])
   },
   created() {
     if (!this.promos) {

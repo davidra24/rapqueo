@@ -30,3 +30,17 @@ export const warningMsg = (title, text) => {
     timer: 3000,
   });
 };
+
+export const questionMsg = async (title, text) => {
+  return await Vue.swal({
+    title,
+    text,
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonColor: '#448AFF',
+    cancelButtonColor: '#FF5252',
+    confirmButtonText: 'Sí',
+    cancelButtonText: 'No',
+    reverseButtons: true,
+  }).then((result) => result);
+};

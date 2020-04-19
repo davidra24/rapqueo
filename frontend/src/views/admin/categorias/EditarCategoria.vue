@@ -6,8 +6,8 @@
       </div>
       <div v-else class="col-12 space">
         <div class="row">
-          <div class="col-6 d-flex justify-content-end">
-            <div style="width: 40%;">
+          <div class="col-12 col-sm-5 col-md-6 d-flex justify-content-center">
+            <div style="width: 50%;">
               <img
                 v-if="form.imagen"
                 :src="require(`@/assets/img/${form.imagen}`)"
@@ -28,10 +28,11 @@
           </div>
           <form
             novalidate
-            class="md-layout col-6 d-flex justify-content-start"
+            class="md-layout col-12 col-sm-6 col-md-5 col-lg-6 d-flex justify-content-start"
             @submit.prevent="validateUser"
           >
             <md-card class="md-layout-item md-size-50 md-small-size-100">
+              <md-progress-bar md-mode="indeterminate" v-if="sending" />
               <md-card-header>
                 <div class="md-title">Información</div>
               </md-card-header>
@@ -74,10 +75,45 @@
               </md-card-content>
 
               <md-card-actions>
-                <md-button type="submit" class="md-primary" :disabled="sending">Create user</md-button>
+                <md-button type="submit" class="md-primary" :disabled="sending">Actualizar</md-button>
               </md-card-actions>
             </md-card>
           </form>
+          <div class="products col-12 row">
+            <div v-if="loadingProducts" class="col-12">
+              <Loading />
+            </div>
+            <div v-else class="col-12">
+              <div class="container">
+                <div class="row">
+                  <div
+                    class="col-12 col-md-6 col-lg-4"
+                    v-for="product in productsCategorie"
+                    :key="product._id"
+                  >
+                    <ProductsCategorieEdit :product="product" />
+                  </div>
+                  <div class="col-12 col-md-6 col-lg-4" @click="modalProducto = true;">
+                    <ProductsCategorieEdit :product="null" style="cursor: pointer;" />
+                    <md-dialog :md-active.sync="modalProducto">
+                      <div class="container-fluid">
+                        <div class="row">
+                          <div class="col-12">HOLA MUNDO</div>
+                        </div>
+                      </div>
+                    </md-dialog>
+                  </div>
+                  <div class="col-12 products">
+                    <div class="row justify-content-center">
+                      <div class="col-4">
+                        <md-button class="md-raised md-primary btn-block">Actualizar productos</md-button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -88,17 +124,20 @@
 import Loading from "@/components/loading";
 import { mapState, mapActions } from "vuex";
 import { getOneOrManyApi } from "../../../util/api";
-import { categories } from "../../../util/constants";
+import { categories, productsByCategorie } from "../../../util/constants";
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
+import ProductsCategorieEdit from "../../../components/admin/categorias/Products";
 export default {
   name: "EditarCategoria",
   mixins: [validationMixin],
-  components: { Loading },
+  components: { Loading, ProductsCategorieEdit },
   data() {
     return {
       loadingCategorie: false,
+      loadingProducts: false,
       imageChange: false,
+      modalProducto: false,
       sending: false,
       form: {
         nombre: "",
@@ -118,10 +157,23 @@ export default {
     }
   },
   computed: {
-    ...mapState(["categorie"])
+    ...mapState(["categorie", "productsCategorie"])
   },
   methods: {
-    ...mapActions(["setCategorie", "setError"]),
+    ...mapActions(["setCategorie", "setError", "setProductsCategorie"]),
+    async fetchProducts(id) {
+      this.loadingProducts = true;
+      await getOneOrManyApi(productsByCategorie, id)
+        .then(res => {
+          this.setProductsCategorie(res.data);
+          console.log(res.data);
+          this.loadingProducts = false;
+        })
+        .catch(err => {
+          this.setError(err);
+          this.loadingProducts = false;
+        });
+    },
     fetch(id) {
       this.loadingCategorie = true;
       getOneOrManyApi(categories, id)
@@ -146,8 +198,15 @@ export default {
     validateUser() {
       this.$v.$touch();
       if (!this.$v.$invalid) {
-        this.saveUser();
+        this.save();
       }
+    },
+    save() {
+      this.sending = true;
+      // Instead of this timeout, here you can call your API
+      window.setTimeout(() => {
+        this.sending = false;
+      }, 1500);
     },
     cambiarImagen() {}
   },
@@ -155,6 +214,7 @@ export default {
     const id = this.$route.params.id;
     if (!this.categorie || this.categorie._id !== id) {
       await this.fetch(id);
+      await this.fetchProducts(id);
     } else {
       this.form = await Object.assign({}, this.categorie);
     }
@@ -163,6 +223,9 @@ export default {
 </script>
 
 <style scoped>
+.products {
+  margin-top: 2%;
+}
 .space {
   margin-top: 5%;
 }
