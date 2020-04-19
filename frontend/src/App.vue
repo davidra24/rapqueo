@@ -4,7 +4,12 @@
       <Navbar id="nav" />
       <CartSlider />
       <md-content class="md-scrollbar">
-        <router-view class="app" />
+        <div v-responsive="['hidden-all', 'xs']">
+          <router-view class="app_responsive" />
+        </div>
+        <div v-responsive="['hidden-xs']">
+          <router-view class="app" />
+        </div>
       </md-content>
     </div>
   </div>
@@ -12,54 +17,58 @@
 
 <script>
 //Vue
-import Vue from "vue";
+import Vue from 'vue';
 
 //Components
-import CartSlider from "./components/cart/CartSlider";
-import Navbar from "./components/navbar/navbar";
+import CartSlider from './components/cart/CartSlider';
+import Navbar from './components/navbar/navbar';
 
 //Styles
-import "./styles/App.css";
-import "vue-material/dist/vue-material.min.css";
-import "vue-material/dist/theme/default.css";
-import "sweetalert2/dist/sweetalert2.min.css";
+import './styles/App.css';
+import 'vue-material/dist/vue-material.min.css';
+import 'vue-material/dist/theme/default.css';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 //Libraries
-import VueFab from "vue-float-action-button";
-import VueSweetalert2 from "vue-sweetalert2";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { library } from "@fortawesome/fontawesome-svg-core";
+import VueFab from 'vue-float-action-button';
+import VueSweetalert2 from 'vue-sweetalert2';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
 import {
   faShoppingCart,
   faUser,
   faMoneyBillWave,
   faCreditCard,
-  faPlusCircle
-} from "@fortawesome/free-solid-svg-icons";
-import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
-import VueMaterial from "vue-material";
-import responsive from "vue-responsive";
+  faPlusCircle,
+  faCamera,
+  faSyncAlt,
+} from '@fortawesome/free-solid-svg-icons';
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
+import VueMaterial from 'vue-material';
+import responsive from 'vue-responsive';
 
 //Data
-import { getCart } from "./util";
-import { mapActions } from "vuex";
-import Vuelidate from "vuelidate";
-import vueCookies from "vue-cookies";
+import { getCart } from './util';
+import { mapActions } from 'vuex';
+import Vuelidate from 'vuelidate';
+import vueCookies from 'vue-cookies';
 
-Vue.use(VueFab, { iconType: "MaterialDesign" });
+Vue.use(VueFab, { iconType: 'MaterialDesign' });
 Vue.use(responsive);
 Vue.use(vueCookies);
 
-Vue.$cookies.config("7d");
+Vue.$cookies.config('7d');
 
 library.add([
   faShoppingCart,
   faUser,
   faMoneyBillWave,
   faCreditCard,
-  faPlusCircle
+  faPlusCircle,
+  faCamera,
+  faSyncAlt,
 ]);
-Vue.component("font-awesome-icon", FontAwesomeIcon);
+Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.config.productionTip = false;
 
 Vue.use(VueSweetalert2);
@@ -74,29 +83,29 @@ Vue.use(VueMaterial);
 export default {
   components: {
     Navbar,
-    CartSlider
+    CartSlider,
   },
   mounted() {
     this.loadCart();
   },
   methods: {
-    ...mapActions(["closeCart", "setCart"]),
+    ...mapActions(['closeCart', 'setCart']),
     close() {
       this.closeCart();
     },
     loadCart() {
       this.setCart(getCart());
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style lang="scss">
-@import "node_modules/bootstrap/scss/bootstrap";
-@import "node_modules/bootstrap-vue/src/index.scss";
+@import 'node_modules/bootstrap/scss/bootstrap';
+@import 'node_modules/bootstrap-vue/src/index.scss';
 
 #myapp {
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -105,11 +114,21 @@ export default {
   width: 100%;
   position: fixed;
 }
+.app_responsive {
+  margin-top: 18%;
+  overflow: hidden;
+  height: 100%;
+  padding-bottom: 5%;
+  margin-left: auto;
+  margin-right: auto;
+}
 .app {
   margin-top: 5%;
   overflow: hidden;
   height: 100%;
   padding-bottom: 5%;
+  margin-left: auto;
+  margin-right: auto;
 }
 #nav {
   overflow: hidden;

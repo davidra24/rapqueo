@@ -11,6 +11,7 @@ const store = new Vuex.Store({
     products: null,
     product: null,
     productsCategorie: null,
+    productsNoCategorie: null,
     cart: null,
     openedCart: false,
     promos: null,
@@ -61,6 +62,9 @@ const store = new Vuex.Store({
     },
     setProductsCategorie(state, productsCategorie) {
       state.productsCategorie = productsCategorie;
+    },
+    setProductsNoCategorie(state, productsNoCategorie) {
+      state.productsNoCategorie = productsNoCategorie;
     },
     setCart(state, cart) {
       state.cart = cart;
@@ -118,6 +122,9 @@ const store = new Vuex.Store({
     },
     setProductsCategorie({ commit }, productsCategorie) {
       commit('setProductsCategorie', productsCategorie);
+    },
+    setProductsNoCategorie({ commit }, productsNoCategorie) {
+      commit('setProductsNoCategorie', productsNoCategorie);
     },
     setCart({ commit }, cart) {
       commit('setCart', cart);

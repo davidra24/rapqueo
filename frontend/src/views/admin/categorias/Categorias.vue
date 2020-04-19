@@ -61,7 +61,7 @@ export default {
     }
   },
   mounted() {
-    //this.validateAdmin();
+    this.validateAdmin();
     if (!this.categories) {
       this.fetchCategories();
     }

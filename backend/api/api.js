@@ -327,6 +327,20 @@ api.post('/verifyPassword', queryUsuario.verifyPassword);
 // ---------------------------- Productos --------------------------------//
 /**
  * @swagger
+ *  /api/productsNoCategorie:
+ *    get:
+ *      tags: ['Productos']
+ *      description: Trae todos los Productos sin categoria
+ *      summary: Get All Products without categorie
+ *      responses:
+ *        '200':
+ *          {description: Successful}
+ *        '500':
+ *          {description: Internal Server Error}
+ */
+api.get('/productsNoCategorie', queryProducto.getProductWithoutCategorie);
+/**
+ * @swagger
  *  /api/products:
  *    get:
  *      tags: ['Productos']
@@ -338,7 +352,6 @@ api.post('/verifyPassword', queryUsuario.verifyPassword);
  *        '500':
  *          {description: Internal Server Error}
  */
-//------------------------------- PRODUCTOS ----------------------------///
 api.get('/products', queryProducto.getAllProducts);
 /**
  * @swagger

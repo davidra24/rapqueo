@@ -18,7 +18,7 @@
                 v-for="promo in promos"
                 :key="promo._id"
               >
-                <Promo v-show="validarPromos(promo)" :promo="promo" />
+                <Promo v-if="validarPromos(promo)" :promo="promo" />
               </CarouselCardItem>
             </CarouselCard>
           </div>
@@ -29,7 +29,7 @@
                 v-for="promo in promos"
                 :key="promo._id"
               >
-                <Promo v-show="validarPromos(promo)" :promo="promo" />
+                <Promo v-if="validarPromos(promo)" :promo="promo" />
               </CarouselCardItem>
             </CarouselCard>
           </div>

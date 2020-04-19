@@ -8,6 +8,12 @@ getAllProducts = (req, res) => {
   });
 };
 
+getProductWithoutCategorie = (req, res) => {
+  Productos.find({ idCategoria: null }).then((data) => {
+    res.send(data);
+  });
+};
+
 getOneProduct = (req, res) => {
   const id = req.params.id;
   Productos.findById(id).then((data) => {
@@ -48,6 +54,7 @@ module.exports = {
   getAllProducts,
   getOneProduct,
   getProductsByCategorie,
+  getProductWithoutCategorie,
   postProduct,
   pullProduct,
   deleteProduct,

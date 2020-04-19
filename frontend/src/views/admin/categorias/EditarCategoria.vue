@@ -91,24 +91,41 @@
                     v-for="product in productsCategorie"
                     :key="product._id"
                   >
-                    <ProductsCategorieEdit :product="product" />
+                    <ProductsCategorieEdit :product="product" @deleteProduct="deleteProduct" />
                   </div>
                   <div class="col-12 col-md-6 col-lg-4" @click="modalProducto = true;">
                     <ProductsCategorieEdit :product="null" style="cursor: pointer;" />
-                    <md-dialog :md-active.sync="modalProducto">
+                    <md-dialog md-fullscreen :md-active.sync="modalProducto">
                       <div class="container-fluid">
                         <div class="row">
-                          <div class="col-12">HOLA MUNDO</div>
+                          <div class="col-12">
+                            <div class="d-flex justify-content-center" v-if="loadingNoCategorie">
+                              <Loading />
+                            </div>
+                            <div
+                              class="d-flex justify-content-center"
+                              v-else-if="!productsNoCategorie || productsNoCategorie.length === 0 "
+                            >
+                              <h1>No hay productos sin categoría asignada</h1>
+                            </div>
+
+                            <div v-else class="d-flex justify-content-center">
+                              <div class="row" style="margin: 5%">
+                                <div
+                                  class="col-12 col-md-6 col-lg-4"
+                                  style="min-width: 17rem;"
+                                  v-for="product in productsNoCategorie"
+                                  :key="product._id"
+                                  @click="agregarProducto(product._id)"
+                                >
+                                  <ProductsCategorieEdit :product="product" :esAgregar="true" />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </md-dialog>
-                  </div>
-                  <div class="col-12 products">
-                    <div class="row justify-content-center">
-                      <div class="col-4">
-                        <md-button class="md-raised md-primary btn-block">Actualizar productos</md-button>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -123,11 +140,17 @@
 <script>
 import Loading from "@/components/loading";
 import { mapState, mapActions } from "vuex";
-import { getOneOrManyApi } from "../../../util/api";
-import { categories, productsByCategorie } from "../../../util/constants";
+import { getOneOrManyApi, getApi, putApi } from "../../../util/api";
+import {
+  categories,
+  productsByCategorie,
+  productosSinCategoria,
+  products
+} from "../../../util/constants";
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
 import ProductsCategorieEdit from "../../../components/admin/categorias/Products";
+import { successMsg, errorMsg } from "../../../util/utilMsg";
 export default {
   name: "EditarCategoria",
   mixins: [validationMixin],
@@ -136,6 +159,7 @@ export default {
     return {
       loadingCategorie: false,
       loadingProducts: false,
+      loadingNoCategorie: false,
       imageChange: false,
       modalProducto: false,
       sending: false,
@@ -157,10 +181,15 @@ export default {
     }
   },
   computed: {
-    ...mapState(["categorie", "productsCategorie"])
+    ...mapState(["categorie", "productsCategorie", "productsNoCategorie"])
   },
   methods: {
-    ...mapActions(["setCategorie", "setError", "setProductsCategorie"]),
+    ...mapActions([
+      "setCategorie",
+      "setError",
+      "setProductsCategorie",
+      "setProductsNoCategorie"
+    ]),
     async fetchProducts(id) {
       this.loadingProducts = true;
       await getOneOrManyApi(productsByCategorie, id)
@@ -187,6 +216,18 @@ export default {
           this.loadingCategorie = false;
         });
     },
+    fetchNoCategories() {
+      this.loadingNoCategorie = true;
+      getApi(productosSinCategoria)
+        .then(res => {
+          this.setProductsNoCategorie(res.data);
+          this.loadingNoCategorie = false;
+        })
+        .catch(err => {
+          this.setError(err);
+          this.loadingNoCategorie = false;
+        });
+    },
     getValidationClass(fieldName) {
       const field = this.$v.form[fieldName];
       if (field) {
@@ -208,6 +249,74 @@ export default {
         this.sending = false;
       }, 1500);
     },
+    agregarProducto(id) {
+      this.modalProducto = false;
+      this.loadingProducts = true;
+      this.productsNoCategorie.map(async (producto, index) => {
+        if (producto._id === id) {
+          const body = {
+            ...producto,
+            idCategoria: this.$route.params.id
+          };
+          await this.guardarProductos(id, body).then(() => {
+            const products = this.productsCategorie;
+            const auxProd = this.productsNoCategorie;
+            products.push(producto);
+            this.setProductsCategorie(products);
+            auxProd.splice(index, 1);
+            this.setProductsNoCategorie(auxProd);
+          });
+          return;
+        }
+      });
+      this.loadingProducts = false;
+    },
+    deleteProduct(id) {
+      this.modalProducto = false;
+      this.loadingProducts = true;
+      this.productsCategorie.map(async (producto, index) => {
+        if (producto._id === id) {
+          const body = {
+            ...producto,
+            idCategoria: null
+          };
+          await this.guardarProductos(id, body).then(() => {
+            const products = this.productsNoCategorie;
+            const auxProd = this.productsCategorie;
+            products.push(producto);
+            this.setProductsNoCategorie(products);
+            auxProd.splice(index, 1);
+            this.setProductsCategorie(auxProd);
+          });
+          successMsg(
+            "Eliminado",
+            "Se ha eliminado el producto de la categoría con éxito."
+          );
+          return;
+        }
+      });
+      this.loadingProducts = false;
+    },
+    async guardarProductos(id, body) {
+      await putApi(products, id, body)
+        .then(response => {
+          if (response.data) {
+            successMsg(
+              "Mercar Chevere",
+              "Configuración de producto guardada con éxito"
+            );
+          } else {
+            errorMsg(
+              "Mercar Chevere",
+              "No se ha podido actualizar el producto"
+            );
+          }
+        })
+        .catch(err => {
+          console.log("error", err);
+          errorMsg("Mercar Chevere", "No se ha podido actualizar el producto");
+        });
+    },
     cambiarImagen() {}
   },
   async mounted() {
@@ -217,6 +326,9 @@ export default {
       await this.fetchProducts(id);
     } else {
       this.form = await Object.assign({}, this.categorie);
+    }
+    if (!this.productsNoCategorie) {
+      await this.fetchNoCategories();
     }
   }
 };
@@ -228,5 +340,8 @@ export default {
 }
 .space {
   margin-top: 5%;
+}
+.md-dialog {
+  width: 90%;
 }
 </style>

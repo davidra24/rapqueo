@@ -17,6 +17,8 @@ import CategoriasAdmin from '../views/admin/categorias/Categorias';
 import PromocionesAdmin from '../views/admin/Promociones';
 import EditarCategoria from '../views/admin/categorias/EditarCategoria';
 import AgregarCategoria from '../views/admin/categorias/AgregarCategoria';
+import AgregarProductos from '../views/admin/productos/AgregarProductos';
+import EditarProductos from '../views/admin/productos/EditarProductos';
 import Perfil from '../views/perfil';
 
 const linkActiveClass = 'my-link-active-class';
@@ -114,6 +116,16 @@ const routes = [
     path: '/admin/agregar/categoria',
     name: 'AgregarCategoria',
     component: AgregarCategoria,
+  },
+  {
+    path: '/admin/editar/productos/:id',
+    name: 'EditarProductos',
+    component: EditarProductos,
+  },
+  {
+    path: '/admin/agregar/producto',
+    name: 'AgregarProductos',
+    component: AgregarProductos,
   },
   {
     path: '/404',

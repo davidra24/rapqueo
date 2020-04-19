@@ -26,7 +26,11 @@
           <img class="img-fluid resize-img" v-bind:src="product.foto" v-bind:alt="product.nombre" />
         </md-card-media>
       </md-card-header>
-      <md-button class="ml-auto p-2 md-icon-button md-accent" @click="eliminar(product._id)">
+      <md-button
+        v-if="!esAgregar"
+        class="ml-auto p-2 md-icon-button md-accent"
+        @click="eliminar(product._id)"
+      >
         <md-icon>delete_outline</md-icon>
       </md-button>
     </div>
@@ -34,31 +38,28 @@
 </template>
 
 <script>
-import { questionMsg, successMsg } from "../../../util/utilMsg";
-//import {} from "../../../util/api";
+import { questionMsg } from "../../../util/utilMsg";
 export default {
   name: "ProductsCategorieEdit",
-  props: ["product"],
+  props: ["product", "esAgregar"],
   methods: {
     async eliminar(id) {
       await questionMsg(
         "¿Eliminar elemento?",
-        "¿Está seguro que desea eliminar este producto de la categoría?" + id
+        "¿Está seguro que desea eliminar este producto de la categoría?"
       ).then(result => {
         if (result.value) {
-          successMsg(
-            "Eliminado",
-            "Se ha eliminado el producto de la categría con éxito." + id
-          );
+          this.$emit("deleteProduct", id);
         }
       });
-    },
-    fetchDelete(id) {
-      console.log(id);
     }
   }
 };
 </script>
 
 <style scoped>
+.resize-img {
+  width: 95%;
+  height: 95%;
+}
 </style>
