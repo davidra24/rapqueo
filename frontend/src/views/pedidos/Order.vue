@@ -49,7 +49,7 @@ export default {
         });
     }
   },
-  mounted() {
+  created() {
     console.log(this.$route.params.id);
     const id = this.$route.params.id;
     if (!this.order || this.order._id != id) {

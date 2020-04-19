@@ -1,17 +1,17 @@
-import { apiUrl } from './constants';
+import { apiUrl } from "./constants";
 
 export const getApi = async (service, params = {}) => {
   var info = {};
   await fetch(`${apiUrl}/${service}`, params)
-    .then(res => {
+    .then((res) => {
       if (res.ok) {
         return res.json();
       }
     })
-    .then(response => {
+    .then((response) => {
       info.data = response;
     })
-    .catch(err => {
+    .catch((err) => {
       info.err = err;
     });
 
@@ -21,15 +21,15 @@ export const getApi = async (service, params = {}) => {
 export const getOneOrManyApi = async (service, id, params = {}) => {
   var info = {};
   await fetch(`${apiUrl}/${service}/${id}`, params)
-    .then(res => {
+    .then((res) => {
       if (res.ok) {
         return res.json();
       }
     })
-    .then(response => {
+    .then((response) => {
       info.data = response;
     })
-    .catch(err => {
+    .catch((err) => {
       info.err = err;
     });
 
@@ -40,24 +40,24 @@ export const postApi = async (service, body) => {
   //console.log('body', body);
   var info = {};
   const params = {
-    method: 'POST',
+    method: "POST",
     body: JSON.stringify(body),
     //mode: 'cors',
     headers: new Headers({
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*'
-    })
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    }),
   };
   await fetch(`${apiUrl}/${service}`, params)
-    .then(res => {
+    .then((res) => {
       if (res.ok) {
         return res.json();
       }
     })
-    .then(response => {
+    .then((response) => {
       info.data = response;
     })
-    .catch(err => {
+    .catch((err) => {
       info.err = err;
     });
 
@@ -67,22 +67,22 @@ export const postApi = async (service, body) => {
 export const putApi = async (service, id, body) => {
   var info = {};
   const params = {
-    method: 'PUT',
+    method: "PUT",
     body: JSON.stringify(body),
     headers: {
-      'Content-Type': 'application/json'
-    }
+      "Content-Type": "application/json",
+    },
   };
   await fetch(`${apiUrl}/${service}/${id}`, params)
-    .then(res => {
+    .then((res) => {
       if (res.ok) {
         return res.json();
       }
     })
-    .then(response => {
+    .then((response) => {
       info.data = response;
     })
-    .catch(err => {
+    .catch((err) => {
       info.err = err;
     });
 
@@ -92,21 +92,21 @@ export const putApi = async (service, id, body) => {
 export const deleteApi = async (service, id) => {
   var info = {};
   const params = {
-    method: 'DELETE',
+    method: "DELETE",
     headers: {
-      'Content-Type': 'application/json'
-    }
+      "Content-Type": "application/json",
+    },
   };
   await fetch(`${apiUrl}/${service}/${id}`, params)
-    .then(res => {
+    .then((res) => {
       if (res.ok) {
         return res.json();
       }
     })
-    .then(response => {
+    .then((response) => {
       info.data = response;
     })
-    .catch(err => {
+    .catch((err) => {
       info.err = err;
     });
 

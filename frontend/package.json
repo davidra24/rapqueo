@@ -22,6 +22,7 @@
     "vue": "^2.6.11",
     "vue-carousel-card": "^1.0.3",
     "vue-cookies": "^1.7.0",
+    "vue-float-action-button": "^0.6.5",
     "vue-material": "^1.0.0-beta-11",
     "vue-pwa-installer": "^0.2.0",
     "vue-responsive": "^1.1.0",

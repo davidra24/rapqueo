@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex justify-content-center">
     <div class="col-12 col-md-10 col-lg-8">
-      <b-card bg-variant="light" :header="this.estado" class="text-center">
+      <b-card bg-variant="light" :header="estado" class="text-center">
         <div class="d-flex justify-content-start">
           <strong class="left">Nombre:</strong>
           <div class="right">{{ order.nombre_usuario }}</div>
@@ -70,7 +70,7 @@
         </div>
         <br />
         <button
-          v-if="boton"
+          v-if="boton && this.user.admin"
           class="btn btn-block btn-success"
           @click="changeState()"
         >{{ this.boton }}</button>
@@ -79,6 +79,7 @@
   </div>
 </template>
 <script>
+import { mapState } from "vuex";
 export default {
   name: "OneOrder",
   props: ["order"],
@@ -86,7 +87,11 @@ export default {
     return {
       estado: "",
       boton: ""
+      //state: 0,
     };
+  },
+  computed: {
+    ...mapState(["user"])
   },
   methods: {
     formatTelephone(number) {
@@ -98,13 +103,14 @@ export default {
     changeState() {
       this.order.estado += 1;
       this.validateState();
+      // this.saveState(this.order.estado);
     },
-    validateState() {
-      if (this.order.estado == 0) {
+    async validateState() {
+      if (this.order.estado === 0) {
         this.estado = "Pedido pendiente";
         this.boton = "Pedido en progreso";
       } else {
-        if (this.order.estado == 1) {
+        if (this.order.estado === 1) {
           this.estado = "Pedido en progreso";
           this.boton = "Pedido entregado";
         } else {
@@ -116,6 +122,7 @@ export default {
   },
   mounted() {
     this.validateState();
+    console.log("ordeeeeeeeeerrrrrrr", this.order);
   }
 };
 </script>

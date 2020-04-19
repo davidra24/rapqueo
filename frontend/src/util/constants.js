@@ -7,6 +7,7 @@ export const apiUrl = "http://localhost:3000";
 export const categories = "api/categories";
 export const products = "api/products";
 export const productsByCategorie = "api/productsByCategorie";
+export const ordersByUser = "api/ordersByUser";
 export const promos = "api/promos";
 export const signup = "api/signup";
 export const login = "api/login";

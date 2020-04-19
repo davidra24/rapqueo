@@ -21,54 +21,52 @@
 </template>
 
 <script>
-// @ is an alias to /src
-import Loading from "@/components/loading";
-import { getOneOrManyApi } from "@/util/api";
-import { productsByCategorie } from "@/util/constants";
-import Products from "@/components/products/Products.vue";
-import { mapState, mapActions } from "vuex";
-export default {
-  name: "ProductsContainer",
-  components: {
-    Loading,
-    Products
-  },
-  data() {
-    return {
-      loading: false
-    };
-  },
-  computed: {
-    ...mapState(["productsCategorie"])
-  },
-  methods: {
-    ...mapActions(["setProductsCategorie", "setError"]),
-    async fetch(id) {
-      this.loading = true;
-      await getOneOrManyApi(productsByCategorie, id)
-        .then(res => {
-          this.setProductsCategorie(res.data);
-          console.log(res.data);
-
-          this.loading = false;
-        })
-        .catch(err => {
-          this.setError(err);
-          this.loading = false;
-        });
-    }
-  },
-  mounted() {
-    const id = this.$route.params.id;
-    if (
-      !this.productsCategorie ||
-      this.productsCategorie[0].idCategoria != id
-    ) {
-      this.fetch(id);
-    }
-  }
-};
+  // @ is an alias to /src
+  import Loading from "@/components/loading";
+  import { getOneOrManyApi } from "@/util/api";
+  import { productsByCategorie } from "@/util/constants";
+  import Products from "@/components/products/Products.vue";
+  import { mapState, mapActions } from "vuex";
+  export default {
+    name: "ProductsContainer",
+    components: {
+      Loading,
+      Products,
+    },
+    data() {
+      return {
+        loading: false,
+      };
+    },
+    computed: {
+      ...mapState(["productsCategorie"]),
+    },
+    methods: {
+      ...mapActions(["setProductsCategorie", "setError"]),
+      async fetch(id) {
+        this.loading = true;
+        await getOneOrManyApi(productsByCategorie, id)
+          .then((res) => {
+            this.setProductsCategorie(res.data);
+            console.log(res.data);
+            this.loading = false;
+          })
+          .catch((err) => {
+            this.setError(err);
+            this.loading = false;
+          });
+      },
+    },
+    mounted() {
+      const id = this.$route.params.id;
+      if (
+        !this.productsCategorie ||
+        this.productsCategorie[0].idCategoria != id
+      ) {
+        this.fetch(id);
+      }
+    },
+  };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
