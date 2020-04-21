@@ -8,23 +8,70 @@
         <div class="row">
           <div class="col-12 col-sm-5 col-md-6 d-flex justify-content-center">
             <div style="width: 50%;">
-              <img
-                v-if="form.imagen"
-                :src="buscarImagen(form.imagen)"
-                alt="Skyscraper"
-              />
-              <div v-else>
-                <Loading />
-              </div>
-              <md-button class="md-primary" @click="imageChange = true"
-                >Cambiar</md-button
-              >
-              <md-dialog :md-active.sync="imageChange">
-                <div class="container-fluid">
-                  <div class="row">
-                    <div class="col-12">HOLA MUNDO</div>
-                  </div>
+              <div class="row">
+                <div class="col-12" v-if="form.imagen">
+                  <img :src="buscarImagen(form.imagen)" alt="Skyscraper" />
                 </div>
+                <div v-else class="col-12">
+                  <h4>
+                    <p>Seleccione una imagen</p>
+                  </h4>
+                  <md-button class="md-primary" @click="changeImage()">Seleccionar</md-button>
+                </div>
+                <div class="col-12">
+                  <span style="color:red;" v-if="!imagenSeleccionada">La imagen es requerida</span>
+                </div>
+              </div>
+
+              <md-dialog :md-active.sync="imageChange">
+                <md-content
+                  v-if="cargarImagenes"
+                  class="md-scrollbar d-flex justify-content-center"
+                >
+                  <Loading />
+                </md-content>
+                <md-content v-else class="md-scrollbar">
+                  <div class="container-fluid">
+                    <div class="row">
+                      <div class="col-12">
+                        <div class="container">
+                          <div class="row" style="margin-bottom: 2%;">
+                            <div
+                              style="margin-top: 2%;"
+                              class="col-12 col-md-6 col-lg-4"
+                              v-for="categoria in categorias_i"
+                              :key="categoria._id"
+                            >
+                              <md-card>
+                                <md-card-media-cover md-solid>
+                                  <md-card-media>
+                                    <img class="img-fluid" :src="categoria.imagen" alt="Skyscraper" />
+                                  </md-card-media>
+                                  <md-card-area>
+                                    <md-card-header>
+                                      <span class="md-title">
+                                        {{
+                                        categoria.nombre
+                                        }}
+                                      </span>
+                                      <md-card-actions>
+                                        <md-button
+                                          @click="
+                                            seleccionarImagen(categoria.nombre)
+                                          "
+                                        >Seleccionar</md-button>
+                                      </md-card-actions>
+                                    </md-card-header>
+                                  </md-card-area>
+                                </md-card-media-cover>
+                              </md-card>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </md-content>
               </md-dialog>
             </div>
           </div>
@@ -50,9 +97,10 @@
                         v-model="form.nombre"
                         :disabled="sending"
                       />
-                      <span class="md-error" v-if="!$v.form.nombre.required"
-                        >El nombre de la categoria es requerida</span
-                      >
+                      <span
+                        class="md-error"
+                        v-if="!$v.form.nombre.required"
+                      >El nombre de la categoria es requerida</span>
                     </md-field>
                   </div>
 
@@ -69,90 +117,17 @@
                       <span
                         class="md-error"
                         v-if="!$v.form.descripcion.required"
-                        >La descripción de la categoría es requerida</span
-                      >
+                      >La descripción de la categoría es requerida</span>
                     </md-field>
                   </div>
                 </div>
               </md-card-content>
 
               <md-card-actions>
-                <md-button type="submit" class="md-primary" :disabled="sending"
-                  >Actualizar</md-button
-                >
+                <md-button type="submit" class="md-primary" :disabled="sending">Guardar</md-button>
               </md-card-actions>
             </md-card>
           </form>
-          <div class="products col-12 row">
-            <div v-if="loadingProducts" class="col-12">
-              <Loading />
-            </div>
-            <div v-else class="col-12">
-              <div class="container">
-                <div class="row">
-                  <div
-                    class="col-12 col-md-6 col-lg-4"
-                    v-for="product in productsCategorie"
-                    :key="product._id"
-                  >
-                    <ProductsCategorieEdit
-                      :product="product"
-                      @deleteProduct="deleteProduct"
-                    />
-                  </div>
-                  <div
-                    class="col-12 col-md-6 col-lg-4"
-                    @click="modalProducto = true"
-                  >
-                    <ProductsCategorieEdit
-                      :product="null"
-                      style="cursor: pointer;"
-                    />
-                    <md-dialog md-fullscreen :md-active.sync="modalProducto">
-                      <div class="container-fluid">
-                        <div class="row">
-                          <div class="col-12">
-                            <div
-                              class="d-flex justify-content-center"
-                              v-if="loadingNoCategorie"
-                            >
-                              <Loading />
-                            </div>
-                            <div
-                              class="d-flex justify-content-center"
-                              v-else-if="
-                                !productsNoCategorie ||
-                                  productsNoCategorie.length === 0
-                              "
-                            >
-                              <h1>No hay productos sin categoría asignada</h1>
-                            </div>
-
-                            <div v-else class="d-flex justify-content-center">
-                              <div class="row" style="margin: 5%">
-                                <div
-                                  class="col-12 col-md-6 col-lg-4"
-                                  style="min-width: 17rem;"
-                                  v-for="product in productsNoCategorie"
-                                  :key="product._id"
-                                  @click="agregarProducto(product._id)"
-                                >
-                                  <ProductsCategorieEdit
-                                    :product="product"
-                                    :esAgregar="true"
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </md-dialog>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -160,26 +135,24 @@
 </template>
 
 <script>
-import Loading from '@/components/loading';
-import { mapState, mapActions } from 'vuex';
-import { getOneOrManyApi, getApi, putApi } from '../../../util/api';
-import {
-  categories,
-  productsByCategorie,
-  productosSinCategoria,
-  products,
-} from '../../../util/constants';
-import { validationMixin } from 'vuelidate';
-import { required } from 'vuelidate/lib/validators';
-import ProductsCategorieEdit from '../../../components/admin/categorias/Products';
-import { successMsg, errorMsg } from '../../../util/utilMsg';
-import { buscarImagen } from '../../../util/images';
+import Loading from "@/components/loading";
+import { mapState, mapActions } from "vuex";
+import { postApi, getApi } from "../../../util/api";
+import { categories } from "../../../util/constants";
+import { validationMixin } from "vuelidate";
+import { required } from "vuelidate/lib/validators";
+import { successMsg, errorMsg } from "../../../util/utilMsg";
+import { buscarImagen, imagenes } from "../../../util/images";
+
 export default {
-  name: 'AgregarCategorias',
+  name: "AgregarCategorias",
   mixins: [validationMixin],
-  components: { Loading, ProductsCategorieEdit },
+  components: { Loading },
   data() {
     return {
+      imagenSeleccionada: true,
+      cargarImagenes: true,
+      categorias_i: null,
       loadingCategorie: false,
       loadingProducts: false,
       loadingNoCategorie: false,
@@ -187,176 +160,108 @@ export default {
       modalProducto: false,
       sending: false,
       form: {
-        nombre: '',
-        imagen: '',
-        descripcion: '',
-      },
+        nombre: "",
+        imagen: "",
+        descripcion: ""
+      }
     };
   },
   validations: {
     form: {
       nombre: {
-        required,
+        required
       },
       descripcion: {
-        required,
-      },
-    },
+        required
+      }
+    }
   },
   computed: {
-    ...mapState(['categorie', 'productsCategorie', 'productsNoCategorie']),
+    ...mapState(["categories"])
   },
   methods: {
-    ...mapActions([
-      'setCategorie',
-      'setError',
-      'setProductsCategorie',
-      'setProductsNoCategorie',
-    ]),
+    ...mapActions(["setCategories"]),
+    changeImage() {
+      this.cargarImagenes = true;
+      this.imageChange = true;
+      setTimeout(() => {
+        this.obtenerImagenes().then(response => {
+          this.categorias_i = response;
+          this.cargarImagenes = false;
+        });
+      }, 1000);
+    },
+    async obtenerImagenes() {
+      return await new Promise(resolve => {
+        resolve(imagenes);
+      });
+    },
+    seleccionarImagen(nombre) {
+      this.form.imagen = nombre;
+      this.imageChange = false;
+    },
     buscarImagen(name) {
       return buscarImagen(name);
-    },
-    async fetchProducts(id) {
-      this.loadingProducts = true;
-      await getOneOrManyApi(productsByCategorie, id)
-        .then((res) => {
-          this.setProductsCategorie(res.data);
-          console.log(res.data);
-          this.loadingProducts = false;
-        })
-        .catch((err) => {
-          this.setError(err);
-          this.loadingProducts = false;
-        });
-    },
-    fetch(id) {
-      this.loadingCategorie = true;
-      getOneOrManyApi(categories, id)
-        .then((res) => {
-          this.setCategorie(res.data);
-          this.form = Object.assign({}, this.categorie);
-          this.loadingCategorie = false;
-        })
-        .catch((err) => {
-          this.setError(err);
-          this.loadingCategorie = false;
-        });
-    },
-    fetchNoCategories() {
-      this.loadingNoCategorie = true;
-      getApi(productosSinCategoria)
-        .then((res) => {
-          this.setProductsNoCategorie(res.data);
-          this.loadingNoCategorie = false;
-        })
-        .catch((err) => {
-          this.setError(err);
-          this.loadingNoCategorie = false;
-        });
     },
     getValidationClass(fieldName) {
       const field = this.$v.form[fieldName];
       if (field) {
         return {
-          'md-invalid': field.$invalid && field.$dirty,
+          "md-invalid": field.$invalid && field.$dirty
         };
       }
     },
     validateUser() {
       this.$v.$touch();
       if (!this.$v.$invalid) {
+        if (!this.form.imagen) {
+          this.imagenSeleccionada = false;
+          return;
+        }
         this.save();
       }
     },
-    save() {
+    async save() {
       this.sending = true;
-      // Instead of this timeout, here you can call your API
-      window.setTimeout(() => {
-        this.sending = false;
-      }, 1500);
-    },
-    agregarProducto(id) {
-      this.modalProducto = false;
-      this.loadingProducts = true;
-      this.productsNoCategorie.map(async (producto, index) => {
-        if (producto._id === id) {
-          const body = {
-            ...producto,
-            idCategoria: this.$route.params.id,
-          };
-          await this.guardarProductos(id, body).then(() => {
-            const products = this.productsCategorie;
-            const auxProd = this.productsNoCategorie;
-            products.push(producto);
-            this.setProductsCategorie(products);
-            auxProd.splice(index, 1);
-            this.setProductsNoCategorie(auxProd);
-          });
-          return;
-        }
-      });
-      this.loadingProducts = false;
-    },
-    deleteProduct(id) {
-      this.modalProducto = false;
-      this.loadingProducts = true;
-      this.productsCategorie.map(async (producto, index) => {
-        if (producto._id === id) {
-          const body = {
-            ...producto,
-            idCategoria: null,
-          };
-          await this.guardarProductos(id, body).then(() => {
-            const products = this.productsNoCategorie;
-            const auxProd = this.productsCategorie;
-            products.push(producto);
-            this.setProductsNoCategorie(products);
-            auxProd.splice(index, 1);
-            this.setProductsCategorie(auxProd);
-          });
-          successMsg(
-            'Eliminado',
-            'Se ha eliminado el producto de la categoría con éxito.'
-          );
-          return;
-        }
-      });
-      this.loadingProducts = false;
-    },
-    async guardarProductos(id, body) {
-      await putApi(products, id, body)
-        .then((response) => {
-          if (response.data) {
-            successMsg(
-              'Mercar Chevere',
-              'Configuración de producto guardada con éxito'
-            );
-          } else {
-            errorMsg(
-              'Mercar Chevere',
-              'No se ha podido actualizar el producto'
-            );
+      const body = Object.assign({}, this.form);
+      this.imagenSeleccionada = true;
+      await this.guardarCategoria(body)
+        .then(response => {
+          if (response) {
+            getApi(categories).then(respuesta => {
+              this.setCategories(respuesta.data);
+              this.sending = false;
+            });
+
+            this.$router.push("/admin/categorias");
           }
         })
-        .catch((err) => {
-          console.log('error', err);
-          errorMsg('Mercar Chevere', 'No se ha podido actualizar el producto');
+        .catch(() => {
+          this.sending = false;
         });
     },
-    cambiarImagen() {},
-  },
-  async mounted() {
-    const id = this.$route.params.id;
-    if (!this.categorie || this.categorie._id !== id) {
-      await this.fetch(id);
-      await this.fetchProducts(id);
-    } else {
-      this.form = await Object.assign({}, this.categorie);
+    async guardarCategoria(body) {
+      return await postApi(categories, body)
+        .then(response => {
+          if (response.data) {
+            successMsg("Mercar Chevere", "Categoría almacenada con éxito");
+            return response.data;
+          } else {
+            errorMsg(
+              "Mercar Chevere",
+              "No se ha podido almacenar la categoría"
+            );
+            return response;
+          }
+        })
+        .catch(err => {
+          console.log("error", err);
+          errorMsg("Mercar Chevere", "No se ha podido actualizar el producto");
+          return err;
+        });
     }
-    if (!this.productsNoCategorie) {
-      await this.fetchNoCategories();
-    }
   },
+  async mounted() {}
 };
 </script>
 
