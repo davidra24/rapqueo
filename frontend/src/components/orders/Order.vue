@@ -26,7 +26,7 @@
           <div class="right">${{ order.total }}</div>
         </div>
         <br />
-        <button class="btn btn-block btn-success" @click="goOrder(order._id)">Ver pedido</button>
+        <md-button class="btn btn-block md-raised md-primary" @click="goOrder(order._id)">Ver pedido</md-button>
       </b-card>
     </div>
   </div>
