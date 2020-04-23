@@ -64,10 +64,16 @@ postOrder = async (req, res) => {
 updateStateOrder = async (req, res) => {
   const { body } = req;
   const user = await Usuarios.findOne({ _id: body.id_usuario });
+  const estado =
+    parseInt(body.estado) === 0
+      ? 'Pendiente'
+      : state.order.estado === 1
+      ? 'En proceso'
+      : 'Entregado';
   await Pedidos.updateOne({ _id: body._id }, body)
     .then(() => {
       const info = {
-        message: `Su pedido se encuentra en estado ${body.estado}`,
+        message: `Su pedido se encuentra en estado ${estado}`,
         url: `/pedido/${body._id}`,
         id: body._id,
       };
