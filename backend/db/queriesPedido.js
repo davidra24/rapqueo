@@ -44,7 +44,7 @@ postOrder = async (req, res) => {
       user.forEach(async (us) => {
         console.log('user');
         await us.displayNotifications.forEach(async (notification) => {
-          await sendNotification(notification, info);
+          await sendNotification(notification, JSON.Stringify(info));
         });
       });
       res.send({
@@ -78,7 +78,7 @@ updateStateOrder = async (req, res) => {
         id: body._id,
       };
       user.displayNotifications.forEach(async (notification) => {
-        await sendNotification(notification, info);
+        await sendNotification(notification, JSON.Stringify(info));
       });
       res.send({
         code: 200,
