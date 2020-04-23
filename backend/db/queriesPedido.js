@@ -67,7 +67,7 @@ updateStateOrder = async (req, res) => {
   const estado =
     parseInt(body.estado) === 0
       ? 'Pendiente'
-      : state.order.estado === 1
+      : body.estado === 1
       ? 'En proceso'
       : 'Entregado';
   await Pedidos.updateOne({ _id: body._id }, body)
