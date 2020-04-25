@@ -108,10 +108,10 @@ export default {
     async validateState() {
       if (this.order.estado === 0) {
         this.estado = "Pedido pendiente";
-        this.boton = "Pedido en progreso";
+        this.boton = "Pedido en camino";
       } else {
         if (this.order.estado === 1) {
-          this.estado = "Pedido en progreso";
+          this.estado = "Pedido en camino";
           this.boton = "Pedido entregado";
         } else {
           this.estado = "Pedido entregado";
@@ -122,7 +122,6 @@ export default {
   },
   mounted() {
     this.validateState();
-    console.log("ordeeeeeeeeerrrrrrr", this.order);
   }
 };
 </script>

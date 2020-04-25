@@ -24,6 +24,13 @@ getOrdersByUser = (req, res) => {
   });
 };
 
+getOrdersByState = (req, res) => {
+  const id = req.params.id;
+  Pedidos.find({ estado: id }).then((data) => {
+    res.send(data);
+  });
+};
+
 getOneOrder = (req, res) => {
   const id = req.params.id;
   Pedidos.findById(id).then((data) => {
@@ -104,6 +111,7 @@ module.exports = {
   getAllOrders,
   getOneOrder,
   getOrdersByUser,
+  getOrdersByState,
   postOrder,
   pullOrder,
   deleteOrder,
