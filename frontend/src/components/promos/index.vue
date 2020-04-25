@@ -35,7 +35,7 @@
           </div>
           <md-button class="md-primary ml-auto p-2 bd-highlight" @click="goPromos()">VER TODO</md-button>
         </div>
-        <div v-else>NO HAY PROMOCIONES ACTIVAS EN EL MOMENTO</div>
+        <div v-else></div>
       </div>
     </div>
   </div>

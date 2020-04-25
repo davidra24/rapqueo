@@ -151,7 +151,7 @@ export default {
               const crypted = await crypt(str);
               await this.$cookies.set("session", crypted);
               await this.$cookies.set("token", token);
-              //await this.subscribeNotification(data.id);
+              await this.subscribeNotification(data.id);
               await this.createSession();
               await successMsg("Mercar Chevere", msg);
               this.sending = await false;

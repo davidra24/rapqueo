@@ -71,7 +71,6 @@
             @submit.prevent="validateUser"
           >
             <md-card class="md-layout-item md-size-50 md-small-size-100">
-              <md-progress-bar md-mode="indeterminate" v-if="sending" />
               <md-card-header>
                 <div class="md-title">Información</div>
               </md-card-header>
@@ -107,11 +106,12 @@
                       <span
                         class="md-error"
                         v-if="!$v.form.descripcion.required"
-                      >La descripción de la categoría es requerida</span>
+                      >La categoría es requerida</span>
                     </md-field>
                   </div>
                 </div>
               </md-card-content>
+              <md-progress-bar md-mode="indeterminate" v-if="sending" />
               <md-card-actions>
                 <md-button @click="eliminar()" class="md-accent" :disabled="sending">Eliminar</md-button>
                 <md-button type="submit" class="md-primary" :disabled="sending">Actualizar</md-button>
@@ -160,7 +160,11 @@
                                   :key="product._id"
                                   @click="agregarProducto(product._id)"
                                 >
-                                  <ProductsCategorieEdit :product="product" :esAgregar="true" />
+                                  <ProductsCategorieEdit
+                                    :product="product"
+                                    :esAgregar="true"
+                                    style="cursor:pointer;"
+                                  />
                                 </div>
                               </div>
                             </div>
@@ -268,19 +272,21 @@ export default {
       const id = this.$route.params.id;
       await questionMsg(
         "Mercar Chevere",
-        "¿Está seguro que desea eliminar esta categoría?\n Recuerde que este cambio es para siempre"
+        `¿Está seguro que desea eliminar esta categoría?
+            Recuerde que este cambio es para siempre`
       ).then(result => {
+        this.sending = true;
         if (result.value) {
           deleteApi(categories, id)
             .then(response => {
-              successMsg(
-                "Mercar Chevere",
-                "La categoría se ha eliminado satisfactoriamente"
-              );
               if (response) {
                 getApi(categories).then(respuesta => {
                   this.setCategories(respuesta.data);
                   this.sending = false;
+                  successMsg(
+                    "Mercar Chevere",
+                    "La categoría se ha eliminado satisfactoriamente"
+                  );
                   this.$router.push("/admin/categorias");
                 });
               }
@@ -292,6 +298,7 @@ export default {
               );
             });
         }
+        this.sending = false;
       });
     },
     async fetchProducts(id) {
@@ -354,22 +361,23 @@ export default {
         ...this.form
       };
       await this.guardarCategoria(id, body)
-        .then(response => {
-          const categorias = this.categories;
+        .then(() => {
           const auxCategorie = body;
 
-          categorias.map((categoria, index) => {
-            if (categoria._id === auxCategorie._id) {
-              console.log(categoria);
-              console.log(auxCategorie);
+          if (this.categories) {
+            const categorias = this.categories;
+            categorias.map((categoria, index) => {
+              if (categoria._id === auxCategorie._id) {
+                categorias[index] = auxCategorie;
+                return;
+              }
+            });
+            this.setCategories(categorias);
+          }
 
-              categorias[index] = auxCategorie;
-            }
-          });
+          this.setCategorie(body);
 
-          this.setCategories(categorias);
-
-          console.log("response", response);
+          this.$router.push("/admin/categorias");
           this.sending = false;
         })
         .catch(() => {

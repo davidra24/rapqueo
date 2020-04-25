@@ -7,7 +7,7 @@
           <Loading />
         </div>
         <div v-else class="col-12">
-          <OneOrder v-bind:order="order" />
+          <OneOrder />
         </div>
       </div>
     </div>

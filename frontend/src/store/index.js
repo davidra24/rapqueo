@@ -39,6 +39,13 @@ const store = new Vuex.Store({
       }
       return total;
     },
+    estadoPedido(state) {
+      return state.order.estado === 0
+        ? 'Pendiente'
+        : state.order.estado === 1
+        ? 'En proceso'
+        : 'Entregado';
+    },
   },
   //Methods
   mutations: {

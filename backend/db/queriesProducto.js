@@ -1,6 +1,7 @@
 require('dotenv/config');
 
 const Productos = require('../models/Productos');
+const Promos = require('../models/Promociones');
 
 getAllProducts = (req, res) => {
   Productos.find().then((data) => {
@@ -45,8 +46,15 @@ pullProduct = (req, res) => {
 };
 
 deleteProduct = (req, res) => {
-  Productos.findOneAndRemove(req.params.id).then((data) => {
-    res.send(data);
+  Productos.findByIdAndRemove(req.params.id).then((data) => {
+    Promos.find().then(async (response) => {
+      response.forEach(async (element) => {
+        if (element.producto._id) {
+          await Promos.findByIdAndRemove(element._id);
+        }
+      });
+      res.send(data);
+    });
   });
 };
 

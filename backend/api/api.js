@@ -672,6 +672,29 @@ api.get("/ordersByState/:id", queryPedido.getOrdersByState);
 api.post("/orders", queryPedido.postOrder);
 /**
  * @swagger
+ *  /api/orders/:
+ *    post:
+ *      tags: ['Pedidos']
+ *      description: Actualzia el estado de un pedido
+ *      summary: Add a new Order
+ *      requestBody:
+ *        description: Actualzia el estado de un pedido
+ *        required: true
+ *      parameters:
+ *        - name: Pedido
+ *          description: Orders Object
+ *          in:  body
+ *          required: true
+ *          type: object
+ *      responses:
+ *        '200':
+ *          {description: Successful}
+ *        '500':
+ *          {description: Internal Server Error}
+ */
+api.post('/updateStateOrder', queryPedido.updateStateOrder);
+/**
+ * @swagger
  *  /api/orders/{id}:
  *    put:
  *      tags: ['Pedidos']

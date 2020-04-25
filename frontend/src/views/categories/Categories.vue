@@ -12,38 +12,38 @@
 </template>
 
 <script>
-import Loading from '@/components/loading';
-import Categories from '@/components/categories/Categories.vue';
-import { categories } from '@/util/constants';
-import { getApi } from '@/util/api';
-import { mapState, mapActions } from 'vuex';
+import Loading from "@/components/loading";
+import Categories from "@/components/categories/Categories.vue";
+import { categories } from "@/util/constants";
+import { getApi } from "@/util/api";
+import { mapState, mapActions } from "vuex";
 export default {
-  name: 'CategoriesContainer',
+  name: "CategoriesContainer",
   components: {
     Loading,
-    Categories,
+    Categories
   },
   computed: {
-    ...mapState(['categories']),
+    ...mapState(["categories"])
   },
   data() {
     return {
-      loadingCategories: true,
+      loadingCategories: true
     };
   },
   methods: {
-    ...mapActions(['setCategories', 'setError', 'setPromos']),
+    ...mapActions(["setCategories", "setError"]),
     async fetchCategories() {
       await getApi(categories)
-        .then(async (res) => {
+        .then(async res => {
           this.setCategories(res.data);
           this.loadingCategories = false;
         })
-        .catch((err) => {
+        .catch(err => {
           this.setError(err);
           this.loadingCategories = false;
         });
-    },
+    }
   },
   mounted() {
     if (!this.categories) {
@@ -51,7 +51,7 @@ export default {
     } else {
       this.loadingCategories = false;
     }
-  },
+  }
 };
 </script>
 
