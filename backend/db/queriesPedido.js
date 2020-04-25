@@ -32,33 +32,52 @@ getOneOrder = (req, res) => {
 };
 
 postOrder = async (req, res) => {
-  const user = await Usuarios.find({ admin: true });
-  await updatePorducts(req.body.productos);
-  await Pedidos.create(req.body)
-    .then(async (data) => {
-      const info = {
-        message: 'Se ha realizado un pedido',
-        url: `/pedido/${data._id}`,
-        id: data._id,
-      };
-      user.forEach(async (us) => {
-        console.log('user');
-        await us.displayNotifications.forEach(async (notification) => {
-          await sendNotification(notification, info);
+  const { productos } = req.body;
+  var existencia = true;
+  var msg = 'No hay existencia en el momento de los siguientes productos: \n';
+  await productos.forEach((producto) => {
+    Productos.findById(producto._id).then((response) => {
+      if (response.caracteristicas.cantidad < producto.cantidad) {
+        existencia = false;
+        msg += `${producto.nombre}, por favor, pida ${response.caracteristicas.cantidad} cantidades o menos \n`;
+      }
+    });
+  });
+  if (!existencia) {
+    res.send({
+      code: 304,
+      msg,
+      data: null,
+    });
+  } else {
+    const user = await Usuarios.find({ admin: true });
+    await Pedidos.create(req.body)
+      .then(async (data) => {
+        const info = {
+          message: 'Se ha realizado un pedido',
+          url: `/pedido/${data._id}`,
+          id: data._id,
+        };
+        user.forEach(async (us) => {
+          console.log('user');
+          await us.displayNotifications.forEach(async (notification) => {
+            await sendNotification(notification, info);
+          });
+        });
+        await updatePorducts(req.body.productos);
+        res.send({
+          code: 200,
+          msg: 'Pedido realizado exitosamente',
+          data,
+        });
+      })
+      .catch((err) => {
+        res.send({
+          code: 500,
+          msg: err,
         });
       });
-      res.send({
-        code: 200,
-        msg: 'Pedido realizado exitosamente',
-        data,
-      });
-    })
-    .catch((err) => {
-      res.send({
-        code: 500,
-        msg: err,
-      });
-    });
+  }
 };
 
 updateStateOrder = async (req, res) => {
@@ -103,7 +122,7 @@ pullOrder = (req, res) => {
 };
 
 deleteOrder = (req, res) => {
-  Pedidos.findOneAndRemove(req.params.id).then((data) => {
+  Pedidos.findByIdAndRemove(req.params.id).then((data) => {
     res.send(data);
   });
 };

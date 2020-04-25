@@ -1,7 +1,7 @@
-require("dotenv/config");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const Usuarios = require("../models/Usuarios");
+require('dotenv/config');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const Usuarios = require('../models/Usuarios');
 
 getAllUsers = (req, res) => {
   Usuarios.find().then((data) => {
@@ -33,7 +33,7 @@ putUser = async (req, res) => {
     .then((data) => {
       res.send({
         code: 200,
-        msg: "Se han actualizado los datos personales satisfactoriamente",
+        msg: 'Se han actualizado los datos personales satisfactoriamente',
         data: {
           id: data._id,
           telefono: data.telefono,
@@ -47,13 +47,13 @@ putUser = async (req, res) => {
     .catch((err) => {
       res.send({
         code: 500,
-        msg: "No se han podido actualizar los datos personales",
+        msg: 'No se han podido actualizar los datos personales',
       });
     });
 };
 
 deleteUser = (req, res) => {
-  Usuarios.findOneAndRemove(req.params.id).then((data) => {
+  Usuarios.findByIdAndRemove(req.params.id).then((data) => {
     res.send(data);
   });
 };
@@ -71,7 +71,7 @@ signup = async (req, res) => {
       console.log(data);
       res.send({
         code: 200,
-        msg: "¡Usuario creado con éxito! :)",
+        msg: '¡Usuario creado con éxito! :)',
         data: {
           telefono: req.body.telefono,
           contrasena: req.body.contrasena,
@@ -79,15 +79,15 @@ signup = async (req, res) => {
       });
     })
     .catch((err) => {
-      console.log("error:...", err.message);
+      console.log('error:...', err.message);
       if (err.code === 11000) {
         res.send({
           code: 401,
           msg:
-            "El Usuario con ese número de teléfono ya existe en la base de datos",
+            'El Usuario con ese número de teléfono ya existe en la base de datos',
         });
       } else {
-        res.send({ code: 500, msg: "Error de servidor" });
+        res.send({ code: 500, msg: 'Error de servidor' });
       }
     });
 };
@@ -98,13 +98,13 @@ login = async (req, res) => {
     .then((data) => {
       bcrypt.compare(contrasena, data.contrasena).then((result) => {
         if (!result) {
-          res.send({ code: 402, msg: "Usuario o contraseña incorrecto" });
+          res.send({ code: 402, msg: 'Usuario o contraseña incorrecto' });
         } else {
           const secretKey = process.env.KEY;
           const token = jwt.sign({ id: data._id }, secretKey);
           res.send({
             code: 200,
-            msg: "Sesión iniciada correctamente",
+            msg: 'Sesión iniciada correctamente',
             token,
             data: {
               id: data._id,
@@ -121,7 +121,7 @@ login = async (req, res) => {
     })
     .catch((err) => {
       console.log(err);
-      res.send({ code: 404, msg: "Usuario o contraseña incorrecto" });
+      res.send({ code: 404, msg: 'Usuario o contraseña incorrecto' });
     });
 };
 
@@ -133,12 +133,12 @@ verifyPassword = async (req, res) => {
         if (!result) {
           res.send({
             code: 402,
-            msg: "La contraseña antigua es incorrecta, por favor verifíquela",
+            msg: 'La contraseña antigua es incorrecta, por favor verifíquela',
           });
         } else {
           res.send({
             code: 200,
-            msg: "Correcto",
+            msg: 'Correcto',
           });
         }
       });
@@ -147,7 +147,7 @@ verifyPassword = async (req, res) => {
       console.log(err);
       res.send({
         code: 404,
-        msg: "La contraseña antigua es incorrecta, por favor verifíquela",
+        msg: 'La contraseña antigua es incorrecta, por favor verifíquela',
       });
     });
 };

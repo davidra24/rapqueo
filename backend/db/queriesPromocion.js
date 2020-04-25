@@ -4,14 +4,14 @@ const Promociones = require('../models/Promociones');
 const Productos = require('../models/Productos');
 
 getAllPromos = (req, res) => {
-  Promociones.find().then(data => {
+  Promociones.find().then((data) => {
     res.send(data);
   });
 };
 
 getOnePromo = (req, res) => {
   const id = req.params.id;
-  Promociones.findById(id).then(data => {
+  Promociones.findById(id).then((data) => {
     res.send(data);
   });
 };
@@ -22,7 +22,6 @@ postPromo = async (req, res) => {
   promocion.producto = producto;
   promocion.markModified('producto');
   await promocion.save();
-  await promocion.update();
   await res.send(promocion);
 };
 
@@ -31,13 +30,13 @@ pullPromo = (req, res) => {
     req.params.id,
     req.body,
     (err, todo) => {}
-  ).then(data => {
+  ).then((data) => {
     res.send(data);
   });
 };
 
 deletePromo = (req, res) => {
-  Promociones.findOneAndRemove(req.params.id).then(data => {
+  Promociones.findByIdAndRemove(req.params.id).then((data) => {
     res.send(data);
   });
 };
@@ -47,5 +46,5 @@ module.exports = {
   getOnePromo,
   postPromo,
   pullPromo,
-  deletePromo
+  deletePromo,
 };

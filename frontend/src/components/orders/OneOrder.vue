@@ -138,9 +138,9 @@ export default {
     validateState() {
       this.boton =
         this.order.estado === 0
-          ? "Marcar como pedido en progreso"
+          ? "En progreso"
           : this.order.estado === 1
-          ? "Marcar como pedido entregado"
+          ? "Entregado"
           : "";
     }
   },
