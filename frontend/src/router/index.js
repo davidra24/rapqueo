@@ -13,11 +13,13 @@ import Register from "../views/register";
 import PedidosAdmin from "../views/admin/pedidos/Pedidos";
 import ProductosAdmin from "../views/admin/productos/Productos";
 import CategoriasAdmin from "../views/admin/categorias/Categorias";
-import PromocionesAdmin from "../views/admin/Promociones";
+import PromocionesAdmin from "../views/admin/promociones/Promociones";
 import EditarCategoria from "../views/admin/categorias/EditarCategoria";
 import AgregarCategoria from "../views/admin/categorias/AgregarCategoria";
 import AgregarProductos from "../views/admin/productos/AgregarProductos";
 import EditarProductos from "../views/admin/productos/EditarProductos";
+import EditarPromociones from "../views/admin/promociones/EditarPromociones";
+//import AgregarCategoria from "../views/admin/categorias/AgregarCategoria";
 import Perfil from "../views/perfil";
 import PedidosUsuario from "../views/pedidos/Orders";
 import Order from "../views/pedidos/Order";
@@ -30,7 +32,7 @@ Vue.material.router.linkActiveClass = linkActiveClass;
 const routes = [
   {
     path: "/",
-    name: "ProductContainer",
+    name: "AllProductContainer",
     component: AllProductsContainer,
   },
   {
@@ -57,11 +59,6 @@ const routes = [
     path: "/productos/:id",
     name: "Product",
     component: Product,
-  },
-  {
-    path: "/productos",
-    name: "ProductContainer",
-    component: AllProductsContainer,
   },
   {
     path: "/promociones",
@@ -133,6 +130,11 @@ const routes = [
     path: "/admin/agregar/producto",
     name: "AgregarProductos",
     component: AgregarProductos,
+  },
+  {
+    path: "/admin/editar/promociones/:id",
+    name: "EditarPromociones",
+    component: EditarPromociones,
   },
   {
     path: "/404",

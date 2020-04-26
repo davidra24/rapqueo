@@ -7,7 +7,7 @@
         <div v-if="!promos" class="col-12">
           <Loading />
         </div>
-        <div v-else-if="promos.length > 0 && validarAllPromos()" class="col-12 col-md-10 col-lg-8">
+        <div v-else-if="validarPromos()" class="col-12 col-md-10 col-lg-8">
           <h2 class="text-center">
             <strong>APROVECHA NUESTRAS PROMOCIONES</strong>
           </h2>
@@ -18,7 +18,7 @@
                 v-for="promo in promos"
                 :key="promo._id"
               >
-                <Promo v-if="validarPromos(promo)" :promo="promo" />
+                <Promo v-if="validarPromo(promo)" :promo="promo" />
               </CarouselCardItem>
             </CarouselCard>
           </div>
@@ -29,7 +29,7 @@
                 v-for="promo in promos"
                 :key="promo._id"
               >
-                <Promo v-if="validarPromos(promo)" :promo="promo" />
+                <Promo v-if="validarPromo(promo)" :promo="promo" />
               </CarouselCardItem>
             </CarouselCard>
           </div>
@@ -71,18 +71,16 @@ export default {
         finalDate.getTime() > actualDate.getTime()
       );
     },
-    validarPromos(promo) {
+    validarPromo(promo) {
       return (
         promo.producto.caracteristicas.cantidad > 0 &&
         this.validateFecha(promo.fechaInicio, promo.fechaFin)
       );
     },
-    validarAllPromos() {
+    validarPromos() {
       let valido = false;
       this.promos.forEach(promo => {
-        valido =
-          promo.producto.caracteristicas.cantidad > 0 &&
-          this.validateFecha(promo.fechaInicio, promo.fechaFin);
+        valido = this.validarPromo(promo);
       });
       return valido;
     }

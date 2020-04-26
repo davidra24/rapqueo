@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="row">
-      <div class="col-12" v-if="loadingProduct">
+      <div class="col-12" v-if="loadingPromo">
         <Loading />
       </div>
       <div class="col-12" v-else>
@@ -10,39 +10,15 @@
             <div class="col-12 col-md-6">
               <div class="d-flex justify-content-center">
                 <div style="width: 100%;">
-                  <img v-if="form.foto" :src="form.foto" alt="Skyscraper" style="width:80%" />
-                  <div v-else>
-                    <Loading />
-                  </div>
-                  <div v-if="!showCamera">
-                    <md-button class="md-primary" @click="changeCamera()">Tomar foto</md-button>
-                  </div>
-                  <md-dialog
-                    md-fullscreen
-                    :md-active.sync="showCamera"
-                    class="d-flex justify-content-center"
-                  >
-                    <div class="wrapper">
-                      <video class="video" :class="activeDevice === 0 ? 'front' : ''" ref="video" />
-                      <canvas style="display:none" ref="canva" />
-                      <button
-                        v-if="videoDevices.length > 1"
-                        class="button is-rounded is-outlined switch-button"
-                        @click="switchCamera"
-                      >
-                        <font-awesome-icon icon="sync-alt"></font-awesome-icon>
-                      </button>
-                      <div class="photo-button-container">
-                        <button class="button photo-button" @click="TakePhoto">
-                          <font-awesome-icon icon="camera"></font-awesome-icon>
-                        </button>
-                      </div>
-                    </div>
-                  </md-dialog>
+                  <img
+                    v-if="form.producto.foto"
+                    :src="form.producto.foto"
+                    alt="Skyscraper"
+                    style="width:80%"
+                  />
                 </div>
               </div>
             </div>
-
             <form
               novalidate
               class="md-layout col-12 col-sm-6 col-md-5 col-lg-6 d-flex justify-content-start"
@@ -50,23 +26,29 @@
             >
               <md-card class="md-layout-item md-size-50 md-small-size-100">
                 <md-card-header>
-                  <div class="md-title">Producto</div>
+                  <div class="md-title">Promocion</div>
                 </md-card-header>
                 <md-card-content>
                   <div class="md-layout md-gutter">
                     <div class="md-layout-item md-small-size-100">
-                      <md-field :class="getValidationClass('nombre')">
-                        <label for="nombre">Nombre</label>
-                        <md-input
-                          name="nombre"
-                          id="nombre"
-                          v-model="form.nombre"
+                      <md-field :class="getValidationClass('producto')">
+                        <label for="producto">Producto</label>
+                        <md-select
+                          name="producto"
+                          id="producto"
+                          v-model="form.producto._id"
                           :disabled="sending"
-                        />
+                        >
+                          <md-option
+                            v-for="product in products"
+                            :key="product._id"
+                            :value="product._id"
+                          >{{product.nombre}}</md-option>
+                        </md-select>
                         <span
                           class="md-error"
-                          v-if="!$v.form.nombre.required"
-                        >El nombre del producto es requerido</span>
+                          v-if="!$v.form.producto._id.required"
+                        >El producto es requerida</span>
                       </md-field>
                     </div>
                     <div class="md-layout-item md-small-size-100">
@@ -76,13 +58,9 @@
                           name="peso"
                           id="peso"
                           type="number"
-                          v-model="form.caracteristicas.peso"
-                          :disabled="sending"
+                          v-model="form.producto.caracteristicas.peso"
+                          disabled
                         />
-                        <span
-                          class="md-error"
-                          v-if="!$v.form.caracteristicas.peso.required"
-                        >La característica de peso es requerida</span>
                       </md-field>
                     </div>
                     <div class="md-layout-item md-small-size-100">
@@ -91,13 +69,9 @@
                         <md-input
                           name="unidad"
                           id="unidad"
-                          v-model="form.caracteristicas.unidad"
-                          :disabled="sending"
+                          v-model="form.producto.caracteristicas.unidad"
+                          disabled
                         />
-                        <span
-                          class="md-error"
-                          v-if="!$v.form.caracteristicas.unidad.required"
-                        >La característica de unidad es requerida</span>
                       </md-field>
                     </div>
                     <div class="md-layout-item md-small-size-100">
@@ -107,13 +81,9 @@
                           name="cantidad"
                           id="cantidad"
                           type="number"
-                          v-model="form.caracteristicas.cantidad"
-                          :disabled="sending"
+                          v-model="form.producto.caracteristicas.cantidad"
+                          disabled
                         />
-                        <span
-                          class="md-error"
-                          v-if="!$v.form.caracteristicas.cantidad.required"
-                        >La característica de cantidad es requerida</span>
                       </md-field>
                     </div>
                     <div class="md-layout-item md-small-size-100">
@@ -122,7 +92,7 @@
                         <md-input
                           name="sabor"
                           id="sabor"
-                          v-model="form.caracteristicas.sabor"
+                          v-model="form.producto.caracteristicas.sabor"
                           :disabled="sending"
                         />
                       </md-field>
@@ -134,13 +104,9 @@
                           name="precio"
                           id="precio"
                           type="number"
-                          v-model="form.caracteristicas.precio"
-                          :disabled="sending"
+                          v-model="form.producto.caracteristicas.precio"
+                          disabled
                         />
-                        <span
-                          class="md-error"
-                          v-if="!$v.form.caracteristicas.precio.required"
-                        >La característica de precio es requerida</span>
                       </md-field>
                     </div>
                     <div class="md-layout-item md-small-size-100">
@@ -149,34 +115,9 @@
                         <md-input
                           name="marca"
                           id="marca"
-                          v-model="form.caracteristicas.marca"
-                          :disabled="sending"
+                          v-model="form.producto.caracteristicas.marca"
+                          disabled
                         />
-                        <span
-                          class="md-error"
-                          v-if="!$v.form.caracteristicas.marca.required"
-                        >La característica de marca es requerida</span>
-                      </md-field>
-                    </div>
-                    <div class="md-layout-item md-small-size-100">
-                      <md-field :class="getValidationClass('categoria')">
-                        <label for="categoria">Categoria</label>
-                        <md-select
-                          name="categoria"
-                          id="categoria"
-                          v-model="form.idCategoria"
-                          :disabled="sending"
-                        >
-                          <md-option
-                            v-for="categorie in categories"
-                            :key="categorie._id"
-                            :value="categorie._id"
-                          >{{categorie.nombre}}</md-option>
-                        </md-select>
-                        <span
-                          class="md-error"
-                          v-if="!$v.form.idCategoria.required"
-                        >La categoría es requerida</span>
                       </md-field>
                     </div>
                   </div>
@@ -198,71 +139,70 @@
 <script>
 import { mapState, mapActions } from "vuex";
 import { getOneOrManyApi, getApi, putApi, deleteApi } from "../../../util/api";
-import { products, categories, promos } from "../../../util/constants";
+import { products, promos } from "../../../util/constants";
 import { successMsg, errorMsg, questionMsg } from "../../../util/utilMsg";
 import Loading from "../../../components/loading";
 import { validationMixin } from "vuelidate";
-import { required } from "vuelidate/lib/validators";
+import { required, integer, between } from "vuelidate/lib/validators";
 export default {
-  name: "EditarProductos",
+  name: "EditarPromociones",
   mixins: [validationMixin],
   components: { Loading },
   data() {
     return {
+      selectedDate: null,
       sending: false,
-      showCamera: false,
-      loadingProduct: false,
+      loadingPromo: false,
       form: {
-        nombre: "",
-        foto: "",
-        caracteristicas: {
-          peso: "",
-          unidad: "",
-          cantidad: "",
-          sabor: "",
-          precio: "",
-          marca: ""
-        },
-        idCategoria: ""
-      },
-      photo: "",
-      mediaStream: null,
-      videoDevices: [],
-      activeDevice: 0
+        fechaInicio: "",
+        fechaFin: "",
+        porcentaje: "",
+        mensaje: "",
+        producto: {
+          _id: "",
+          foto: "",
+          caracteristicas: {
+            peso: "",
+            unidad: "",
+            cantidad: "",
+            sabor: "",
+            precio: "",
+            marca: ""
+          },
+          idCategoria: ""
+        }
+      }
     };
   },
   computed: {
-    ...mapState(["product", "products", "categories", "promos"])
+    ...mapState(["promo", "products", "product"])
   },
   validations: {
     form: {
-      nombre: {
-        required
+      fechaInicio: { required },
+      fechaFin: { required },
+      porcentaje: {
+        integer,
+        between: between(1, 100)
       },
-      idCategoria: {
-        required
-      },
-      caracteristicas: {
-        peso: {
+      mensaje: { required },
+      producto: {
+        _id: {
           required
         },
-        unidad: {
-          required
-        },
-        cantidad: {
-          required
-        },
-        precio: {
-          required
-        },
-        marca: {
-          required
+        idCategoria: { required },
+        caracteristicas: {
+          peso: { required },
+          unidad: { required },
+          cantidad: { required },
+          precio: { required },
+          marca: { required }
         }
       }
     }
   },
   methods: {
-    ...mapActions(["setProduct", "setProducts", "setCategories", "setPromos"]),
+    ...mapActions(["setPromo", "setProducts", "setProduct"]),
     getValidationClass(fieldName) {
       const field = this.$v.form[fieldName];
       if (field) {
@@ -336,82 +276,51 @@ export default {
         this.save();
       }
     },
-    async changeCamera() {
-      this.showCamera = true;
-      const devices = await navigator.mediaDevices.enumerateDevices();
-      this.videoDevices = devices.filter(d => d.kind === "videoinput");
-      this.StartRecording(0);
+    fetchPromo(id) {
+      this.loadingPromo = true;
+      getOneOrManyApi(promos, id)
+        .then(res => {
+          this.setPromo(res.data);
+          this.form = Object.assign({}, this.promo);
+          this.loadingPromo = false;
+        })
+        .catch(err => {
+          this.setError(err);
+          this.loadingPromo = false;
+        });
+    },
+    fetchProducts() {
+      this.loadingPromo = true;
+      getApi(products)
+        .then(res => {
+          this.setProducts(res.data);
+          this.loadingPromo = false;
+        })
+        .catch(err => {
+          this.setError(err);
+          this.loadingPromo = false;
+        });
     },
     fetchProduct(id) {
-      this.loadingProduct = true;
       getOneOrManyApi(products, id)
         .then(res => {
           this.setProduct(res.data);
-          this.form = Object.assign({}, this.product);
-          this.loadingProduct = false;
+          this.form.producto = Object.assign({}, this.product);
         })
         .catch(err => {
           this.setError(err);
-          this.loadingProduct = false;
         });
-    },
-    fetchCategories() {
-      this.loadingProduct = true;
-      getApi(categories)
-        .then(res => {
-          this.setCategories(res.data);
-          this.loadingProduct = false;
-        })
-        .catch(err => {
-          this.setError(err);
-          this.loadingProduct = false;
-        });
-    },
-    async StartRecording(deviceIdx) {
-      let video = this.$refs.video;
-      this.mediaStream = await navigator.mediaDevices.getUserMedia({
-        video: { deviceId: { exact: this.videoDevices[deviceIdx].deviceId } }
-      });
-      video.srcObject = await this.mediaStream;
-      video.play();
-    },
-    async TakePhoto() {
-      let video = this.$refs.video;
-      let canva = this.$refs.canva;
-      let width = video.videoWidth;
-      let height = video.videoHeight;
-      canva.width = width;
-      canva.height = height;
-      let ctx = canva.getContext("2d");
-      ctx.save();
-      if (this.activeDevice === 0) {
-        ctx.scale(-1, 1);
-        ctx.drawImage(video, width * -1, 0, width, height);
-      } else {
-        ctx.drawImage(video, 0, 0);
-      }
-      ctx.restore();
-      this.form.foto = canva.toDataURL("image/png");
-      this.showCamera = false;
-    },
-    switchCamera() {
-      const tracks = this.mediaStream.getVideoTracks();
-      tracks.forEach(track => {
-        track.stop();
-      });
-      this.StartRecording((this.activeDevice + 1) % 2);
-      this.activeDevice = (this.activeDevice + 1) % 2;
     }
   },
   async mounted() {
     const id = this.$route.params.id;
-    if (!this.product || this.product._id !== id) {
-      await this.fetchProduct(id);
+    if (!this.promo || this.promo._id !== id) {
+      await this.fetchPromo(id);
     } else {
-      this.form = await Object.assign({}, this.product);
+      this.form = await Object.assign({}, this.promo);
     }
-    if (!this.categories) {
-      await this.fetchCategories();
+    if (!this.products) {
+      await this.fetchProducts();
     }
   }
 };
