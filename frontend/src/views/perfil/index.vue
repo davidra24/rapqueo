@@ -22,9 +22,22 @@
             >
               <b-card-body>
                 <!----------------------------------->
-                <md-chip class="md-accent">{{
-                  formatTelephone(user.telefono)
-                }}</md-chip>
+                <div class="row">
+                  <div class="col-12" style="margin-bottom: 1%;">
+                    <md-chip class="md-primary" style="width:50%;">{{
+                      formatTelephone(user.telefono)
+                    }}</md-chip>
+                  </div>
+                  <div class="col-12" style="margin-bottom: 2%;">
+                    <md-chip class="md-accent" style="width:50%;">
+                      {{ user.correo }}
+                    </md-chip>
+                  </div>
+                  <md-tooltip md-direction="top"
+                    >Estas propiedades no se pueden cambiar, nos ayudan a
+                    identificarte</md-tooltip
+                  >
+                </div>
                 <div v-if="editarpersonales">
                   <form novalidate @submit.prevent="validateForm(0)">
                     <div class="md-layout md-gutter">
@@ -64,6 +77,7 @@
                         </md-field>
                       </div>
                     </div>
+
                     <div class="row">
                       <div class="col-12 col-md-6">
                         <md-button
@@ -513,348 +527,354 @@
 </template>
 
 <script>
-  import { validationMixin } from "vuelidate";
-  import {
-    requiredIf,
-    minLength,
-    integer,
-    between,
-    alpha,
-  } from "vuelidate/lib/validators";
-  import { mapState, mapActions } from "vuex";
-  import { crypt } from "../../util/utilCrypt";
-  import { putApi, postApi } from "../../util/api";
-  import { usuarios, verifyPassword } from "../../util/constants";
-  import { successMsg, errorMsg } from "../../util/utilMsg";
-  const validVias = (value) =>
-    /(Calle|Carrera|Diagonal|Transversal|Avenida)$/.test(value);
-  export default {
-    name: "Perfil",
-    mixins: [validationMixin],
-    computed: {
-      ...mapState(["user"]),
-    },
-    data() {
-      return {
-        via: ["Calle", "Carrera", "Diagonal", "Transversal", "Avenida"],
-        form: {
-          Via: "",
-          numeroVia: "",
-          numero1: "",
-          numero2: "",
-          letra: "",
-          letra1: "",
-          letra2: "",
-          barrio: "",
-          info: "",
-          firstName: "",
-          lastName: "",
-          lastPassword: "",
-          password: "",
-          password2: "",
-        },
-        editarpersonales: false,
-        editarseguridad: false,
-        editardireccion: false,
-        sending: false,
-      };
-    },
-    validations: {
+import { validationMixin } from 'vuelidate';
+import {
+  requiredIf,
+  minLength,
+  integer,
+  between,
+  alpha,
+} from 'vuelidate/lib/validators';
+import { mapState, mapActions } from 'vuex';
+import { crypt } from '../../util/utilCrypt';
+import { putApi, postApi } from '../../util/api';
+import { usuarios, verifyPassword } from '../../util/constants';
+import { successMsg, errorMsg } from '../../util/utilMsg';
+const validVias = (value) =>
+  /(Calle|Carrera|Diagonal|Transversal|Avenida)$/.test(value);
+export default {
+  name: 'Perfil',
+  mixins: [validationMixin],
+  computed: {
+    ...mapState(['user']),
+  },
+  data() {
+    return {
+      via: ['Calle', 'Carrera', 'Diagonal', 'Transversal', 'Avenida'],
       form: {
-        firstName: {
-          required: requiredIf(function() {
-            return this.editarpersonales;
-          }),
-        },
-        lastName: {
-          required: requiredIf(function() {
-            return this.editarpersonales;
-          }),
-        },
-        lastPassword: {
-          required: requiredIf(function() {
-            return this.editarseguridad;
-          }),
-          minLength: minLength(8),
-        },
-        password: {
-          required: requiredIf(function() {
-            return this.editarseguridad;
-          }),
-          minLength: minLength(8),
-        },
-        password2: {
-          required: requiredIf(function() {
-            return this.editarseguridad;
-          }),
-          minLength: minLength(8),
-        },
-        Via: {
-          required: requiredIf(function() {
-            return this.editardireccion;
-          }),
-          validVias,
-        },
-        numeroVia: {
-          required: requiredIf(function() {
-            return this.editardireccion;
-          }),
-          integer,
-          between: between(1, 99),
-        },
-        numero1: {
-          required: requiredIf(function() {
-            return this.editardireccion;
-          }),
-          integer,
-          between: between(1, 99),
-        },
-        numero2: {
-          required: requiredIf(function() {
-            return this.editardireccion;
-          }),
-          integer,
-          between: between(1, 999),
-        },
-        letra: {
-          alpha,
-        },
-        letra1: {
-          alpha,
-        },
-        letra2: {
-          alpha,
-        },
-        barrio: {
-          required: requiredIf(function() {
-            return this.editardireccion;
-          }),
-        },
+        Via: '',
+        numeroVia: '',
+        numero1: '',
+        numero2: '',
+        letra: '',
+        letra1: '',
+        letra2: '',
+        barrio: '',
+        info: '',
+        firstName: '',
+        lastName: '',
+        lastPassword: '',
+        password: '',
+        password2: '',
+      },
+      editarpersonales: false,
+      editarseguridad: false,
+      editardireccion: false,
+      sending: false,
+    };
+  },
+  validations: {
+    form: {
+      firstName: {
+        required: requiredIf(function() {
+          return this.editarpersonales;
+        }),
+      },
+      lastName: {
+        required: requiredIf(function() {
+          return this.editarpersonales;
+        }),
+      },
+      lastPassword: {
+        required: requiredIf(function() {
+          return this.editarseguridad;
+        }),
+        minLength: minLength(8),
+      },
+      password: {
+        required: requiredIf(function() {
+          return this.editarseguridad;
+        }),
+        minLength: minLength(8),
+      },
+      password2: {
+        required: requiredIf(function() {
+          return this.editarseguridad;
+        }),
+        minLength: minLength(8),
+      },
+      Via: {
+        required: requiredIf(function() {
+          return this.editardireccion;
+        }),
+        validVias,
+      },
+      numeroVia: {
+        required: requiredIf(function() {
+          return this.editardireccion;
+        }),
+        integer,
+        between: between(1, 99),
+      },
+      numero1: {
+        required: requiredIf(function() {
+          return this.editardireccion;
+        }),
+        integer,
+        between: between(1, 99),
+      },
+      numero2: {
+        required: requiredIf(function() {
+          return this.editardireccion;
+        }),
+        integer,
+        between: between(1, 999),
+      },
+      letra: {
+        alpha,
+      },
+      letra1: {
+        alpha,
+      },
+      letra2: {
+        alpha,
+      },
+      barrio: {
+        required: requiredIf(function() {
+          return this.editardireccion;
+        }),
       },
     },
-    methods: {
-      ...mapActions(["setUser", "setSession", "setError"]),
-      editarPersonales() {
-        this.form.firstName = this.user.nombre;
-        this.form.lastName = this.user.apellido;
-        this.editarpersonales = true;
-      },
-      guardarPersonales() {
-        this.editarpersonales = false;
-        const data = {
-          nombre: this.form.firstName,
-          apellido: this.form.lastName,
-        };
-        this.actualizarDatos(data);
-      },
-      cancelarPersonales() {
-        this.editarpersonales = false;
-      },
-      editarSeguridad() {
-        this.editarseguridad = true;
-      },
-      guardarSeguridad() {
+  },
+  methods: {
+    ...mapActions(['setUser', 'setSession', 'setError']),
+    editarPersonales() {
+      this.form.firstName = this.user.nombre;
+      this.form.lastName = this.user.apellido;
+      this.editarpersonales = true;
+    },
+    guardarPersonales() {
+      this.editarpersonales = false;
+      console.log(this.form);
+      const data = {
+        nombre: this.form.firstName,
+        apellido: this.form.lastName,
+      };
+      console.log(data);
+      this.actualizarDatos(data);
+    },
+    cancelarPersonales() {
+      this.editarpersonales = false;
+    },
+    editarSeguridad() {
+      this.editarseguridad = true;
+    },
+    guardarSeguridad() {
+      if (this.form.password !== this.form.password2) {
+        errorMsg(
+          'Mercar Chevere',
+          'La contraseña nueva no coincide con su verificación, por favor reviselas'
+        );
+      } else {
         const data = {
           contrasena: this.form.password,
         };
         const password = this.form.lastPassword;
-        if (this.form.password != this.form.password2) {
-          errorMsg(
-            "Mercar Chevere",
-            "La contraseña nueva no coincide con su verificación, por favor reviselas"
-          );
-        } else {
-          this.verifyPassword(password, data);
-        }
-      },
-      cancelarSeguridad() {
-        this.form.lastPassword = "";
-        this.form.password = "";
-        this.form.password2 = "";
+        this.verifyPassword(password, data);
         this.editarseguridad = false;
-      },
-      editarDireccion() {
-        this.editardireccion = true;
-        this.$v.$reset();
-      },
-      async quitarDireccion(dir) {
-        const direcciones = this.user.direccion;
-        var finalDir = [];
-        await direcciones.map((direccion) => {
-          if (
-            direccion.direccion !== dir.direccion &&
-            direccion.barrio !== dir.barrio &&
-            direccion.datos_adicionales !== dir.datos_adicionales
-          ) {
-            finalDir.push(direccion);
-          }
-        });
-        const newUser = {
-          ...this.user,
-          direccion: finalDir,
-        };
-        this.setUser(newUser);
-        this.actualizarDatos({ direccion: finalDir });
-      },
-      cancelarDireccion() {
-        this.editardireccion = false;
-        this.clearForm();
-      },
-      guardarDireccion() {
-        this.editardireccion = false;
-        const direccion = this.datosDireccion();
-        this.save(direccion);
-      },
-      datosDireccion() {
-        return {
-          barrio: this.form.barrio,
-          direccion:
-            this.form.Via +
-            " " +
-            this.form.numeroVia +
-            this.form.letra +
-            " #" +
-            this.form.numero1 +
-            this.form.letra1 +
-            "-" +
-            this.form.numero2 +
-            this.form.letra2,
-          datos_adicionales: this.form.info,
-        };
-      },
-      async save(body) {
-        var direccion = this.user.direccion;
-        direccion.push(body);
-        this.actualizarDatos({ direccion });
-      },
-      getValidationClass(fieldName) {
-        const field = this.$v.form[fieldName];
-        if (field) {
-          return {
-            "md-invalid": field.$invalid && field.$dirty,
-          };
+      }
+    },
+    cancelarSeguridad() {
+      this.form.lastPassword = '';
+      this.form.password = '';
+      this.form.password2 = '';
+      this.editarseguridad = false;
+    },
+    editarDireccion() {
+      this.editardireccion = true;
+      this.$v.$reset();
+    },
+    async quitarDireccion(dir) {
+      const direcciones = this.user.direccion;
+      var finalDir = [];
+      await direcciones.map((direccion) => {
+        if (
+          direccion.direccion !== dir.direccion &&
+          direccion.barrio !== dir.barrio &&
+          direccion.datos_adicionales !== dir.datos_adicionales
+        ) {
+          finalDir.push(direccion);
         }
-      },
-      clearForm() {
-        this.$v.$reset();
-        this.form.Via = "";
-        this.form.numeroVia = "";
-        this.form.numero1 = "";
-        this.form.numero2 = "";
-        this.letra = "";
-        this.letra1 = "";
-        this.letra2 = "";
-        this.barrio = "";
-        this.info = "";
-      },
-      async validataUser() {
-        const usrId = await this.$route.params.id;
-        if (this.user) {
-          if (this.user.id !== usrId) {
-            await this.$router.push("/");
+      });
+      const newUser = {
+        ...this.user,
+        direccion: finalDir,
+      };
+      this.setUser(newUser);
+      this.actualizarDatos({ direccion: finalDir });
+    },
+    cancelarDireccion() {
+      this.editardireccion = false;
+      this.clearForm();
+    },
+    guardarDireccion() {
+      this.editardireccion = false;
+      const direccion = this.datosDireccion();
+      this.save(direccion);
+    },
+    datosDireccion() {
+      return {
+        barrio: this.form.barrio,
+        direccion:
+          this.form.Via +
+          ' ' +
+          this.form.numeroVia +
+          this.form.letra +
+          ' #' +
+          this.form.numero1 +
+          this.form.letra1 +
+          '-' +
+          this.form.numero2 +
+          this.form.letra2,
+        datos_adicionales: this.form.info,
+      };
+    },
+    async save(body) {
+      var direccion = this.user.direccion;
+      direccion.push(body);
+      this.actualizarDatos({ direccion });
+    },
+    getValidationClass(fieldName) {
+      const field = this.$v.form[fieldName];
+      if (field) {
+        return {
+          'md-invalid': field.$invalid && field.$dirty,
+        };
+      }
+    },
+    clearForm() {
+      this.$v.$reset();
+      this.form.Via = '';
+      this.form.numeroVia = '';
+      this.form.numero1 = '';
+      this.form.numero2 = '';
+      this.letra = '';
+      this.letra1 = '';
+      this.letra2 = '';
+      this.barrio = '';
+      this.info = '';
+    },
+    async validataUser() {
+      const usrId = await this.$route.params.id;
+      if (this.user) {
+        if (this.user.id !== usrId) {
+          await this.$router.push('/');
+        }
+      } else {
+        await this.$router.push('/');
+      }
+    },
+    validateForm(id) {
+      this.$v.$touch();
+      if (!this.$v.$invalid) {
+        switch (id) {
+          case 0:
+            console.log('ENTRA A 0');
+
+            this.guardarPersonales();
+            break;
+          case 1:
+            this.guardarSeguridad();
+            break;
+          case 2:
+            this.guardarDireccion();
+            break;
+          default:
+            break;
+        }
+      } else {
+        console.log(this.$v);
+      }
+    },
+    formatTelephone(number) {
+      const phone = number.split('');
+      var result = '';
+      result += `${phone[3]}${phone[4]}${phone[5]} ${phone[6]}${phone[7]}${phone[8]} ${phone[9]}${phone[10]}${phone[11]}${phone[12]}`;
+      return result;
+    },
+    async actualizarStorage(data) {
+      const crypted = await crypt(JSON.stringify(data));
+      await this.$cookies.set('session', crypted);
+      await this.setSession(crypted);
+    },
+    async verifyPassword(password, cuerpo) {
+      this.sending = true;
+      const body = {
+        telefono: this.user.telefono,
+        contrasena: password,
+      };
+      postApi(verifyPassword, body).then(async (result) => {
+        if (result.data) {
+          const { code, msg } = result.data;
+          if (parseInt(code) === 200) {
+            await this.actualizarDatos(cuerpo);
+            this.form.lastPassword = await '';
+            this.form.password = await '';
+            this.form.password2 = await '';
+            this.editarseguridad = await false;
+          } else {
+            errorMsg('Mercar Chevere', msg);
           }
         } else {
-          await this.$router.push("/");
+          errorMsg(
+            'Mercar Chevere',
+            'No se ha podido actualizar los datos, erro de conexión con el servidor'
+          );
         }
-      },
-      validateForm(id) {
-        this.$v.$touch();
-        console.log(!this.$v.$invalid);
-        if (!this.$v.$invalid) {
-          switch (id) {
-            case 0:
-              this.guardarPersonales();
-              break;
-            case 1:
-              this.guardarSeguridad();
-              break;
-            case 2:
-              this.guardarDireccion();
-              break;
-            default:
-              break;
-          }
-        }
-      },
-      formatTelephone(number) {
-        const phone = number.split("");
-        var result = "";
-        result += `${phone[3]}${phone[4]}${phone[5]} ${phone[6]}${phone[7]}${phone[8]} ${phone[9]}${phone[10]}${phone[11]}${phone[12]}`;
-        return result;
-      },
-      async actualizarStorage(data) {
-        const crypted = await crypt(JSON.stringify(data));
-        await this.$cookies.set("session", crypted);
-        await this.setSession(crypted);
-      },
-      async verifyPassword(password, cuerpo) {
-        this.sending = true;
-        const body = {
-          telefono: this.user.telefono,
-          contrasena: password,
-        };
-        postApi(verifyPassword, body).then(async (result) => {
+        this.sending = false;
+      });
+    },
+    async actualizarDatos(body) {
+      this.sending = true;
+      const id = this.user.id;
+      putApi(usuarios, id, body)
+        .then((result) => {
           if (result.data) {
-            const { code, msg } = result.data;
+            const { code, msg, data } = result.data;
+            console.log('result', result.data);
             if (parseInt(code) === 200) {
-              await this.actualizarDatos(cuerpo);
-              this.form.lastPassword = await "";
-              this.form.password = await "";
-              this.form.password2 = await "";
-              this.editarseguridad = await false;
+              const usuario = { ...data, ...body };
+              this.actualizarStorage(usuario);
+              this.setUser(usuario);
+              successMsg('Mercar Chevere', msg);
             } else {
-              errorMsg("Mercar Chevere", msg);
+              errorMsg('Mercar Chevere', msg);
             }
           } else {
             errorMsg(
-              "Mercar Chevere",
-              "No se ha podido actualizar los datos, erro de conexión con el servidor"
+              'Mercar Chevere',
+              'No se ha podido actualizar los datos, erro de conexión con el servidor'
             );
           }
           this.sending = false;
+        })
+        .catch((err) => {
+          this.setError(err);
+          this.sending = false;
+          console.log('error', err);
+          errorMsg('Mercar Chevere', `${err}: Error de servidor`);
         });
-      },
-      async actualizarDatos(body) {
-        this.sending = true;
-        const id = this.user.id;
-        putApi(usuarios, id, body)
-          .then((result) => {
-            if (result.data) {
-              const { code, msg, data } = result.data;
-              console.log(result.data);
-              if (parseInt(code) === 200) {
-                const usuario = { ...data, ...body };
-                this.actualizarStorage(usuario);
-                this.setUser(usuario);
-                successMsg("Mercar Chevere", msg);
-              } else {
-                errorMsg("Mercar Chevere", msg);
-              }
-            } else {
-              errorMsg(
-                "Mercar Chevere",
-                "No se ha podido actualizar los datos, erro de conexión con el servidor"
-              );
-            }
-            this.sending = false;
-          })
-          .catch((err) => {
-            this.setError(err);
-            this.sending = false;
-            console.log("error", err);
-            errorMsg("Mercar Chevere", `${err}: Error de servidor`);
-          });
-      },
     },
-    async mounted() {
-      await this.validataUser();
-    },
-  };
+  },
+  async mounted() {
+    await this.validataUser();
+  },
+};
 </script>
 
 <style scoped>
-  .white-header {
-    background-color: #448aff;
-    color: white;
-  }
+.white-header {
+  background-color: #448aff;
+  color: white;
+}
 </style>

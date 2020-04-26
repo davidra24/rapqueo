@@ -21,6 +21,7 @@ import EditarProductos from '../views/admin/productos/EditarProductos';
 import Perfil from '../views/perfil';
 import PedidosUsuario from '../views/pedidos/Orders';
 import Order from '../views/pedidos/Order';
+import Olvide from '../views/olvidar';
 
 const linkActiveClass = 'my-link-active-class';
 
@@ -133,6 +134,11 @@ const routes = [
     path: '/admin/agregar/producto',
     name: 'AgregarProductos',
     component: AgregarProductos,
+  },
+  {
+    path: '/olvide',
+    name: 'Olvide',
+    component: Olvide,
   },
   {
     path: '/404',
