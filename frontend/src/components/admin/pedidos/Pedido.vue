@@ -26,16 +26,16 @@
           <div class="right">${{ order.total }}</div>
         </div>
         <br />
-        <md-button class="btn btn-block md-raised md-primary" @click="goOrder(order._id)">Ver pedido</md-button>
+        <button class="btn btn-block btn-success" @click="goOrder(order._id)">Ver pedido</button>
       </b-card>
     </div>
   </div>
 </template>
 
 <script>
-import Loading from "../loading";
+import Loading from "../../loading";
 export default {
-  name: "Order",
+  name: "Pedido",
   props: ["order"],
   component: {
     Loading

@@ -272,7 +272,7 @@
                     </md-card>
                   </div>
                   <div class="col-12" v-if="verifyPago" style="color:red; margin-top: 2%;">
-                    <p>Debe seleccionar una direccion</p>
+                    <p>Debe seleccionar una metodo de pago</p>
                   </div>
                 </div>
               </div>
@@ -446,7 +446,6 @@ export default {
       });
       return productos;
     },
-    descontarProductos() {},
     validateLoggin() {
       if (this.$cookies.get("session") && this.$cookies.get("token")) {
         this.logged = true;
@@ -498,13 +497,13 @@ export default {
           this.form.Via +
           " " +
           this.form.numeroVia +
-          this.form.letra +
+          this.form.letra.toUpperCase() +
           " #" +
           this.form.numero1 +
-          this.form.letra1 +
+          this.form.letra1.toUpperCase() +
           "-" +
           this.form.numero2 +
-          this.form.letra2,
+          this.form.letra2.toUpperCase(),
         datos_adicionales: this.form.info
       };
     },
