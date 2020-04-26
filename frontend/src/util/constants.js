@@ -17,6 +17,7 @@ export const notificationRegister = 'notification/subscribe';
 export const productosSinCategoria = 'api/productsNoCategorie';
 export const ordersByUser = 'api/ordersByUser';
 export const updateOrder = 'api/updateStateOrder';
+export const ordersByState = 'api/ordersByState';
 export const forgot = 'api/forgot';
 export const codeRecovery = 'api/code-recovery';
 export const recoveryPassword = 'api/recoveryPassword';
