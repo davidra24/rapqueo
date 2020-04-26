@@ -29,6 +29,18 @@ const store = new Vuex.Store({
     getCart(state) {
       return state.cart;
     },
+    getPromosValidas(state) {
+      var active = [];
+      state.promos.forEach((promo) => {
+        if (
+          promo.producto.caracteristicas.cantidad > 0 &&
+          validateFecha(promo.fechaInicio, promo.fechaFin)
+        ) {
+          active.push(promo);
+        }
+      });
+      return active;
+    },
     totalPriece(state) {
       var total = 0;
       if (state.cart) {
@@ -170,3 +182,13 @@ const store = new Vuex.Store({
 });
 
 export default store;
+
+const validateFecha = (fechaInicio, fechaFin) => {
+  var initialDate = new Date(fechaInicio);
+  var finalDate = new Date(fechaFin);
+  var actualDate = new Date();
+  return (
+    initialDate.getTime() < actualDate.getTime() &&
+    finalDate.getTime() > actualDate.getTime()
+  );
+};
