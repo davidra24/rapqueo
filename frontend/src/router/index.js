@@ -10,7 +10,7 @@ import PromosContainer from "../views/promos/AllPromos.vue";
 import Promo from "../views/promos/Promo.vue";
 import Login from "../views/login";
 import Register from "../views/register";
-import PedidosAdmin from "../views/admin/pedidos/Pedidos";
+import PedidosAdmin from "../views/admin/pedidos";
 import ProductosAdmin from "../views/admin/productos/Productos";
 import CategoriasAdmin from "../views/admin/categorias/Categorias";
 import PromocionesAdmin from "../views/admin/promociones/Promociones";

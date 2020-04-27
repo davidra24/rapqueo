@@ -75,15 +75,42 @@
                     <div class="md-layout-item md-small-size-100">
                       <md-datepicker
                         v-model="form.fechaInicio"
-                        name="mensaje"
-                        id="mensaje"
+                        name="fechaInicio"
+                        id="fechaInicio"
                         :disabled="sending"
                         :class="getValidationClass('fechaInicio')"
+                        md-immediately
                       >
+                        <label for="fechaInicio">Fecha inicio</label>
                         <span
                           class="md-error"
-                          v-if="!$v.form.mensaje.required"
-                        >El mensaje de descuento es requerido</span>
+                          v-if="!$v.form.fechaInicio.required"
+                        >La fecha inicial es requerida</span>
+                        <span
+                          class="md-error"
+                          v-else-if="!$v.form.fechaInicio.invalid"
+                        >La fecha inicial debe ser antes de la fecha final</span>
+                      </md-datepicker>
+                    </div>
+                    <div class="md-layout-item md-small-size-100">
+                      <md-datepicker
+                        v-model="form.fechaFin"
+                        name="fechaFin"
+                        id="fechaFin"
+                        :disabled="sending"
+                        :class="getValidationClass('fechaFin')"
+                        md-immediately
+                        @md-closed="validDates()"
+                      >
+                        <label for="fechaFinal">Fecha final</label>
+                        <span
+                          class="md-error"
+                          v-if="!$v.form.fechaFin.required"
+                        >La fecha final es requerida</span>
+                        <span
+                          class="md-error"
+                          v-else-if="!$v.form.fechaFin.invalid"
+                        >La fecha inicial debe ser antes de la fecha final</span>
                       </md-datepicker>
                     </div>
                   </div>
@@ -109,7 +136,13 @@ import { products, promos } from "../../../util/constants";
 import { successMsg, errorMsg, questionMsg } from "../../../util/utilMsg";
 import Loading from "../../../components/loading";
 import { validationMixin } from "vuelidate";
-import { required, integer, between } from "vuelidate/lib/validators";
+import {
+  required,
+  integer,
+  between,
+  minValue,
+  maxValue
+} from "vuelidate/lib/validators";
 export default {
   name: "EditarPromociones",
   mixins: [validationMixin],
@@ -118,6 +151,9 @@ export default {
     return {
       sending: false,
       loadingPromo: false,
+      validDate: false,
+      initialDate: 0,
+      finalDate: 0,
       form: {
         fechaInicio: "",
         fechaFin: "",
@@ -131,8 +167,18 @@ export default {
   },
   validations: {
     form: {
-      fechaInicio: { required },
-      fechaFin: { required },
+      fechaInicio: {
+        required,
+        maxValue(value) {
+          return maxValue(this.finalDate)(value);
+        }
+      },
+      fechaFin: {
+        required,
+        minValue(value) {
+          return minValue(this.initialDate)(value);
+        }
+      },
       porcentaje: {
         required,
         integer,
@@ -144,6 +190,16 @@ export default {
   methods: {
     ...mapActions(["setPromo", "setError"]),
     getValidationClass(fieldName) {
+      if (this.form.fechaInicio) {
+        this.initialDate = this.form.fechaInicio.getTime();
+      } else {
+        this.initialDate = 0;
+      }
+      if (this.form.fechaFin) {
+        this.finalDate = this.form.fechaFin.getTime();
+      } else {
+        this.finalDate = 0;
+      }
       const field = this.$v.form[fieldName];
       if (field) {
         return {
@@ -221,9 +277,10 @@ export default {
       getOneOrManyApi(promos, id)
         .then(res => {
           this.setPromo(res.data);
-          this.form = Object.assign({}, this.promo);
-          var date = new Date(this.promo.fechaInicio);
-          this.form.fechaInicio = date;
+          this.form.porcentaje = this.promo.porcentaje;
+          this.form.mensaje = this.promo.mensaje;
+          this.form.fechaInicio = new Date(this.promo.fechaInicio);
+          this.form.fechaFin = new Date(this.promo.fechaFin);
           this.loadingPromo = false;
         })
         .catch(err => {
@@ -233,11 +290,15 @@ export default {
     }
   },
   async created() {
+    this.$material.locale.dateFormat = "dd/MM/yyyy";
     const id = this.$route.params.id;
     if (!this.promo || this.promo._id !== id) {
-      await this.fetchPromo(id);
+      this.fetchPromo(id);
     } else {
-      this.form = await Object.assign({}, this.promo);
+      this.form.porcentaje = this.promo.porcentaje;
+      this.form.mensaje = this.promo.mensaje;
+      this.form.fechaInicio = new Date(this.promo.fechaInicio);
+      this.form.fechaFin = new Date(this.promo.fechaFin);
     }
   }
 };

@@ -14,6 +14,7 @@
         </h2>
       </div>
       <div v-else class="col-12">
+        <h3>Mis pedidos</h3>
         <Orders />
       </div>
     </div>
