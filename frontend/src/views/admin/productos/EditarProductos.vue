@@ -129,7 +129,7 @@
                     </div>
                     <div class="md-layout-item md-small-size-100">
                       <md-field :class="getValidationClass('precio')">
-                        <label for="precio">Pecio</label>
+                        <label for="precio">Precio</label>
                         <md-input
                           name="precio"
                           id="precio"

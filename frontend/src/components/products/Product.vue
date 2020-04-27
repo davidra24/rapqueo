@@ -149,7 +149,7 @@ export default {
       this.promoV = true;
     },
     productVerify() {
-      if (this.product.caracteristicas.cantidad == 0) {
+      if (this.product.caracteristicas.cantidad < 1) {
         return true;
       }
       return false;
@@ -196,7 +196,7 @@ export default {
   computed: {
     ...mapState(["promos"])
   },
-  created() {
+  mounted() {
     if (!this.promos) {
       this.fetchPromos();
     }

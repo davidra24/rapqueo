@@ -53,13 +53,7 @@ export default {
     Loading
   },
   data() {
-    return {
-      slide: 0,
-      sliding: null,
-      initialDate: new Date(this.promo.fechaInicial),
-      finalDate: new Date(this.promo.fechaFinal),
-      actualDate: new Date()
-    };
+    return {};
   },
   methods: {
     goPromo(id) {

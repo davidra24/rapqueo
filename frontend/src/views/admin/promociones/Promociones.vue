@@ -1,11 +1,11 @@
 <template>
   <div class="container">
     <div class="row">
-      <div v-if="loadingProductos" class="col-12">
+      <div v-if="loadingPromociones" class="col-12">
         <Loading />
       </div>
       <div v-else class="col-12">
-        <ProductosAdminComponent />
+        <PromocionesAdminComponent />
         <vue-fab mainBtnColor="#448AFF" @clickMainBtn="clickAdd" size="big"></vue-fab>
       </div>
     </div>
@@ -16,32 +16,32 @@
 <script>
 import Loading from "../../../components/loading";
 import { mapState, mapActions } from "vuex";
-import ProductosAdminComponent from "../../../components/admin/productos/Productos";
-import { products } from "../../../util/constants";
+import PromocionesAdminComponent from "../../../components/admin/promociones/Promociones";
+import { promos } from "../../../util/constants";
 import { getApi } from "../../../util/api";
 export default {
-  name: "ProductosAdmin",
+  name: "PromocionesAdmin",
   computed: {
-    ...mapState(["user", "products"])
+    ...mapState(["user", "promos"])
   },
   data() {
     return {
-      loadingProductos: false
+      loadingPromociones: false
     };
   },
-  components: { Loading, ProductosAdminComponent },
+  components: { Loading, PromocionesAdminComponent },
   methods: {
-    ...mapActions(["setProducts", "setError"]),
-    async fetchProducts() {
-      this.loadingProductos = true;
-      await getApi(products)
+    ...mapActions(["setPromos", "setError"]),
+    async fetchPromos() {
+      this.loadingPromociones = true;
+      await getApi(promos)
         .then(res => {
-          this.setProducts(res.data);
-          this.loadingProductos = false;
+          this.setPromos(res.data);
+          this.loadingPromociones = false;
         })
         .catch(err => {
           this.setError(err);
-          this.loadingProductos = false;
+          this.loadingPromociones = false;
         });
     },
     validateAdmin() {
@@ -49,8 +49,8 @@ export default {
         if (!this.user.admin) {
           this.$router.push("/");
         } else {
-          if (!this.products) {
-            this.fetchProducts();
+          if (!this.promos) {
+            this.fetchPromos();
           }
         }
       } else {
@@ -58,7 +58,7 @@ export default {
       }
     },
     clickAdd() {
-      this.$router.push("/admin/agregar/producto");
+      this.$router.push("/admin/agregar/promocion");
     }
   },
   mounted() {

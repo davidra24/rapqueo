@@ -98,7 +98,10 @@ export default {
       this.cantidad = this.cantidad > 1 ? this.cantidad - 1 : this.cantidad;
     },
     suma() {
-      this.cantidad = this.cantidad >= 0 ? this.cantidad + 1 : this.cantidad;
+      this.cantidad =
+        this.cantidad < this.promo.producto.caracteristicas.cantidad
+          ? this.cantidad + 1
+          : this.cantidad;
     },
     agregado() {
       this.show = true;
