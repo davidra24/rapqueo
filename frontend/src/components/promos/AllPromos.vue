@@ -1,23 +1,28 @@
 <template>
   <div class="container">
     <div class="row">
-      <div class="col-12 col-md-6 col-lg-4" v-for="promo in promos" :key="promo._id">
+      <div
+        class="col-12 col-md-6 col-lg-4"
+        v-for="promo in getPromosValidas"
+        :key="promo._id"
+      >
         <Promos v-bind:promo="promo" />
       </div>
     </div>
   </div>
 </template>
 <script>
-import Promos from "./Promos";
-import { mapState } from "vuex";
+import Promos from './Promos';
+import { mapState, mapGetters } from 'vuex';
 export default {
-  name: "AllPromos",
+  name: 'AllPromos',
   computed: {
-    ...mapState(["promos"])
+    ...mapState(['promos']),
+    ...mapGetters(['getPromosValidas']),
   },
   components: {
-    Promos
-  }
+    Promos,
+  },
 };
 </script>
 

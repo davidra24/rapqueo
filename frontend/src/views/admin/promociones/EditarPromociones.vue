@@ -11,9 +11,9 @@
               <div class="d-flex justify-content-center">
                 <div style="width: 100%;">
                   <img
-                    v-if="form.producto.foto"
-                    :src="form.producto.foto"
-                    alt="Skyscraper"
+                    class="resize-img"
+                    v-bind:src="promo.producto.foto"
+                    v-bind:alt="promo.producto.nombre"
                     style="width:80%"
                   />
                 </div>
@@ -30,95 +30,61 @@
                 </md-card-header>
                 <md-card-content>
                   <div class="md-layout md-gutter">
+                    <div
+                      class="md-layout-item md-small-size-100 d-flex align-items-start flex-column"
+                    >
+                      <h6>Producto: {{promo.producto.nombre}}</h6>
+                      <h6>Peso: {{promo.producto.caracteristicas.peso}}{{promo.producto.caracteristicas.unidad}}</h6>
+                      <h6>Cantidad: {{promo.producto.caracteristicas.cantidad}}</h6>
+                      <h6>Precio: ${{promo.producto.caracteristicas.precio}}</h6>
+                    </div>
                     <div class="md-layout-item md-small-size-100">
-                      <md-field :class="getValidationClass('producto')">
-                        <label for="producto">Producto</label>
-                        <md-select
-                          name="producto"
-                          id="producto"
-                          v-model="form.producto._id"
+                      <md-field :class="getValidationClass('porcentaje')">
+                        <label for="porcentaje">Porcentaje de descuento</label>
+                        <md-input
+                          name="porcentaje"
+                          id="porcentaje"
+                          v-model="form.porcentaje"
                           :disabled="sending"
-                        >
-                          <md-option
-                            v-for="product in products"
-                            :key="product._id"
-                            :value="product._id"
-                          >{{product.nombre}}</md-option>
-                        </md-select>
+                        />
                         <span
                           class="md-error"
-                          v-if="!$v.form.producto._id.required"
-                        >El producto es requerida</span>
+                          v-if="!$v.form.porcentaje.required"
+                        >El porcentaje de descuento es requerido</span>
+                        <span
+                          class="md-error"
+                          v-else-if="!$v.form.porcentaje.invalid"
+                        >El formato de descuento es incorrecto</span>
                       </md-field>
                     </div>
                     <div class="md-layout-item md-small-size-100">
-                      <md-field :class="getValidationClass('peso')">
-                        <label for="peso">Peso</label>
-                        <md-input
-                          name="peso"
-                          id="peso"
-                          type="number"
-                          v-model="form.producto.caracteristicas.peso"
-                          disabled
-                        />
-                      </md-field>
-                    </div>
-                    <div class="md-layout-item md-small-size-100">
-                      <md-field :class="getValidationClass('unidad')">
-                        <label for="unidad">Unidad</label>
-                        <md-input
-                          name="unidad"
-                          id="unidad"
-                          v-model="form.producto.caracteristicas.unidad"
-                          disabled
-                        />
-                      </md-field>
-                    </div>
-                    <div class="md-layout-item md-small-size-100">
-                      <md-field :class="getValidationClass('cantidad')">
-                        <label for="cantidad">Cantidad</label>
-                        <md-input
-                          name="cantidad"
-                          id="cantidad"
-                          type="number"
-                          v-model="form.producto.caracteristicas.cantidad"
-                          disabled
-                        />
-                      </md-field>
-                    </div>
-                    <div class="md-layout-item md-small-size-100">
-                      <md-field :class="getValidationClass('sabor')">
-                        <label for="sabor">sabor</label>
-                        <md-input
-                          name="sabor"
-                          id="sabor"
-                          v-model="form.producto.caracteristicas.sabor"
+                      <md-field :class="getValidationClass('mensaje')">
+                        <label for="mensaje">Mensaje</label>
+                        <md-textarea
+                          name="mensaje"
+                          id="mensaje"
+                          v-model="form.mensaje"
                           :disabled="sending"
                         />
+                        <span
+                          class="md-error"
+                          v-if="!$v.form.mensaje.required"
+                        >El mensaje de descuento es requerido</span>
                       </md-field>
                     </div>
                     <div class="md-layout-item md-small-size-100">
-                      <md-field :class="getValidationClass('precio')">
-                        <label for="precio">Precio</label>
-                        <md-input
-                          name="precio"
-                          id="precio"
-                          type="number"
-                          v-model="form.producto.caracteristicas.precio"
-                          disabled
-                        />
-                      </md-field>
-                    </div>
-                    <div class="md-layout-item md-small-size-100">
-                      <md-field :class="getValidationClass('marca')">
-                        <label for="marca">Marca</label>
-                        <md-input
-                          name="marca"
-                          id="marca"
-                          v-model="form.producto.caracteristicas.marca"
-                          disabled
-                        />
-                      </md-field>
+                      <md-datepicker
+                        v-model="form.fechaInicio"
+                        name="mensaje"
+                        id="mensaje"
+                        :disabled="sending"
+                        :class="getValidationClass('fechaInicio')"
+                      >
+                        <span
+                          class="md-error"
+                          v-if="!$v.form.mensaje.required"
+                        >El mensaje de descuento es requerido</span>
+                      </md-datepicker>
                     </div>
                   </div>
                 </md-card-content>
@@ -150,59 +116,33 @@ export default {
   components: { Loading },
   data() {
     return {
-      selectedDate: null,
       sending: false,
       loadingPromo: false,
       form: {
         fechaInicio: "",
         fechaFin: "",
         porcentaje: "",
-        mensaje: "",
-        producto: {
-          _id: "",
-          foto: "",
-          caracteristicas: {
-            peso: "",
-            unidad: "",
-            cantidad: "",
-            sabor: "",
-            precio: "",
-            marca: ""
-          },
-          idCategoria: ""
-        }
+        mensaje: ""
       }
     };
   },
   computed: {
-    ...mapState(["promo", "products", "product"])
+    ...mapState(["promo"])
   },
   validations: {
     form: {
       fechaInicio: { required },
       fechaFin: { required },
       porcentaje: {
+        required,
         integer,
-        between: between(1, 100)
+        between: between(0, 100)
       },
-      mensaje: { required },
-      producto: {
-        _id: {
-          required
-        },
-        idCategoria: { required },
-        caracteristicas: {
-          peso: { required },
-          unidad: { required },
-          cantidad: { required },
-          precio: { required },
-          marca: { required }
-        }
-      }
+      mensaje: { required }
     }
   },
   methods: {
-    ...mapActions(["setPromo", "setProducts", "setProduct"]),
+    ...mapActions(["setPromo", "setError"]),
     getValidationClass(fieldName) {
       const field = this.$v.form[fieldName];
       if (field) {
@@ -282,45 +222,22 @@ export default {
         .then(res => {
           this.setPromo(res.data);
           this.form = Object.assign({}, this.promo);
+          var date = new Date(this.promo.fechaInicio);
+          this.form.fechaInicio = date;
           this.loadingPromo = false;
         })
         .catch(err => {
           this.setError(err);
           this.loadingPromo = false;
-        });
-    },
-    fetchProducts() {
-      this.loadingPromo = true;
-      getApi(products)
-        .then(res => {
-          this.setProducts(res.data);
-          this.loadingPromo = false;
-        })
-        .catch(err => {
-          this.setError(err);
-          this.loadingPromo = false;
-        });
-    },
-    fetchProduct(id) {
-      getOneOrManyApi(products, id)
-        .then(res => {
-          this.setProduct(res.data);
-          this.form.producto = Object.assign({}, this.product);
-        })
-        .catch(err => {
-          this.setError(err);
         });
     }
   },
-  async mounted() {
+  async created() {
     const id = this.$route.params.id;
     if (!this.promo || this.promo._id !== id) {
       await this.fetchPromo(id);
     } else {
       this.form = await Object.assign({}, this.promo);
-    }
-    if (!this.products) {
-      await this.fetchProducts();
     }
   }
 };

@@ -25,10 +25,7 @@
           </md-card-header>
           <div class="row">
             <div class="col-4">
-              <md-button
-                class="md-fab md-mini-mini md-primary"
-                @click="resta()"
-              >
+              <md-button class="md-fab md-mini-mini md-primary" @click="resta()">
                 <md-icon>remove</md-icon>
               </md-button>
             </div>
@@ -47,8 +44,7 @@
               @click="agregarCarrito(), (myVar = agregado())"
               :disabled="show"
               variant="primary"
-              >Agregar</md-button
-            >
+            >Agregar</md-button>
           </div>
           <template v-slot:overlay>
             <div class="text-center">
@@ -63,25 +59,25 @@
 </template>
 
 <script>
-import { addToCart } from '@/util';
-import { mapActions, mapState } from 'vuex';
+import { addToCart } from "@/util";
+import { mapActions, mapState } from "vuex";
 export default {
-  name: 'OneProduct',
+  name: "OneProduct",
   computed: {
-    ...mapState(['product']),
+    ...mapState(["product"])
   },
   data() {
     return {
       cantidad: 1,
       precio: 0,
-      show: false,
+      show: false
     };
   },
   mounted() {
     this.precio = this.product.caracteristicas.precio;
   },
   methods: {
-    ...mapActions(['addCart']),
+    ...mapActions(["addCart"]),
     resta() {
       this.cantidad = this.cantidad > 1 ? this.cantidad - 1 : this.cantidad;
       this.precio =
@@ -90,7 +86,10 @@ export default {
           : this.precio;
     },
     suma() {
-      this.cantidad = this.cantidad >= 0 ? this.cantidad + 1 : this.cantidad;
+      this.cantidad =
+        this.cantidad < this.product.caracteristicas.cantidad
+          ? this.cantidad + 1
+          : this.cantidad;
       this.precio = this.cantidad * this.product.caracteristicas.precio;
     },
     agregado() {
@@ -107,12 +106,12 @@ export default {
         cantidad: this.cantidad,
         peso: this.peso,
         unidad: this.unidad,
-        precio: this.precio,
+        precio: this.precio
       };
       addToCart(cart);
       this.addCart(cart);
-    },
-  },
+    }
+  }
 };
 </script>
 

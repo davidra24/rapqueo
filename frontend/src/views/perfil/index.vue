@@ -16,11 +16,22 @@
             <b-collapse id="accordion-1" visible accordion="my-accordion" role="tabpanel">
               <b-card-body>
                 <!----------------------------------->
-                <md-chip class="md-accent">
-                  {{
-                  formatTelephone(user.telefono)
-                  }}
-                </md-chip>
+                <div class="row">
+                  <div class="col-12" style="margin-bottom: 1%;">
+                    <md-chip class="md-primary" style="width:50%;">
+                      {{
+                      formatTelephone(user.telefono)
+                      }}
+                    </md-chip>
+                  </div>
+                  <div class="col-12" style="margin-bottom: 2%;">
+                    <md-chip class="md-accent" style="width:50%;">{{ user.correo }}</md-chip>
+                  </div>
+                  <md-tooltip md-direction="top">
+                    Estas propiedades no se pueden cambiar, nos ayudan a
+                    identificarte
+                  </md-tooltip>
+                </div>
                 <div v-if="editarpersonales">
                   <form novalidate @submit.prevent="validateForm(0)">
                     <div class="md-layout md-gutter">
@@ -36,7 +47,7 @@
                           />
                           <span
                             class="md-error"
-                            v-if="!$v.form.firstName.requiredIf"
+                            v-if="!$v.form.firstName.required"
                           >El nombre es requerido</span>
                         </md-field>
                       </div>
@@ -53,11 +64,12 @@
                           />
                           <span
                             class="md-error"
-                            v-if="!$v.form.lastName.requiredIf"
+                            v-if="!$v.form.lastName.required"
                           >El apellido es requerido</span>
                         </md-field>
                       </div>
                     </div>
+
                     <div class="row">
                       <div class="col-12 col-md-6">
                         <md-button
@@ -124,7 +136,7 @@
                         />
                         <span
                           class="md-error"
-                          v-if="!$v.form.lastPassword.requiredIf"
+                          v-if="!$v.form.lastPassword.required"
                         >La contraseña es requerida</span>
                         <span class="md-error" v-else-if="!$v.form.lastPassword.minlength">
                           La contraseña debe tener un mínimo de 8
@@ -146,7 +158,7 @@
                           />
                           <span
                             class="md-error"
-                            v-if="!$v.form.password.requiredIf"
+                            v-if="!$v.form.password.required"
                           >La contraseña es requerida</span>
                           <span class="md-error" v-else-if="!$v.form.password.minlength">
                             La contraseña debe tener un mínimo de 8
@@ -168,7 +180,7 @@
                           />
                           <span
                             class="md-error"
-                            v-if="!$v.form.password2.requiredIf"
+                            v-if="!$v.form.password2.required"
                           >Confirmación de contraseña es requerida</span>
                           <span class="md-error" v-else-if="!$v.form.password2.minlength">
                             La contraseña debe tener un mínimo de 8
@@ -256,7 +268,7 @@
                           <span class="md-helper-text">Ej: Calle, Carrera</span>
                           <span
                             class="md-error"
-                            v-if="!$v.form.Via.requiredIf"
+                            v-if="!$v.form.Via.required"
                           >El nombre de la via es requerida</span>
                           <span
                             class="md-error"
@@ -274,7 +286,7 @@
                         >
                           <label>Numero</label>
                           <md-input v-model="form.numeroVia" md-counter="false" maxlength="2"></md-input>
-                          <span class="md-error" v-if="!$v.form.numeroVia.requiredIf">Requerido</span>
+                          <span class="md-error" v-if="!$v.form.numeroVia.required">Requerido</span>
                           <span
                             class="md-error"
                             v-else-if="!$v.form.numeroVia.ViaValid"
@@ -306,7 +318,7 @@
                         >
                           <label>Numero</label>
                           <md-input v-model="form.numero1" md-counter="false" maxlength="2"></md-input>
-                          <span class="md-error" v-if="!$v.form.numero1.requiredIf">Requerido</span>
+                          <span class="md-error" v-if="!$v.form.numero1.required">Requerido</span>
                           <span
                             class="md-error"
                             v-else-if="!$v.form.numero1.ViaValid"
@@ -336,7 +348,7 @@
                         >
                           <label>Numero</label>
                           <md-input v-model="form.numero2" md-counter="false" maxlength="3"></md-input>
-                          <span class="md-error" v-if="!$v.form.numero2.requiredIf">Requerido</span>
+                          <span class="md-error" v-if="!$v.form.numero2.required">Requerido</span>
                           <span
                             class="md-error"
                             v-else-if="!$v.form.numero2.ViaValid"
@@ -369,7 +381,7 @@
                           <md-input v-model="form.barrio"></md-input>
                           <span
                             class="md-error"
-                            v-if="!$v.form.barrio.requiredIf"
+                            v-if="!$v.form.barrio.required"
                           >El nombre del barrio es requerido</span>
                         </md-field>
                       </div>
@@ -440,7 +452,7 @@ export default {
     return {
       via: ["Calle", "Carrera", "Diagonal", "Transversal", "Avenida"],
       form: {
-        Via: "",
+        Via: "Calle",
         numeroVia: "",
         numero1: "",
         numero2: "",
@@ -464,55 +476,55 @@ export default {
   validations: {
     form: {
       firstName: {
-        requiredIf: requiredIf(function() {
+        required: requiredIf(function() {
           return this.editarpersonales;
         })
       },
       lastName: {
-        requiredIf: requiredIf(function() {
+        required: requiredIf(function() {
           return this.editarpersonales;
         })
       },
       lastPassword: {
-        requiredIf: requiredIf(function() {
+        required: requiredIf(function() {
           return this.editarseguridad;
         }),
         minLength: minLength(8)
       },
       password: {
-        requiredIf: requiredIf(function() {
+        required: requiredIf(function() {
           return this.editarseguridad;
         }),
         minLength: minLength(8)
       },
       password2: {
-        requiredIf: requiredIf(function() {
+        required: requiredIf(function() {
           return this.editarseguridad;
         }),
         minLength: minLength(8)
       },
       Via: {
-        requiredIf: requiredIf(function() {
+        required: requiredIf(function() {
           return this.editardireccion;
         }),
         validVias
       },
       numeroVia: {
-        requiredIf: requiredIf(function() {
+        required: requiredIf(function() {
           return this.editardireccion;
         }),
         integer,
         between: between(1, 99)
       },
       numero1: {
-        requiredIf: requiredIf(function() {
+        required: requiredIf(function() {
           return this.editardireccion;
         }),
         integer,
         between: between(1, 99)
       },
       numero2: {
-        requiredIf: requiredIf(function() {
+        required: requiredIf(function() {
           return this.editardireccion;
         }),
         integer,
@@ -528,7 +540,7 @@ export default {
         alpha
       },
       barrio: {
-        requiredIf: requiredIf(function() {
+        required: requiredIf(function() {
           return this.editardireccion;
         })
       }
@@ -543,10 +555,12 @@ export default {
     },
     guardarPersonales() {
       this.editarpersonales = false;
+      console.log(this.form);
       const data = {
         nombre: this.form.firstName,
         apellido: this.form.lastName
       };
+      console.log(data);
       this.actualizarDatos(data);
     },
     cancelarPersonales() {
@@ -556,17 +570,18 @@ export default {
       this.editarseguridad = true;
     },
     guardarSeguridad() {
-      const data = {
-        contrasena: this.form.password
-      };
-      const password = this.form.lastPassword;
-      if (this.form.password != this.form.password2) {
+      if (this.form.password !== this.form.password2) {
         errorMsg(
           "Mercar Chevere",
           "La contraseña nueva no coincide con su verificación, por favor reviselas"
         );
       } else {
+        const data = {
+          contrasena: this.form.password
+        };
+        const password = this.form.lastPassword;
         this.verifyPassword(password, data);
+        this.editarseguridad = false;
       }
     },
     cancelarSeguridad() {
@@ -577,7 +592,7 @@ export default {
     },
     editarDireccion() {
       this.editardireccion = true;
-      this.$v.$reset();
+      this.clearForm();
     },
     async quitarDireccion(dir) {
       const direcciones = this.user.direccion;
@@ -601,12 +616,14 @@ export default {
     cancelarDireccion() {
       this.editardireccion = false;
       this.clearForm();
+      this.form.Via = "Calle";
     },
     guardarDireccion() {
       this.editardireccion = false;
       const direccion = this.datosDireccion();
       this.save(direccion);
       this.clearForm();
+      this.form.Via = "Calle";
     },
     datosDireccion() {
       return {
@@ -615,13 +632,13 @@ export default {
           this.form.Via +
           " " +
           this.form.numeroVia +
-          this.form.letra +
+          this.form.letra.toUpperCase() +
           " #" +
           this.form.numero1 +
-          this.form.letra1 +
+          this.form.letra1.toUpperCase() +
           "-" +
           this.form.numero2 +
-          this.form.letra2,
+          this.form.letra2.toUpperCase(),
         datos_adicionales: this.form.info
       };
     },
@@ -664,6 +681,7 @@ export default {
       this.$v.$touch();
       console.log(!this.$v.$invalid);
       console.log(id);
+      console.log(this.$v);
       if (!this.$v.$invalid) {
         switch (id) {
           case 0:
@@ -678,6 +696,8 @@ export default {
           default:
             break;
         }
+      } else {
+        console.log(this.$v);
       }
     },
     formatTelephone(number) {

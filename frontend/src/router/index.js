@@ -23,6 +23,7 @@ import EditarPromociones from "../views/admin/promociones/EditarPromociones";
 import Perfil from "../views/perfil";
 import PedidosUsuario from "../views/pedidos/Orders";
 import Order from "../views/pedidos/Order";
+import Olvide from "../views/olvidar";
 
 const linkActiveClass = "my-link-active-class";
 
@@ -135,6 +136,11 @@ const routes = [
     path: "/admin/editar/promociones/:id",
     name: "EditarPromociones",
     component: EditarPromociones,
+  },
+  {
+    path: "/olvide",
+    name: "Olvide",
+    component: Olvide,
   },
   {
     path: "/404",

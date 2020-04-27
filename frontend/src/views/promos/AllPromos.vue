@@ -19,14 +19,14 @@ export default {
   name: 'PromosContainer',
   components: {
     AllPromos,
-    Loading
+    Loading,
   },
   computed: {
-    ...mapState(['promos'])
+    ...mapState(['promos']),
   },
   data() {
     return {
-      loading: false
+      loading: false,
     };
   },
   methods: {
@@ -34,20 +34,20 @@ export default {
     async fetch() {
       this.loading = true;
       await getApi(promos)
-        .then(respuesta => {
+        .then((respuesta) => {
           this.setPromos(respuesta.data);
           this.loading = false;
         })
-        .catch(err => {
+        .catch((err) => {
           this.setError(err);
           this.loading = false;
         });
-    }
+    },
   },
   mounted() {
     if (!this.promos) {
       this.fetch();
     }
-  }
+  },
 };
 </script>

@@ -9,23 +9,21 @@
                 <strong>{{ promo.producto.nombre }}</strong>
               </h6>
               <b-card-text class="small text-muted">
-                <span class="md-body-2" style="text-decoration: line-through;"
-                  >${{ promo.producto.caracteristicas.precio }}</span
-                >
+                <span
+                  class="md-body-2"
+                  style="text-decoration: line-through;"
+                >${{ promo.producto.caracteristicas.precio }}</span>
               </b-card-text>
               <div>
                 ${{
-                  parseInt(promo.producto.caracteristicas.precio) *
-                    (1 - parseInt(promo.porcentaje) / 100) *
-                    cantidad
+                parseInt(promo.producto.caracteristicas.precio) *
+                (1 - parseInt(promo.porcentaje) / 100) *
+                cantidad
                 }}
               </div>
             </md-card-header-text>
             <md-card-media md-big>
-              <md-badge
-                class="md-primary badge-percent"
-                v-bind:md-content="promo.porcentaje + '%'"
-              ></md-badge>
+              <md-badge class="md-primary badge-percent" v-bind:md-content="promo.porcentaje + '%'"></md-badge>
               <img
                 class="img-fluid resize-img"
                 v-bind:src="promo.producto.foto"
@@ -35,10 +33,7 @@
           </md-card-header>
           <div class="row">
             <div class="col-4">
-              <md-button
-                class="md-fab md-mini-mini md-primary"
-                @click="resta()"
-              >
+              <md-button class="md-fab md-mini-mini md-primary" @click="resta()">
                 <md-icon>remove</md-icon>
               </md-button>
             </div>
@@ -57,8 +52,7 @@
               @click="agregarCarrito(), (myVar = agregado())"
               :disabled="show"
               variant="primary"
-              >Agregar</md-button
-            >
+            >Agregar</md-button>
           </div>
           <template v-slot:overlay>
             <div class="text-center">
@@ -72,26 +66,29 @@
   </div>
 </template>
 <script>
-import { addToCart } from '@/util';
-import { mapActions, mapState } from 'vuex';
+import { addToCart } from "@/util";
+import { mapActions, mapState } from "vuex";
 export default {
-  name: 'OnePromo',
+  name: "OnePromo",
   computed: {
-    ...mapState(['promo']),
+    ...mapState(["promo"])
   },
   data() {
     return {
       cantidad: 1,
-      show: false,
+      show: false
     };
   },
   methods: {
-    ...mapActions(['addCart']),
+    ...mapActions(["addCart"]),
     resta() {
       this.cantidad = this.cantidad > 1 ? this.cantidad - 1 : this.cantidad;
     },
     suma() {
-      this.cantidad = this.cantidad >= 0 ? this.cantidad + 1 : this.cantidad;
+      this.cantidad =
+        this.cantidad < this.promo.producto.caracteristicas.cantidad
+          ? this.cantidad + 1
+          : this.cantidad;
     },
     agregado() {
       this.show = true;
@@ -110,12 +107,12 @@ export default {
         precio:
           this.promo.producto.caracteristicas.precio *
           (1 - this.promo.porcentaje / 100) *
-          this.cantidad,
+          this.cantidad
       };
       addToCart(cart);
       this.addCart(cart);
-    },
-  },
+    }
+  }
 };
 </script>
 

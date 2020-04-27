@@ -12,10 +12,15 @@
             <strong>APROVECHA NUESTRAS PROMOCIONES</strong>
           </h2>
           <div v-responsive="['hidden-xs', 'hidden-sm']">
-            <CarouselCard :interval="2000" height="300px" type="card" arrow="hover">
+            <CarouselCard
+              :interval="2000"
+              height="300px"
+              type="card"
+              arrow="hover"
+            >
               <CarouselCardItem
                 class="d-flex justify-content-center"
-                v-for="promo in promos"
+                v-for="promo in getPromosValidas"
                 :key="promo._id"
               >
                 <Promo v-if="validarPromo(promo)" :promo="promo" />
@@ -33,7 +38,11 @@
               </CarouselCardItem>
             </CarouselCard>
           </div>
-          <md-button class="md-primary ml-auto p-2 bd-highlight" @click="goPromos()">VER TODO</md-button>
+          <md-button
+            class="md-primary ml-auto p-2 bd-highlight"
+            @click="goPromos()"
+            >VER TODO</md-button
+          >
         </div>
         <div v-else></div>
       </div>
@@ -42,50 +51,51 @@
 </template>
 
 <script>
-import Promo from "./Promo.vue";
-import { CarouselCard, CarouselCardItem } from "vue-carousel-card";
-import "vue-carousel-card/styles/index.css";
-import { mapState } from "vuex";
-import Loading from "@/components/loading";
-export default {
-  name: "CarouselPromo",
-  components: {
-    Loading,
-    Promo,
-    CarouselCard,
-    CarouselCardItem
-  },
-  computed: {
-    ...mapState(["promos"])
-  },
-  methods: {
-    goPromos() {
-      this.$router.push({ path: `/promociones` });
+  import Promo from "./Promo.vue";
+  import { CarouselCard, CarouselCardItem } from "vue-carousel-card";
+  import "vue-carousel-card/styles/index.css";
+  import { mapState, mapGetters } from "vuex";
+  import Loading from "@/components/loading";
+  export default {
+    name: "CarouselPromo",
+    components: {
+      Loading,
+      Promo,
+      CarouselCard,
+      CarouselCardItem,
     },
-    validateFecha(fechaInicio, fechaFin) {
-      var initialDate = new Date(fechaInicio);
-      var finalDate = new Date(fechaFin);
-      var actualDate = new Date();
-      return (
-        initialDate.getTime() < actualDate.getTime() &&
-        finalDate.getTime() > actualDate.getTime()
-      );
+    computed: {
+      ...mapState(["promos"]),
+      ...mapGetters(["getPromosValidas"]),
     },
-    validarPromo(promo) {
-      return (
-        promo.producto.caracteristicas.cantidad > 0 &&
-        this.validateFecha(promo.fechaInicio, promo.fechaFin)
-      );
+    methods: {
+      goPromos() {
+        this.$router.push({ path: `/promociones` });
+      },
+      validateFecha(fechaInicio, fechaFin) {
+        var initialDate = new Date(fechaInicio);
+        var finalDate = new Date(fechaFin);
+        var actualDate = new Date();
+        return (
+          initialDate.getTime() < actualDate.getTime() &&
+          finalDate.getTime() > actualDate.getTime()
+        );
+      },
+      validarPromo(promo) {
+        return (
+          promo.producto.caracteristicas.cantidad > 0 &&
+          this.validateFecha(promo.fechaInicio, promo.fechaFin)
+        );
+      },
+      validarPromos() {
+        let valido = false;
+        this.promos.forEach((promo) => {
+          valido = this.validarPromo(promo);
+        });
+        return valido;
+      },
     },
-    validarPromos() {
-      let valido = false;
-      this.promos.forEach(promo => {
-        valido = this.validarPromo(promo);
-      });
-      return valido;
-    }
-  }
-};
+  };
 </script>
 
 <style scoped></style>

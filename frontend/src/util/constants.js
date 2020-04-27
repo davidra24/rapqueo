@@ -16,8 +16,11 @@ export const pedidos = "api/orders";
 export const notificationRegister = "notification/subscribe";
 export const productosSinCategoria = "api/productsNoCategorie";
 export const ordersByUser = "api/ordersByUser";
-export const ordersByState = "api/ordersByState";
 export const updateOrder = "api/updateStateOrder";
+export const ordersByState = "api/ordersByState";
+export const forgot = "api/forgot";
+export const codeRecovery = "api/code-recovery";
+export const recoveryPassword = "api/recoveryPassword";
 //Service worker and notifications
 export const public_key =
   "BNdocsBvG3mZu0FY2GUOD7kZsLykj5mnnroe49ws-vXAm-usT9WAUxORSJqmMWn-9E8N0-LPbIXYfFghauVkcoM";

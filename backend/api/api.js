@@ -303,6 +303,75 @@ api.post("/signup", queryUsuario.signup);
 api.post("/login", queryUsuario.login);
 /**
  * @swagger
+ *  /api/code-recovery/:
+ *    post:
+ *      tags: ['Usuarios']
+ *      description: Codigo recuperacion
+ *      summary: Log In
+ *      requestBody:
+ *        description: Codigo recuperacion
+ *        required: true
+ *      parameters:
+ *        - name: Usuario
+ *          description: Users Object
+ *          in:  body
+ *          required: true
+ *          type: object
+ *      responses:
+ *        '200':
+ *          {description: Successful}
+ *        '500':
+ *          {description: Internal Server Error}
+ */
+api.post('/code-recovery', queryUsuario.codeRecovery);
+/**
+ * @swagger
+ *  /api/recoveryPassword/:
+ *    post:
+ *      tags: ['Usuarios']
+ *      description: Contraqseña recuperacion
+ *      summary: Log In
+ *      requestBody:
+ *        description: Contraqseña recuperacion
+ *        required: true
+ *      parameters:
+ *        - name: Usuario
+ *          description: Users Object
+ *          in:  body
+ *          required: true
+ *          type: object
+ *      responses:
+ *        '200':
+ *          {description: Successful}
+ *        '500':
+ *          {description: Internal Server Error}
+ */
+api.post('/recoveryPassword', queryUsuario.recoveryPassword);
+/**
+ * @swagger
+ *  /api/forgo/:
+ *    post:
+ *      tags: ['Usuarios']
+ *      description: Olvidé mi contraseña
+ *      summary: Forgot password
+ *      requestBody:
+ *        description: Olvidé mi contraseña
+ *        required: true
+ *      parameters:
+ *        - name: Usuario
+ *          description: Users Object
+ *          in:  body
+ *          required: true
+ *          type: object
+ *      responses:
+ *        '200':
+ *          {description: Successful}
+ *        '500':
+ *          {description: Internal Server Error}
+ */
+api.post('/forgot', queryUsuario.forgotPassword);
+/**
+ * @swagger
  *  /api/verifyPassword/:
  *    post:
  *      tags: ['Usuarios']
