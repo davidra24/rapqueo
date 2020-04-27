@@ -1,8 +1,8 @@
 require('dotenv').config();
 const http = require('http');
 const express = require('express');
-const api = require('../api/api');
 const bodyParser = require('body-parser');
+const api = require('../api/api');
 const cors = require('cors');
 const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
@@ -12,6 +12,7 @@ const morgan = require('morgan');
 const app = express();
 const server = http.createServer(app);
 const port = process.env.PORT || 3000;
+const active = 1;
 
 //Middlewares
 app.use(morgan('dev'));
