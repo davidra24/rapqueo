@@ -275,7 +275,7 @@ export default {
       const { id } = this.$route.params;
       await questionMsg(
         "Mercar Chevere",
-        `¿Está seguro que desea eliminar esta categoría?
+        `¿Está seguro que desea eliminar este producto?
             Recuerde que este cambio es para siempre`
       ).then(result => {
         if (result.value) {

@@ -132,7 +132,7 @@
 <script>
 import { mapState, mapActions } from "vuex";
 import { getOneOrManyApi, getApi, putApi, deleteApi } from "../../../util/api";
-import { products, promos } from "../../../util/constants";
+import { promos } from "../../../util/constants";
 import { successMsg, errorMsg, questionMsg } from "../../../util/utilMsg";
 import Loading from "../../../components/loading";
 import { validationMixin } from "vuelidate";
@@ -163,7 +163,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["promo"])
+    ...mapState(["promo", "promos"])
   },
   validations: {
     form: {
@@ -188,7 +188,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["setPromo", "setError"]),
+    ...mapActions(["setPromo", "setPromos", "setError"]),
     getValidationClass(fieldName) {
       if (this.form.fechaInicio) {
         this.initialDate = this.form.fechaInicio.getTime();
@@ -211,32 +211,29 @@ export default {
       const { id } = this.$route.params;
       await questionMsg(
         "Mercar Chevere",
-        `¿Está seguro que desea eliminar esta categoría?
+        `¿Está seguro que desea eliminar esta promocion?
             Recuerde que este cambio es para siempre`
       ).then(result => {
         if (result.value) {
           this.sending = true;
-          deleteApi(products, id)
+          deleteApi(promos, id)
             .then(response => {
               if (response) {
-                getApi(products).then(respuesta => {
-                  this.setProducts(respuesta.data);
-                  getApi(promos).then(responsee => {
-                    this.setPromos(responsee.data);
-                    successMsg(
-                      "Mercar Chevere",
-                      "El producto se ha eliminado con éxito"
-                    );
-                    this.sending = false;
-                    this.$router.push("/admin/productos");
-                  });
+                getApi(promos).then(respuesta => {
+                  this.setPromos(respuesta.data);
+                  successMsg(
+                    "Mercar Chevere",
+                    "La promocion se ha eliminado con éxito"
+                  );
+                  this.sending = false;
+                  this.$router.push("/admin/promociones");
                 });
               }
             })
             .catch(err => {
               errorMsg(
                 "Mercar Chevere",
-                "No se ha podido eliminar la categoría, error: " + err
+                "No se ha podido eliminar la promocion, error: " + err
               );
             });
         }
@@ -246,23 +243,23 @@ export default {
       const { id } = this.$route.params;
       const body = this.form;
       this.sending = true;
-      putApi(products, id, body)
+      putApi(promos, id, body)
         .then(() => {
-          getApi(products).then(response => {
-            this.setProducts(response.data);
-            this.setProduct(body);
+          getApi(promos).then(response => {
+            this.setPromos(response.data);
+            this.setPromo(body);
             successMsg(
               "Mercar Chevere",
-              "Se ha actualizado satisfactoriamente el producto"
+              "Se ha actualizado satisfactoriamente la promocio "
             );
             this.sending = false;
-            this.$router.push("/admin/productos");
+            this.$router.push("/admin/promociones");
           });
         })
         .catch(error => {
           errorMsg(
             "Mercar Chevere",
-            "No se ha podido actualizar el producto" + error
+            "No se ha podido actualizar el promocion" + error
           );
         });
     },

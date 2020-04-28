@@ -1,5 +1,5 @@
-import Vue from "vue";
-import Vuex from "vuex";
+import Vue from 'vue';
+import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
@@ -18,6 +18,7 @@ const store = new Vuex.Store({
     cart: null,
     openedCart: false,
     promos: null,
+    productsNoPromo: null,
     promo: null,
     user: null,
     session: null,
@@ -79,6 +80,9 @@ const store = new Vuex.Store({
     setProducts(state, products) {
       state.products = products;
     },
+    setProductsNoPromo(state, productsNoPromo) {
+      state.productsNoPromo = productsNoPromo;
+    },
     setProduct(state, product) {
       state.product = product;
     },
@@ -131,58 +135,61 @@ const store = new Vuex.Store({
   },
   actions: {
     setError({ commit }, error) {
-      commit("setError", error);
+      commit('setError', error);
     },
     setCategories({ commit }, categories) {
-      commit("setCategories", categories);
+      commit('setCategories', categories);
     },
     setCategorie({ commit }, categorie) {
-      commit("setCategorie", categorie);
+      commit('setCategorie', categorie);
     },
     setPromos({ commit }, promos) {
-      commit("setPromos", promos);
+      commit('setPromos', promos);
     },
     setPromo({ commit }, promo) {
-      commit("setPromo", promo);
+      commit('setPromo', promo);
     },
     setProducts({ commit }, products) {
-      commit("setProducts", products);
+      commit('setProducts', products);
+    },
+    setProductsNoPromo({ commit }, productsNoPromo) {
+      commit('setProductsNoPromo', productsNoPromo);
     },
     setProduct({ commit }, product) {
-      commit("setProduct", product);
+      commit('setProduct', product);
     },
     setProductsCategorie({ commit }, productsCategorie) {
-      commit("setProductsCategorie", productsCategorie);
+      commit('setProductsCategorie', productsCategorie);
     },
     setOrder({ commit }, order) {
-      commit("setOrder", order);
+      commit('setOrder', order);
     },
     setOrdersUser({ commit }, ordersUser) {
-      commit("setOrdersUser", ordersUser);
+      commit('setOrdersUser', ordersUser);
     },
     setOrdersState({ commit }, ordersState) {
-      commit("setOrdersState", ordersState);
+      commit('setOrdersState', ordersState);
     },
     setProductsNoCategorie({ commit }, productsNoCategorie) {
-      commit("setProductsNoCategorie", productsNoCategorie);
+      commit('setProductsNoCategorie', productsNoCategorie);
     },
     setCart({ commit }, cart) {
-      commit("setCart", cart);
+      commit('setCart', cart);
     },
     addCart({ commit }, oneCart) {
-      commit("addCart", oneCart);
+      commit('addCart', oneCart);
     },
     openCart({ commit }) {
-      commit("setOpenCart");
+      commit('setOpenCart');
     },
     closeCart({ commit }) {
-      commit("setCloseCart");
+      commit('setCloseCart');
     },
     setUser({ commit }, user) {
-      commit("setUser", user);
+      commit('setUser', user);
     },
     setSession({ commit }, session) {
-      commit("setSession", session);
+      commit('setSession', session);
     },
   },
   modules: {},

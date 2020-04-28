@@ -1,5 +1,8 @@
 <template>
-  <div class="row d-flex justify-content-center" style="margin-bottom: 4%; heigth:20%">
+  <div
+    class="row d-flex justify-content-center"
+    style="margin-bottom: 4%; heigth:20%"
+  >
     <div class="col-12">
       <b-card bg-variant="light" :header="estado" class="text-center">
         <div class="d-flex justify-content-start">
@@ -26,50 +29,54 @@
           <div class="right">${{ order.total }}</div>
         </div>
         <br />
-        <button class="btn btn-block btn-success" @click="goOrder(order._id)">Ver pedido</button>
+        <md-button
+          class="btn btn-block md-primary md-raised"
+          @click="goOrder(order._id)"
+          >Ver pedido</md-button
+        >
       </b-card>
     </div>
   </div>
 </template>
 
 <script>
-import Loading from "../../loading";
+import Loading from '../../loading';
 export default {
-  name: "Pedido",
-  props: ["order"],
+  name: 'Pedido',
+  props: ['order'],
   component: {
-    Loading
+    Loading,
   },
   data() {
     return {
-      estado: ""
+      estado: '',
     };
   },
   methods: {
     formatTelephone(number) {
-      const phone = number.split("");
-      var result = "";
+      const phone = number.split('');
+      var result = '';
       result += `${phone[3]}${phone[4]}${phone[5]} ${phone[6]}${phone[7]}${phone[8]} ${phone[9]}${phone[10]}${phone[11]}${phone[12]}`;
       return result;
     },
     validateState() {
       if (this.order.estado === 0) {
-        this.estado = "Pedido pendiente";
+        this.estado = 'Pedido pendiente';
       } else {
         if (this.order.estado === 1) {
-          this.estado = "Pedido en camino";
+          this.estado = 'Pedido en camino';
         } else {
-          this.estado = "Pedido entregado";
+          this.estado = 'Pedido entregado';
         }
       }
     },
     goOrder(id) {
       this.$router.push({ path: `/pedido/${id}` });
-    }
+    },
   },
   mounted() {
     this.validateState();
-  }
+  },
 };
 </script>
 

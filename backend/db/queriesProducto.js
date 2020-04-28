@@ -9,6 +9,34 @@ getAllProducts = (req, res) => {
   });
 };
 
+getAllProductsWithoutPromo = async (req, res) => {
+  await Promos.find()
+    .then(async (promos) => {
+      await Productos.find().then(async (productos) => {
+        let arr = [];
+        for (let i = 0; i < productos.length; i++) {
+          let existe = false;
+          for (let j = 0; j < promos.length; j++) {
+            const str1 = promos[j].producto._id.toString();
+            const str2 = productos[i]._id.toString();
+            if (str1.trim() === str2.trim()) {
+              existe = true;
+            }
+          }
+          if (!existe) {
+            arr.push(productos[i]);
+          }
+        }
+        res.send(arr);
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+
+      res.send({ code: 500, msg: 'Error al consultar promociones' });
+    });
+};
+
 getProductWithoutCategorie = (req, res) => {
   Productos.find({ idCategoria: null }).then((data) => {
     res.send(data);
@@ -63,6 +91,7 @@ module.exports = {
   getOneProduct,
   getProductsByCategorie,
   getProductWithoutCategorie,
+  getAllProductsWithoutPromo,
   postProduct,
   pullProduct,
   deleteProduct,

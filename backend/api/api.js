@@ -1,12 +1,12 @@
-const express = require("express");
+const express = require('express');
 const api = express.Router();
-const queryCategoria = require("../db/queriesCategoria");
-const queryUsuario = require("../db/queriesUsuario");
-const queryProducto = require("../db/queriesProducto");
-const queryPromocion = require("../db/queriesPromocion");
-const queryPedido = require("../db/queriesPedido");
-const queryRol = require("../db/queriesRol");
-const mongoose = require("mongoose");
+const queryCategoria = require('../db/queriesCategoria');
+const queryUsuario = require('../db/queriesUsuario');
+const queryProducto = require('../db/queriesProducto');
+const queryPromocion = require('../db/queriesPromocion');
+const queryPedido = require('../db/queriesPedido');
+const queryRol = require('../db/queriesRol');
+const mongoose = require('mongoose');
 
 mongoose
   .connect(process.env.MONGOLAB_ONYX_URI, {
@@ -16,9 +16,9 @@ mongoose
     useFindAndModify: false,
   })
   .then((db) => {
-    console.log("CONNECTED DATABASE");
+    console.log('CONNECTED DATABASE');
   })
-  .catch((err) => console.log("Error: ", err));
+  .catch((err) => console.log('Error: ', err));
 /**
  * @swagger
  *  /api/send/:
@@ -56,7 +56,7 @@ mongoose
  *        '500':
  *          {description: Internal Server Error}
  */
-api.get("/categories", queryCategoria.getAllCategories);
+api.get('/categories', queryCategoria.getAllCategories);
 /**
  * @swagger
  *  /api/categories/{id}:
@@ -76,7 +76,7 @@ api.get("/categories", queryCategoria.getAllCategories);
  *        '500':
  *          {description: Internal Server Error}
  */
-api.get("/categories/:id", queryCategoria.getOneCategorie);
+api.get('/categories/:id', queryCategoria.getOneCategorie);
 /**
  * @swagger
  *  /api/categories/:
@@ -99,7 +99,7 @@ api.get("/categories/:id", queryCategoria.getOneCategorie);
  *        '500':
  *          {description: Internal Server Error}
  */
-api.post("/categories", queryCategoria.postCategorie);
+api.post('/categories', queryCategoria.postCategorie);
 /**
  * @swagger
  *  /api/categories/{id}:
@@ -127,7 +127,7 @@ api.post("/categories", queryCategoria.postCategorie);
  *        '500':
  *          {description: Internal Server Error}
  */
-api.put("/categories/:id", queryCategoria.pullCategorie);
+api.put('/categories/:id', queryCategoria.pullCategorie);
 /**
  * @swagger
  *  /api/categories/{id}:
@@ -147,7 +147,7 @@ api.put("/categories/:id", queryCategoria.pullCategorie);
  *        '500':
  *          {description: Internal Server Error}
  */
-api.delete("/categories/:id", queryCategoria.deleteCategorie);
+api.delete('/categories/:id', queryCategoria.deleteCategorie);
 
 // ---------------------------- Usuarios --------------------------------//
 /**
@@ -163,7 +163,7 @@ api.delete("/categories/:id", queryCategoria.deleteCategorie);
  *        '500':
  *          {description: Internal Server Error}
  */
-api.get("/users", queryUsuario.getAllUsers);
+api.get('/users', queryUsuario.getAllUsers);
 /**
  * @swagger
  *  /api/users/{id}:
@@ -183,7 +183,7 @@ api.get("/users", queryUsuario.getAllUsers);
  *        '500':
  *          {description: Internal Server Error}
  */
-api.get("/users/:id", queryUsuario.getOneUser);
+api.get('/users/:id', queryUsuario.getOneUser);
 /**
  * @swagger
  *  /api/users/:
@@ -206,7 +206,7 @@ api.get("/users/:id", queryUsuario.getOneUser);
  *        '500':
  *          {description: Internal Server Error}
  */
-api.post("/users", queryUsuario.postUser);
+api.post('/users', queryUsuario.postUser);
 /**
  * @swagger
  *  /api/users/{id}:
@@ -234,7 +234,7 @@ api.post("/users", queryUsuario.postUser);
  *        '500':
  *          {description: Internal Server Error}
  */
-api.put("/users/:id", queryUsuario.putUser);
+api.put('/users/:id', queryUsuario.putUser);
 /**
  * @swagger
  *  /api/users/{id}:
@@ -254,7 +254,7 @@ api.put("/users/:id", queryUsuario.putUser);
  *        '500':
  *          {description: Internal Server Error}
  */
-api.delete("/users/:id", queryUsuario.deleteUser);
+api.delete('/users/:id', queryUsuario.deleteUser);
 /**
  * @swagger
  *  /api/signup/:
@@ -277,7 +277,7 @@ api.delete("/users/:id", queryUsuario.deleteUser);
  *        '500':
  *          {description: Internal Server Error}
  */
-api.post("/signup", queryUsuario.signup);
+api.post('/signup', queryUsuario.signup);
 /**
  * @swagger
  *  /api/signup/:
@@ -300,7 +300,7 @@ api.post("/signup", queryUsuario.signup);
  *        '500':
  *          {description: Internal Server Error}
  */
-api.post("/login", queryUsuario.login);
+api.post('/login', queryUsuario.login);
 /**
  * @swagger
  *  /api/code-recovery/:
@@ -392,7 +392,7 @@ api.post('/forgot', queryUsuario.forgotPassword);
  *        '500':
  *          {description: Internal Server Error}
  */
-api.post("/verifyPassword", queryUsuario.verifyPassword);
+api.post('/verifyPassword', queryUsuario.verifyPassword);
 // ---------------------------- Productos --------------------------------//
 /**
  * @swagger
@@ -407,7 +407,7 @@ api.post("/verifyPassword", queryUsuario.verifyPassword);
  *        '500':
  *          {description: Internal Server Error}
  */
-api.get("/productsNoCategorie", queryProducto.getProductWithoutCategorie);
+api.get('/productsNoCategorie', queryProducto.getProductWithoutCategorie);
 /**
  * @swagger
  *  /api/products:
@@ -421,7 +421,21 @@ api.get("/productsNoCategorie", queryProducto.getProductWithoutCategorie);
  *        '500':
  *          {description: Internal Server Error}
  */
-api.get("/products", queryProducto.getAllProducts);
+api.get('/products', queryProducto.getAllProducts);
+/**
+ * @swagger
+ *  /api/products:
+ *    get:
+ *      tags: ['Productos']
+ *      description: Trae todos los Productos
+ *      summary: Get All Products
+ *      responses:
+ *        '200':
+ *          {description: Successful}
+ *        '500':
+ *          {description: Internal Server Error}
+ */
+api.get('/products-no-promo', queryProducto.getAllProductsWithoutPromo);
 /**
  * @swagger
  *  /api/products/{id}:
@@ -441,7 +455,7 @@ api.get("/products", queryProducto.getAllProducts);
  *        '500':
  *          {description: Internal Server Error}
  */
-api.get("/products/:id", queryProducto.getOneProduct);
+api.get('/products/:id', queryProducto.getOneProduct);
 /**
  * @swagger
  *  /api/productsByCategorie/{id}:
@@ -461,7 +475,7 @@ api.get("/products/:id", queryProducto.getOneProduct);
  *        '500':
  *          {description: Internal Server Error}
  */
-api.get("/productsByCategorie/:id", queryProducto.getProductsByCategorie);
+api.get('/productsByCategorie/:id', queryProducto.getProductsByCategorie);
 /**
  * @swagger
  *  /api/products:
@@ -484,7 +498,7 @@ api.get("/productsByCategorie/:id", queryProducto.getProductsByCategorie);
  *        '500':
  *          {description: Internal Server Error}
  */
-api.post("/products", queryProducto.postProduct);
+api.post('/products', queryProducto.postProduct);
 /**
  * @swagger
  *  /api/products/{id}:
@@ -512,7 +526,7 @@ api.post("/products", queryProducto.postProduct);
  *        '500':
  *          {description: Internal Server Error}
  */
-api.put("/products/:id", queryProducto.pullProduct);
+api.put('/products/:id', queryProducto.pullProduct);
 /**
  * @swagger
  *  /api/products/{id}:
@@ -532,7 +546,7 @@ api.put("/products/:id", queryProducto.pullProduct);
  *        '500':
  *          {description: Internal Server Error}
  */
-api.delete("/products/:id", queryProducto.deleteProduct);
+api.delete('/products/:id', queryProducto.deleteProduct);
 
 // ---------------------------- Promociones --------------------------------//
 /**
@@ -548,7 +562,7 @@ api.delete("/products/:id", queryProducto.deleteProduct);
  *        '500':
  *          {description: Internal Server Error}
  */
-api.get("/promos", queryPromocion.getAllPromos);
+api.get('/promos', queryPromocion.getAllPromos);
 /**
  * @swagger
  *  /api/promos/{id}:
@@ -568,7 +582,7 @@ api.get("/promos", queryPromocion.getAllPromos);
  *        '500':
  *          {description: Internal Server Error}
  */
-api.get("/promos/:id", queryPromocion.getOnePromo);
+api.get('/promos/:id', queryPromocion.getOnePromo);
 /**
  * @swagger
  *  /api/promos/:
@@ -591,7 +605,7 @@ api.get("/promos/:id", queryPromocion.getOnePromo);
  *        '500':
  *          {description: Internal Server Error}
  */
-api.post("/promos", queryPromocion.postPromo);
+api.post('/promos', queryPromocion.postPromo);
 /**
  * @swagger
  *  /api/promos/{id}:
@@ -619,7 +633,7 @@ api.post("/promos", queryPromocion.postPromo);
  *        '500':
  *          {description: Internal Server Error}
  */
-api.put("/promos/:id", queryPromocion.pullPromo);
+api.put('/promos/:id', queryPromocion.pullPromo);
 /**
  * @swagger
  *  /api/promos/{id}:
@@ -639,7 +653,7 @@ api.put("/promos/:id", queryPromocion.pullPromo);
  *        '500':
  *          {description: Internal Server Error}
  */
-api.delete("/promos/:id", queryPromocion.deletePromo);
+api.delete('/promos/:id', queryPromocion.deletePromo);
 
 // ---------------------------- Pedidos --------------------------------//
 /**
@@ -655,7 +669,7 @@ api.delete("/promos/:id", queryPromocion.deletePromo);
  *        '500':
  *          {description: Internal Server Error}
  */
-api.get("/orders", queryPedido.getAllOrders);
+api.get('/orders', queryPedido.getAllOrders);
 /**
  * @swagger
  *  /api/orders/{id}:
@@ -675,7 +689,7 @@ api.get("/orders", queryPedido.getAllOrders);
  *        '500':
  *          {description: Internal Server Error}
  */
-api.get("/orders/:id", queryPedido.getOneOrder);
+api.get('/orders/:id', queryPedido.getOneOrder);
 /**
  * @swagger
  *  /api/ordersByUser/{id}:
@@ -695,7 +709,7 @@ api.get("/orders/:id", queryPedido.getOneOrder);
  *        '500':
  *          {description: Internal Server Error}
  */
-api.get("/ordersByUser/:id", queryPedido.getOrdersByUser);
+api.get('/ordersByUser/:id', queryPedido.getOrdersByUser);
 /**
  * @swagger
  *  /api/ordersByState/{id}:
@@ -715,7 +729,7 @@ api.get("/ordersByUser/:id", queryPedido.getOrdersByUser);
  *        '500':
  *          {description: Internal Server Error}
  */
-api.get("/ordersByState/:id", queryPedido.getOrdersByState);
+api.get('/ordersByState/:id', queryPedido.getOrdersByState);
 /**
  * @swagger
  *  /api/orders/:
@@ -738,7 +752,7 @@ api.get("/ordersByState/:id", queryPedido.getOrdersByState);
  *        '500':
  *          {description: Internal Server Error}
  */
-api.post("/orders", queryPedido.postOrder);
+api.post('/orders', queryPedido.postOrder);
 /**
  * @swagger
  *  /api/orders/:
@@ -789,7 +803,7 @@ api.post('/updateStateOrder', queryPedido.updateStateOrder);
  *        '500':
  *          {description: Internal Server Error}
  */
-api.put("/orders/:id", queryPedido.pullOrder);
+api.put('/orders/:id', queryPedido.pullOrder);
 /**
  * @swagger
  *  /api/orders/{id}:
@@ -809,7 +823,7 @@ api.put("/orders/:id", queryPedido.pullOrder);
  *        '500':
  *          {description: Internal Server Error}
  */
-api.delete("/orders/:id", queryPedido.deleteOrder);
+api.delete('/orders/:id', queryPedido.deleteOrder);
 
 // ---------------------------- Roles --------------------------------//
 /**
@@ -825,7 +839,7 @@ api.delete("/orders/:id", queryPedido.deleteOrder);
  *        '500':
  *          {description: Internal Server Error}
  */
-api.get("/roles", queryRol.getAllRoles);
+api.get('/roles', queryRol.getAllRoles);
 /**
  * @swagger
  *  /api/roles/{id}:
@@ -845,7 +859,7 @@ api.get("/roles", queryRol.getAllRoles);
  *        '500':
  *          {description: Internal Server Error}
  */
-api.get("/roles/:id", queryRol.getOneRole);
+api.get('/roles/:id', queryRol.getOneRole);
 /**
  * @swagger
  *  /api/roles/:
@@ -868,7 +882,7 @@ api.get("/roles/:id", queryRol.getOneRole);
  *        '500':
  *          {description: Internal Server Error}
  */
-api.post("/roles", queryRol.postRole);
+api.post('/roles', queryRol.postRole);
 /**
  * @swagger
  *  /api/products/{id}:
@@ -896,7 +910,7 @@ api.post("/roles", queryRol.postRole);
  *        '500':
  *          {description: Internal Server Error}
  */
-api.put("/roles/:id", queryRol.pullRole);
+api.put('/roles/:id', queryRol.pullRole);
 /**
  * @swagger
  *  /api/roles/{id}:
@@ -916,6 +930,6 @@ api.put("/roles/:id", queryRol.pullRole);
  *        '500':
  *          {description: Internal Server Error}
  */
-api.delete("/roles/:id", queryRol.deleteRole);
+api.delete('/roles/:id', queryRol.deleteRole);
 
 module.exports = api;

@@ -11,11 +11,16 @@
               <div class="d-flex justify-content-center">
                 <div style="width: 100%;">
                   <img
-                    class="resize-img"
-                    v-bind:src="this.foto"
-                    v-bind:alt="this.nombre"
+                    v-if="this.foto"
+                    :src="this.foto"
+                    :alt="this.nombre"
                     style="width:80%"
                   />
+                  <div v-else>
+                    <h4>
+                      <p>Seleccione un producto, por favor</p>
+                    </h4>
+                  </div>
                 </div>
               </div>
             </div>
@@ -34,7 +39,9 @@
                       class="md-layout-item md-small-size-100 d-flex align-items-start flex-column"
                     >
                       <div class="md-layout-item md-small-size-100">
-                        <md-field :class="getValidationClass('producto')">
+                        <md-field
+                          :class="getValidationClass('productsNoPromo')"
+                        >
                           <label for="producto">Producto</label>
                           <md-select
                             name="producto"
@@ -44,21 +51,26 @@
                             @md-selected="fetchProduct(form.idProducto)"
                           >
                             <md-option
-                              v-for="product in products"
+                              v-for="product in productsNoPromo"
                               :key="product._id"
                               :value="product._id"
-                            >{{product.nombre}}</md-option>
+                              >{{ product.nombre }}</md-option
+                            >
                           </md-select>
                           <span
                             class="md-error"
                             v-if="!$v.form.idProducto.required"
-                          >La categoría es requerida</span>
+                            >La categoría es requerida</span
+                          >
                         </md-field>
                       </div>
-                      <div v-if="this.precio" class="d-flex align-items-start flex-column">
-                        <h6>Peso: {{peso}}{{unidad}}</h6>
-                        <h6>Cantidad: {{cantidad}}</h6>
-                        <h6>Precio: ${{precio}}</h6>
+                      <div
+                        v-if="this.precio"
+                        class="d-flex align-items-start flex-column"
+                      >
+                        <h6>Peso: {{ peso }}{{ unidad }}</h6>
+                        <h6>Cantidad: {{ cantidad }}</h6>
+                        <h6>Precio: ${{ precio }}</h6>
                       </div>
                     </div>
                     <div class="md-layout-item md-small-size-100 col-12">
@@ -73,11 +85,13 @@
                         <span
                           class="md-error"
                           v-if="!$v.form.porcentaje.required"
-                        >El porcentaje de descuento es requerido</span>
+                          >El porcentaje de descuento es requerido</span
+                        >
                         <span
                           class="md-error"
                           v-else-if="!$v.form.porcentaje.invalid"
-                        >El formato de descuento es incorrecto</span>
+                          >El formato de descuento es incorrecto</span
+                        >
                       </md-field>
                     </div>
                     <div class="md-layout-item md-small-size-100 col-12">
@@ -89,10 +103,9 @@
                           v-model="form.mensaje"
                           :disabled="sending"
                         />
-                        <span
-                          class="md-error"
-                          v-if="!$v.form.mensaje.required"
-                        >El mensaje de descuento es requerido</span>
+                        <span class="md-error" v-if="!$v.form.mensaje.required"
+                          >El mensaje de descuento es requerido</span
+                        >
                       </md-field>
                     </div>
                     <div class="md-layout-item md-small-size-100 col-12">
@@ -108,11 +121,14 @@
                         <span
                           class="md-error"
                           v-if="!$v.form.fechaInicio.required"
-                        >La fecha inicial es requerida</span>
+                          >La fecha inicial es requerida</span
+                        >
                         <span
                           class="md-error"
                           v-else-if="!$v.form.fechaInicio.invalid"
-                        >La fecha inicial debe ser antes de la fecha final</span>
+                          >La fecha inicial debe ser antes de la fecha
+                          final</span
+                        >
                       </md-datepicker>
                     </div>
                     <div class="md-layout-item md-small-size-100 col-12">
@@ -126,21 +142,27 @@
                         @md-closed="validDates()"
                       >
                         <label for="fechaFinal">Fecha final</label>
-                        <span
-                          class="md-error"
-                          v-if="!$v.form.fechaFin.required"
-                        >La fecha final es requerida</span>
+                        <span class="md-error" v-if="!$v.form.fechaFin.required"
+                          >La fecha final es requerida</span
+                        >
                         <span
                           class="md-error"
                           v-else-if="!$v.form.fechaFin.invalid"
-                        >La fecha inicial debe ser antes de la fecha final</span>
+                          >La fecha inicial debe ser antes de la fecha
+                          final</span
+                        >
                       </md-datepicker>
                     </div>
                   </div>
                 </md-card-content>
                 <md-progress-bar md-mode="indeterminate" v-if="sending" />
                 <md-card-actions>
-                  <md-button type="submit" class="md-primary" :disabled="sending">Guardar</md-button>
+                  <md-button
+                    type="submit"
+                    class="md-primary"
+                    :disabled="sending"
+                    >Guardar</md-button
+                  >
                 </md-card-actions>
               </md-card>
             </form>
@@ -152,21 +174,22 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
-import { getOneOrManyApi, getApi, postApi } from "../../../util/api";
-import { products } from "../../../util/constants";
-import { successMsg, errorMsg } from "../../../util/utilMsg";
-import Loading from "../../../components/loading";
-import { validationMixin } from "vuelidate";
+import { mapState, mapActions } from 'vuex';
+import { getOneOrManyApi, getApi, postApi } from '../../../util/api';
+import { productosSinPromo, promos, products } from '../../../util/constants';
+import { successMsg, errorMsg } from '../../../util/utilMsg';
+import Loading from '../../../components/loading';
+import { validationMixin } from 'vuelidate';
 import {
   required,
   integer,
   between,
   minValue,
-  maxValue
-} from "vuelidate/lib/validators";
+  maxValue,
+} from 'vuelidate/lib/validators';
+
 export default {
-  name: "AgregarPromociones",
+  name: 'AgregarPromociones',
   mixins: [validationMixin],
   components: { Loading },
   data() {
@@ -175,51 +198,51 @@ export default {
       loadingProducts: false,
       initialDate: 0,
       finalDate: 0,
-      foto: "",
-      nombre: "",
+      foto: '',
+      nombre: '',
       peso: 0,
-      unidad: "",
+      unidad: '',
       cantidad: 0,
       precio: 0,
       form: {
-        idProducto: "",
-        fechaInicio: "",
-        fechaFin: "",
-        porcentaje: "",
-        mensaje: ""
-      }
+        idProducto: '',
+        fechaInicio: '',
+        fechaFin: '',
+        porcentaje: '',
+        mensaje: '',
+      },
     };
   },
   computed: {
-    ...mapState(["promo", "products", "product"])
+    ...mapState(['promos', 'productsNoPromo']),
   },
   validations: {
     form: {
       idProducto: {
-        required
+        required,
       },
       fechaInicio: {
         required,
         maxValue(value) {
           return maxValue(this.finalDate)(value);
-        }
+        },
       },
       fechaFin: {
         required,
         minValue(value) {
           return minValue(this.initialDate)(value);
-        }
+        },
       },
       porcentaje: {
         required,
         integer,
-        between: between(0, 100)
+        between: between(0, 100),
       },
-      mensaje: { required }
-    }
+      mensaje: { required },
+    },
   },
   methods: {
-    ...mapActions(["setPromo", "setProducts", "setProduct", "setError"]),
+    ...mapActions(['setPromos', 'setProductsNoPromo', 'setError']),
     getValidationClass(fieldName) {
       if (this.form.fechaInicio) {
         this.initialDate = this.form.fechaInicio.getTime();
@@ -234,36 +257,31 @@ export default {
       const field = this.$v.form[fieldName];
       if (field) {
         return {
-          "md-invalid": field.$invalid && field.$dirty
+          'md-invalid': field.$invalid && field.$dirty,
         };
       }
     },
     save() {
-      if (!this.form.foto) {
-        this.imagenSeleccionada = false;
-      } else {
-        this.imagenSeleccionada = true;
-        this.sending = true;
-        const body = this.form;
-        postApi(products, body)
-          .then(() => {
-            getApi(products).then(response => {
-              this.setProducts(response.data);
-              successMsg(
-                "Mercar Chevere",
-                "Se ha almacenado satisfactoriamente el producto"
-              );
-              this.sending = false;
-              this.$router.push("/admin/productos");
-            });
-          })
-          .catch(error => {
-            errorMsg(
-              "Mercar Chevere",
-              "No se ha podido actualizar el producto" + error
+      this.sending = true;
+      const body = this.form;
+      postApi(promos, body)
+        .then(() => {
+          getApi(promos).then((response) => {
+            this.setPromos(response.data);
+            successMsg(
+              'Mercar Chevere',
+              'Se ha almacenado satisfactoriamente la promocion'
             );
+            this.sending = false;
+            this.$router.push('/admin/promociones');
           });
-      }
+        })
+        .catch((error) => {
+          errorMsg(
+            'Mercar Chevere',
+            'No se ha podido almacenar el promocion' + error
+          );
+        });
     },
     validate() {
       this.$v.$touch();
@@ -274,7 +292,7 @@ export default {
     fetchProduct(id) {
       this.loadingProduct = true;
       getOneOrManyApi(products, id)
-        .then(res => {
+        .then((res) => {
           this.setProduct(res.data);
           this.nombre = this.product.nombre;
           this.foto = this.product.foto;
@@ -284,34 +302,33 @@ export default {
           this.precio = this.product.caracteristicas.precio;
           this.loadingProduct = false;
         })
-        .catch(err => {
+        .catch((err) => {
           this.setError(err);
           this.loadingProduct = false;
         });
     },
     fetchProducts() {
       this.loadingProducts = true;
-      getApi(products)
-        .then(res => {
-          this.setProducts(res.data);
+      getApi(productosSinPromo)
+        .then((res) => {
+          this.setProductsNoPromo(res.data);
           this.loadingProducts = false;
         })
-        .catch(err => {
+        .catch((err) => {
           this.setError(err);
           this.loadingProducts = false;
         });
-    }
+    },
   },
   async created() {
-    if (!this.products) {
+    if (!this.productNoPromo) {
       await this.fetchProducts();
     }
-    this.$material.locale.dateFormat = "dd/MM/yyyy";
+    this.$material.locale.dateFormat = 'dd/MM/yyyy';
     this.form.fechaInicio = new Date();
     this.form.fechaFin = new Date();
-  }
+  },
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

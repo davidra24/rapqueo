@@ -231,7 +231,6 @@ export default {
               this.setCategories(respuesta.data);
               this.sending = false;
             });
-
             this.$router.push("/admin/categorias");
           }
         })

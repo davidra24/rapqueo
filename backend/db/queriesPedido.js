@@ -4,6 +4,7 @@ const webpush = require('web-push');
 const Pedidos = require('../models/Pedidos');
 const Usuarios = require('../models/Usuarios');
 const Productos = require('../models/Productos');
+const Promos = require('../models/Promociones');
 
 webpush.setVapidDetails(
   'mailto:mercachevere0@gmail.com',
@@ -40,15 +41,16 @@ getOneOrder = (req, res) => {
 
 postOrder = async (req, res) => {
   const { productos } = req.body;
-  var existencia = true;
-  var msg = 'No hay existencia en el momento de los siguientes productos: \n';
+  let existencia = true;
+  let msg = 'No hay existencia en el momento de los siguientes productos: \n';
   await productos.forEach((producto) => {
-    Productos.findById(producto._id).then((response) => {
+    Productos.findById(producto.id).then((response) => {
       if (response.caracteristicas.cantidad < producto.cantidad) {
         existencia = false;
         msg += `${producto.nombre}, por favor, pida ${response.caracteristicas.cantidad} cantidades o menos \n`;
       }
     });
+    msg += '.';
   });
   if (!existencia) {
     res.send({
@@ -155,8 +157,15 @@ const updatePorducts = async (products) => {
   return await products.map(async (producto) => {
     return await Productos.findByIdAndUpdate(producto.id, {
       $inc: { 'caracteristicas.cantidad': -producto.cantidad },
+    }).then((response) => {
+      updatePromos(response).then((response) => 'ok');
     });
   });
+};
+
+const updatePromos = async (producto) => {
+  const { _id } = producto;
+  await Promos.findOneAndUpdate({ 'producto._id': _id }, { producto });
 };
 
 module.exports = {

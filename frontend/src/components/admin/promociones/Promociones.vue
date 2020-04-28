@@ -19,7 +19,7 @@
                 <span class="md-title">{{ promo.producto.nombre }}</span>
                 <br />
                 <div>{{formatDate(promo.fechaInicio)}} - {{formatDate(promo.fechaFin)}}</div>
-                {{validarPromo(promo)}}
+                <strong>{{validarPromo(promo)}}</strong>
                 <div class="row">
                   <div class="col-8">
                     <md-badge
