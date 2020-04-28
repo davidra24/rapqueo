@@ -3,9 +3,21 @@
     <div class="col-12 col-md-10 col-lg-8">
       <div>
         <md-tabs md-alignment="fixed">
-          <md-tab md-label="Pendientes" md-icon="local_post_office" @click="goPedidos(0)"></md-tab>
-          <md-tab md-label="En camino" md-icon="local_shipping" @click="goPedidos(1)"></md-tab>
-          <md-tab md-label="Entregados" md-icon="done" @click="goPedidos(2)"></md-tab>
+          <md-tab
+            md-label="Pendientes"
+            md-icon="local_post_office"
+            @click="goPedidos(0)"
+          ></md-tab>
+          <md-tab
+            md-label="En camino"
+            md-icon="local_shipping"
+            @click="goPedidos(1)"
+          ></md-tab>
+          <md-tab
+            md-label="Entregados"
+            md-icon="done"
+            @click="goPedidos(2)"
+          ></md-tab>
         </md-tabs>
       </div>
       <div class="container">
@@ -14,7 +26,10 @@
           <div v-if="loading" class="col-12">
             <Loading />
           </div>
-          <div v-else-if="!ordersState || ordersState.length === 0" class="col-12">
+          <div
+            v-else-if="!ordersState || ordersState.length === 0"
+            class="col-12"
+          >
             <h2>
               <strong>
                 NO HAY PEDIDOS PARA ESTA CATEGORÍA
@@ -32,36 +47,35 @@
 </template>
 
 <script>
-import Loading from "@/components/loading";
-import { getOneOrManyApi } from "@/util/api";
-import { ordersByState } from "@/util/constants";
-import { mapState, mapActions } from "vuex";
-import Pedidos from "@/components/admin/pedidos/Pedidos";
+import Loading from '@/components/loading';
+import { getOneOrManyApi } from '@/util/api';
+import { ordersByState } from '@/util/constants';
+import { mapState, mapActions } from 'vuex';
+import Pedidos from '@/components/admin/pedidos/Pedidos';
 export default {
-  name: "PedidosAdmin",
+  name: 'PedidosAdmin',
   components: {
     Loading,
-    Pedidos
+    Pedidos,
   },
   data() {
     return {
-      loading: false
+      loading: false,
     };
   },
   computed: {
-    ...mapState(["user", "ordersState"])
+    ...mapState(['user', 'ordersState']),
   },
   methods: {
-    ...mapActions(["setOrdersState", "setError"]),
+    ...mapActions(['setOrdersState', 'setError']),
     async fetch(id) {
       this.loading = true;
       await getOneOrManyApi(ordersByState, id)
-        .then(res => {
+        .then((res) => {
           this.setOrdersState(res.data);
-          console.log(res.data);
           this.loading = false;
         })
-        .catch(err => {
+        .catch((err) => {
           this.setError(err);
           this.loading = false;
         });
@@ -79,18 +93,18 @@ export default {
     validateAdmin() {
       if (this.user) {
         if (!this.user.admin) {
-          this.$router.push("/");
+          this.$router.push('/');
         } else {
           this.goPedidos(0);
         }
       } else {
-        this.$router.push("/");
+        this.$router.push('/');
       }
-    }
+    },
   },
   mounted() {
     this.validateAdmin();
-  }
+  },
 };
 </script>
 

@@ -227,7 +227,7 @@ export default {
     },
     async subscribeNotification(id) {
       const subscribe = await subscription(urlBase64ToUint8Array(public_key));
-      await console.log('subs', subscribe);
+
       await postApi(notificationRegister, { id, subscribe }).then((result) => {
         console.log('Status: ', result);
       });
@@ -253,11 +253,8 @@ export default {
         };
         postApi(signup, data)
           .then(async (result) => {
-            console.log('result', result);
-            console.log('result.data', result.data);
             if (result.data) {
               const { code, msg, data } = result.data;
-              console.log('result.data', result.data);
 
               if (parseInt(code) === 200) {
                 await successMsg('Mercar Chevere', msg);
@@ -320,7 +317,6 @@ export default {
         .catch((err) => {
           this.setError(err);
           this.sending = false;
-          console.log('error', err);
           errorMsg('Mercar Chevere', `${err}: Error de servidor`);
         });
     },
@@ -328,8 +324,6 @@ export default {
       this.$v.$touch();
       if (!this.$v.$invalid) {
         this.saveUser();
-      } else {
-        console.log(this.$v);
       }
     },
     async createSession() {

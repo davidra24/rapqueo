@@ -68,7 +68,6 @@ postOrder = async (req, res) => {
           id: data._id,
         };
         user.forEach(async (us) => {
-          console.log('user');
           await us.displayNotifications.forEach(async (notification) => {
             await sendNotification(notification, info);
           });

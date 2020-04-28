@@ -48,7 +48,6 @@ export default {
       getOneOrManyApi(ordersByUser, id)
         .then(res => {
           this.setOrdersUser(res.data);
-          console.log(res.data);
           this.loading = false;
         })
         .catch(err => {
@@ -57,7 +56,6 @@ export default {
         });
     },
     async validateUser() {
-      console.log(this.user);
       const usrId = await this.$route.params.id;
       if (this.user) {
         if (this.user.id !== usrId) {

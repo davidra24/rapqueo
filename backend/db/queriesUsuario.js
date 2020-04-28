@@ -74,7 +74,6 @@ signup = async (req, res) => {
   };
   await Usuarios.create(data)
     .then((data) => {
-      console.log(data);
       res.send({
         code: 200,
         msg: '¡Usuario creado con éxito! :)',
@@ -85,7 +84,6 @@ signup = async (req, res) => {
       });
     })
     .catch((err) => {
-      console.log('error:...', err.message);
       if (err.code === 11000) {
         res.send({
           code: 401,
@@ -126,7 +124,6 @@ login = async (req, res) => {
       });
     })
     .catch((err) => {
-      console.log(err);
       res.send({ code: 404, msg: 'Teléfono o contraseña incorrecto' });
     });
 };
@@ -150,7 +147,6 @@ verifyPassword = async (req, res) => {
       });
     })
     .catch((err) => {
-      console.log(err);
       res.send({
         code: 404,
         msg: 'La contraseña antigua es incorrecta, por favor verifíquela',
@@ -227,7 +223,6 @@ forgotPassword = async (req, res) => {
           });
         })
         .catch((err) => {
-          console.log('error', err);
           res.send({
             code: 500,
             msg: 'Error de conexión con el servidor de correo',
@@ -235,7 +230,6 @@ forgotPassword = async (req, res) => {
         });
     })
     .catch((err) => {
-      console.log(err);
       res.send({
         code: 500,
         msg: 'Error de conexión con el servidor de correo',

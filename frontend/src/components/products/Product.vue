@@ -3,7 +3,11 @@
     <md-card style="width: 85%;">
       <b-overlay :show="show" rounded="sm">
         <b-overlay :show="producto" rounded="sm">
-          <div class="container-fluid" @click="goProduct(product._id)" style="cursor: pointer;">
+          <div
+            class="container-fluid"
+            @click="goProduct(product._id)"
+            style="cursor: pointer;"
+          >
             <md-card-header>
               <md-card-header-text>
                 <h6>
@@ -23,16 +27,17 @@
                       <span
                         class="md-body-2"
                         style="text-decoration: line-through;"
-                      >${{ promo.producto.caracteristicas.precio }}</span>
+                        >${{ promo.producto.caracteristicas.precio }}</span
+                      >
                     </b-card-text>
                     <div>
                       ${{
-                      cambioPrecio(
-                      promo.producto.caracteristicas.precio *
-                      (1 - promo.porcentaje / 100) *
-                      cantidad,
-                      promo.porcentaje / 100
-                      )
+                        cambioPrecio(
+                          promo.producto.caracteristicas.precio *
+                            (1 - promo.porcentaje / 100) *
+                            cantidad,
+                          promo.porcentaje / 100
+                        )
                       }}
                     </div>
                   </div>
@@ -50,7 +55,10 @@
           </div>
           <div class="row">
             <div class="col-4">
-              <md-button class="md-fab md-mini-mini md-primary" @click="resta()">
+              <md-button
+                class="md-fab md-mini-mini md-primary"
+                @click="resta()"
+              >
                 <md-icon>remove</md-icon>
               </md-button>
             </div>
@@ -69,7 +77,8 @@
               @click="agregarCarrito(), agregado()"
               :disabled="false"
               variant="primary"
-            >Agregar</md-button>
+              >Agregar</md-button
+            >
           </div>
           <template v-slot:overlay>
             <div class="text-center">
@@ -94,17 +103,17 @@
 </template>
 
 <script>
-import Loading from "../loading";
-import { promos } from "@/util/constants";
-import { addToCart } from "../../util";
-import { mapActions, mapState } from "vuex";
-import { getApi } from "@/util/api";
+import Loading from '../loading';
+import { promos } from '@/util/constants';
+import { addToCart } from '../../util';
+import { mapActions, mapState } from 'vuex';
+import { getApi } from '@/util/api';
 export default {
-  name: "Product",
-  props: ["product", "promo"],
+  name: 'Product',
+  props: ['product', 'promo'],
   component: {
     Loading,
-    promos
+    promos,
   },
   data() {
     return {
@@ -116,17 +125,17 @@ export default {
       foto: this.product.foto,
       descuento: 1,
       show: false,
-      producto: this.productVerify()
+      producto: this.productVerify(),
     };
   },
   methods: {
-    ...mapActions(["addCart", "setPromos", "setError"]),
+    ...mapActions(['addCart', 'setPromos', 'setError']),
     async fetchPromos() {
       await getApi(promos)
-        .then(res => {
+        .then((res) => {
           this.setPromos(res.data);
         })
-        .catch(err => {
+        .catch((err) => {
           this.setError(err);
         });
     },
@@ -134,7 +143,6 @@ export default {
       var initialDate = new Date(fechaInicio);
       var finalDate = new Date(fechaFin);
       var actualDate = new Date();
-      console.log(finalDate);
       return (
         initialDate.getTime() < actualDate.getTime() &&
         finalDate.getTime() > actualDate.getTime()
@@ -171,7 +179,7 @@ export default {
         cantidad: this.cantidad,
         peso: this.peso,
         unidad: this.unidad,
-        precio: this.precio * this.descuento
+        precio: this.precio * this.descuento,
       };
       addToCart(cart);
       this.addCart(cart);
@@ -191,16 +199,16 @@ export default {
           ? this.cantidad + 1
           : this.cantidad;
       this.precio = this.cantidad * this.product.caracteristicas.precio;
-    }
+    },
   },
   computed: {
-    ...mapState(["promos"])
+    ...mapState(['promos']),
   },
   mounted() {
     if (!this.promos) {
       this.fetchPromos();
     }
-  }
+  },
 };
 </script>
 

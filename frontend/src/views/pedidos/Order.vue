@@ -15,47 +15,46 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
-import { pedidos } from "@/util/constants";
-import { getOneOrManyApi } from "@/util/api";
-import Loading from "@/components/loading";
-import OneOrder from "@/components/orders/OneOrder";
+import { mapState, mapActions } from 'vuex';
+import { pedidos } from '@/util/constants';
+import { getOneOrManyApi } from '@/util/api';
+import Loading from '@/components/loading';
+import OneOrder from '@/components/orders/OneOrder';
 export default {
-  name: "Order",
+  name: 'Order',
   components: {
     Loading,
-    OneOrder
+    OneOrder,
   },
   computed: {
-    ...mapState(["order"])
+    ...mapState(['order']),
   },
   data() {
     return {
-      loading: false
+      loading: false,
     };
   },
   methods: {
-    ...mapActions(["setOrder", "setError"]),
+    ...mapActions(['setOrder', 'setError']),
     async fetch(id) {
       this.loading = true;
       await getOneOrManyApi(pedidos, id)
-        .then(res => {
+        .then((res) => {
           this.setOrder(res.data);
           this.loading = false;
         })
-        .catch(err => {
+        .catch((err) => {
           this.setError(err);
           this.loading = false;
         });
-    }
+    },
   },
   created() {
-    console.log(this.$route.params.id);
     const id = this.$route.params.id;
     if (!this.order || this.order._id != id) {
       this.fetch(id);
     }
-  }
+  },
 };
 </script>
 <style lang="stylus" scoped></style>

@@ -12,14 +12,12 @@ webpush.setVapidDetails(
 //var pushSubscription = null;
 
 router.post('/subscribe', async (req, res) => {
-  console.log(req.body);
   const { id, subscribe } = await req.body;
   const usuario = await Usuarios.findById(id);
   var displayNotifications =
     usuario.displayNotifications && usuario.displayNotifications.length > 0
       ? usuario.displayNotifications
       : [];
-  console.log('display', displayNotifications);
   var exist = false;
   if (displayNotifications.length > 0) {
     await displayNotifications.forEach((element) => {

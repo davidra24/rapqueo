@@ -6,64 +6,67 @@
       </div>
       <div v-else class="col-12">
         <ProductosAdminComponent />
-        <vue-fab mainBtnColor="#448AFF" @clickMainBtn="clickAdd" size="big"></vue-fab>
+        <vue-fab
+          mainBtnColor="#448AFF"
+          @clickMainBtn="clickAdd"
+          size="big"
+        ></vue-fab>
       </div>
     </div>
   </div>
 </template>
 
-
 <script>
-import Loading from "../../../components/loading";
-import { mapState, mapActions } from "vuex";
-import ProductosAdminComponent from "../../../components/admin/productos/Productos";
-import { products } from "../../../util/constants";
-import { getApi } from "../../../util/api";
+import Loading from '../../../components/loading';
+import { mapState, mapActions } from 'vuex';
+import ProductosAdminComponent from '../../../components/admin/productos/Productos';
+import { products } from '../../../util/constants';
+import { getApi } from '../../../util/api';
 export default {
-  name: "ProductosAdmin",
+  name: 'ProductosAdmin',
   computed: {
-    ...mapState(["user", "products"])
+    ...mapState(['user', 'products']),
   },
   data() {
     return {
-      loadingProductos: false
+      loadingProductos: false,
     };
   },
   components: { Loading, ProductosAdminComponent },
   methods: {
-    ...mapActions(["setProducts", "setError"]),
+    ...mapActions(['setProducts', 'setError']),
     async fetchProducts() {
       this.loadingProductos = true;
       await getApi(products)
-        .then(res => {
+        .then((res) => {
           this.setProducts(res.data);
           this.loadingProductos = false;
         })
-        .catch(err => {
+        .catch((err) => {
           this.setError(err);
           this.loadingProductos = false;
         });
     },
-    validateAdmin() {
+    clickAdd() {
+      this.$router.push('/admin/agregar/producto');
+    },
+    async validateAdmin() {
       if (this.user) {
         if (!this.user.admin) {
-          this.$router.push("/");
+          this.$router.push('/');
         } else {
           if (!this.products) {
-            this.fetchProducts();
+            await this.fetchProducts();
           }
         }
       } else {
-        this.$router.push("/");
+        this.$router.push('/');
       }
     },
-    clickAdd() {
-      this.$router.push("/admin/agregar/producto");
-    }
   },
-  mounted() {
-    this.validateAdmin();
-  }
+  async mounted() {
+    await this.validateAdmin();
+  },
 };
 </script>
 

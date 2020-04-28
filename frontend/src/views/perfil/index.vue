@@ -584,13 +584,11 @@ export default {
     },
     guardarPersonales() {
       this.editarpersonales = false;
-      console.log(this.form);
       const data = {
         nombre: this.form.firstName,
         apellido: this.form.lastName,
         correo: this.form.email
       };
-      console.log(data);
       this.actualizarDatos(data);
     },
     cancelarPersonales() {
@@ -709,9 +707,6 @@ export default {
     },
     validateForm(id) {
       this.$v.$touch();
-      console.log(!this.$v.$invalid);
-      console.log(id);
-      console.log(this.$v);
       if (!this.$v.$invalid) {
         switch (id) {
           case 0:
@@ -727,7 +722,6 @@ export default {
             break;
         }
       } else {
-        console.log(this.$v);
       }
     },
     formatTelephone(number) {
@@ -775,7 +769,6 @@ export default {
         .then(result => {
           if (result.data) {
             const { code, msg, data } = result.data;
-            console.log(result.data);
             if (parseInt(code) === 200) {
               const usuario = { ...data, ...body };
               this.actualizarStorage(usuario);
@@ -795,7 +788,6 @@ export default {
         .catch(err => {
           this.setError(err);
           this.sending = false;
-          console.log("error", err);
           errorMsg("Mercar Chevere", `${err}: Error de servidor`);
         });
     }

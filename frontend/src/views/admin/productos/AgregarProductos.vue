@@ -10,17 +10,26 @@
             <div class="col-12 col-md-6">
               <div class="d-flex justify-content-center">
                 <div style="width: 100%;">
-                  <img v-if="form.foto" :src="form.foto" alt="Skyscraper" style="width:80%" />
+                  <img
+                    v-if="form.foto"
+                    :src="form.foto"
+                    alt="Skyscraper"
+                    style="width:80%"
+                  />
                   <div v-else>
                     <h4>
                       <p>Tome una foto del producto, por favor</p>
                     </h4>
                   </div>
                   <div class="col-12">
-                    <span style="color:red;" v-if="!imagenSeleccionada">La imagen es requerida</span>
+                    <span style="color:red;" v-if="!imagenSeleccionada"
+                      >La imagen es requerida</span
+                    >
                   </div>
                   <div v-if="!showCamera">
-                    <md-button class="md-primary" @click="changeCamera()">Tomar foto</md-button>
+                    <md-button class="md-primary" @click="changeCamera()"
+                      >Tomar foto</md-button
+                    >
                   </div>
                   <md-dialog
                     md-fullscreen
@@ -28,7 +37,11 @@
                     class="d-flex justify-content-center"
                   >
                     <div class="wrapper">
-                      <video class="video" :class="activeDevice === 0 ? 'front' : ''" ref="video" />
+                      <video
+                        class="video"
+                        :class="activeDevice === 0 ? 'front' : ''"
+                        ref="video"
+                      />
                       <canvas style="display:none" ref="canva" />
                       <button
                         v-if="videoDevices.length > 1"
@@ -68,10 +81,9 @@
                           v-model="form.nombre"
                           :disabled="sending"
                         />
-                        <span
-                          class="md-error"
-                          v-if="!$v.form.nombre.required"
-                        >El nombre del producto es requerido</span>
+                        <span class="md-error" v-if="!$v.form.nombre.required"
+                          >El nombre del producto es requerido</span
+                        >
                       </md-field>
                     </div>
                     <div class="md-layout-item md-small-size-100">
@@ -87,7 +99,8 @@
                         <span
                           class="md-error"
                           v-if="!$v.form.caracteristicas.peso.required"
-                        >La característica de peso es requerida</span>
+                          >La característica de peso es requerida</span
+                        >
                       </md-field>
                     </div>
                     <div class="md-layout-item md-small-size-100">
@@ -102,7 +115,8 @@
                         <span
                           class="md-error"
                           v-if="!$v.form.caracteristicas.unidad.required"
-                        >La característica de unidad es requerida</span>
+                          >La característica de unidad es requerida</span
+                        >
                       </md-field>
                     </div>
                     <div class="md-layout-item md-small-size-100">
@@ -118,7 +132,8 @@
                         <span
                           class="md-error"
                           v-if="!$v.form.caracteristicas.cantidad.required"
-                        >La característica de cantidad es requerida</span>
+                          >La característica de cantidad es requerida</span
+                        >
                       </md-field>
                     </div>
                     <div class="md-layout-item md-small-size-100">
@@ -145,7 +160,8 @@
                         <span
                           class="md-error"
                           v-if="!$v.form.caracteristicas.precio.required"
-                        >La característica de precio es requerida</span>
+                          >La característica de precio es requerida</span
+                        >
                       </md-field>
                     </div>
                     <div class="md-layout-item md-small-size-100">
@@ -160,7 +176,8 @@
                         <span
                           class="md-error"
                           v-if="!$v.form.caracteristicas.marca.required"
-                        >La característica de marca es requerida</span>
+                          >La característica de marca es requerida</span
+                        >
                       </md-field>
                     </div>
                     <div class="md-layout-item md-small-size-100">
@@ -176,19 +193,26 @@
                             v-for="categorie in categories"
                             :key="categorie._id"
                             :value="categorie._id"
-                          >{{categorie.nombre}}</md-option>
+                            >{{ categorie.nombre }}</md-option
+                          >
                         </md-select>
                         <span
                           class="md-error"
                           v-if="!$v.form.idCategoria.required"
-                        >La categoría es requerida</span>
+                          >La categoría es requerida</span
+                        >
                       </md-field>
                     </div>
                   </div>
                 </md-card-content>
                 <md-progress-bar md-mode="indeterminate" v-if="sending" />
                 <md-card-actions>
-                  <md-button type="submit" class="md-primary" :disabled="sending">Guardar</md-button>
+                  <md-button
+                    type="submit"
+                    class="md-primary"
+                    :disabled="sending"
+                    >Guardar</md-button
+                  >
                 </md-card-actions>
               </md-card>
             </form>
@@ -200,15 +224,15 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
-import { getApi, postApi } from "../../../util/api";
-import { products, categories } from "../../../util/constants";
-import { successMsg, errorMsg } from "../../../util/utilMsg";
-import Loading from "../../../components/loading";
-import { validationMixin } from "vuelidate";
-import { required } from "vuelidate/lib/validators";
+import { mapState, mapActions } from 'vuex';
+import { getApi, postApi } from '../../../util/api';
+import { products, categories } from '../../../util/constants';
+import { successMsg, errorMsg } from '../../../util/utilMsg';
+import Loading from '../../../components/loading';
+import { validationMixin } from 'vuelidate';
+import { required } from 'vuelidate/lib/validators';
 export default {
-  name: "AgregarProductos",
+  name: 'AgregarProductos',
   mixins: [validationMixin],
   components: { Loading },
   data() {
@@ -218,61 +242,61 @@ export default {
       showCamera: false,
       loadingProduct: false,
       form: {
-        nombre: "",
-        foto: "",
+        nombre: '',
+        foto: '',
         caracteristicas: {
-          peso: "",
-          unidad: "",
-          cantidad: "",
-          sabor: "",
-          precio: "",
-          marca: ""
+          peso: '',
+          unidad: '',
+          cantidad: '',
+          sabor: '',
+          precio: '',
+          marca: '',
         },
-        idCategoria: ""
+        idCategoria: '',
       },
-      photo: "",
+      photo: '',
       mediaStream: null,
       videoDevices: [],
-      activeDevice: 0
+      activeDevice: 0,
     };
   },
   computed: {
-    ...mapState(["products", "categories"])
+    ...mapState(['products', 'categories', 'user']),
   },
   validations: {
     form: {
       nombre: {
-        required
+        required,
       },
       idCategoria: {
-        required
+        required,
       },
       caracteristicas: {
         peso: {
-          required
+          required,
         },
         unidad: {
-          required
+          required,
         },
         cantidad: {
-          required
+          required,
         },
         precio: {
-          required
+          required,
         },
         marca: {
-          required
-        }
-      }
-    }
+          required,
+        },
+      },
+    },
   },
   methods: {
-    ...mapActions(["setProducts", "setCategories"]),
+    ...mapActions(['setProducts', 'setCategories']),
     getValidationClass(fieldName) {
       const field = this.$v.form[fieldName];
       if (field) {
         return {
-          "md-invalid": field.$invalid && field.$dirty
+          'md-invalid': field.$invalid && field.$dirty,
         };
       }
     },
@@ -285,20 +309,20 @@ export default {
         const body = this.form;
         postApi(products, body)
           .then(() => {
-            getApi(products).then(response => {
+            getApi(products).then((response) => {
               this.setProducts(response.data);
               successMsg(
-                "Mercar Chevere",
-                "Se ha almacenado satisfactoriamente el producto"
+                'Mercar Chevere',
+                'Se ha almacenado satisfactoriamente el producto'
               );
               this.sending = false;
-              this.$router.push("/admin/productos");
+              this.$router.push('/admin/productos');
             });
           })
-          .catch(error => {
+          .catch((error) => {
             errorMsg(
-              "Mercar Chevere",
-              "No se ha podido actualizar el producto" + error
+              'Mercar Chevere',
+              'No se ha podido actualizar el producto' + error
             );
           });
       }
@@ -312,11 +336,11 @@ export default {
     fetchCategories() {
       this.loadingProduct = true;
       getApi(categories)
-        .then(res => {
+        .then((res) => {
           this.setCategories(res.data);
           this.loadingProduct = false;
         })
-        .catch(err => {
+        .catch((err) => {
           this.setError(err);
           this.loadingProduct = false;
         });
@@ -324,13 +348,13 @@ export default {
     async changeCamera() {
       this.showCamera = true;
       const devices = await navigator.mediaDevices.enumerateDevices();
-      this.videoDevices = devices.filter(d => d.kind === "videoinput");
+      this.videoDevices = devices.filter((d) => d.kind === 'videoinput');
       this.StartRecording(0);
     },
     async StartRecording(deviceIdx) {
       let video = this.$refs.video;
       this.mediaStream = await navigator.mediaDevices.getUserMedia({
-        video: { deviceId: { exact: this.videoDevices[deviceIdx].deviceId } }
+        video: { deviceId: { exact: this.videoDevices[deviceIdx].deviceId } },
       });
       video.srcObject = await this.mediaStream;
       video.play();
@@ -342,7 +366,7 @@ export default {
       let height = video.videoHeight;
       canva.width = width;
       canva.height = height;
-      let ctx = canva.getContext("2d");
+      let ctx = canva.getContext('2d');
       ctx.save();
       if (this.activeDevice === 0) {
         ctx.scale(-1, 1);
@@ -351,23 +375,34 @@ export default {
         ctx.drawImage(video, 0, 0);
       }
       ctx.restore();
-      this.form.foto = canva.toDataURL("image/png");
+      this.form.foto = canva.toDataURL('image/png');
       this.showCamera = false;
     },
     switchCamera() {
       const tracks = this.mediaStream.getVideoTracks();
-      tracks.forEach(track => {
+      tracks.forEach((track) => {
         track.stop();
       });
       this.StartRecording((this.activeDevice + 1) % 2);
       this.activeDevice = (this.activeDevice + 1) % 2;
-    }
+    },
+    async validateAdmin() {
+      if (this.user) {
+        if (!this.user.admin) {
+          this.$router.push('/');
+        } else {
+          if (!this.categories) {
+            await this.fetchCategories();
+          }
+        }
+      } else {
+        this.$router.push('/');
+      }
+    },
   },
   async mounted() {
-    if (!this.categories) {
-      await this.fetchCategories();
-    }
-  }
+    await this.validateAdmin();
+  },
 };
 </script>
 

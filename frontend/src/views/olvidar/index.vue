@@ -169,7 +169,6 @@ export default {
     };
   },
   errorCaptured(err, vm, info) {
-    console.log(`Error: ${err}, Virtual Machine: ${vm}, info: ${info}`);
     return false;
   },
   validations: {
@@ -222,7 +221,6 @@ export default {
           .then((response) => {
             if (response.data) {
               const { code, msg } = response.data;
-              console.log('result.data', response.data);
               if (parseInt(code) === 200) {
                 this.sending = false;
                 this.cambiar = true;
@@ -249,7 +247,6 @@ export default {
         .then((response) => {
           const { code, msg, respuesta } = response.data;
           if (parseInt(code) === 200) {
-            console.log(respuesta);
             successMsg('Mercar Chevere', msg);
             this.sending = false;
             this.$router.push('/login');
