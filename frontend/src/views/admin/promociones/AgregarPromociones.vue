@@ -102,6 +102,7 @@
                           id="mensaje"
                           v-model="form.mensaje"
                           :disabled="sending"
+                          maxlength="140"
                         />
                         <span class="md-error" v-if="!$v.form.mensaje.required"
                           >El mensaje de descuento es requerido</span
@@ -174,161 +175,161 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
-import { getOneOrManyApi, getApi, postApi } from '../../../util/api';
-import { productosSinPromo, promos, products } from '../../../util/constants';
-import { successMsg, errorMsg } from '../../../util/utilMsg';
-import Loading from '../../../components/loading';
-import { validationMixin } from 'vuelidate';
-import {
-  required,
-  integer,
-  between,
-  minValue,
-  maxValue,
-} from 'vuelidate/lib/validators';
+  import { mapState, mapActions } from "vuex";
+  import { getOneOrManyApi, getApi, postApi } from "../../../util/api";
+  import { productosSinPromo, promos, products } from "../../../util/constants";
+  import { successMsg, errorMsg } from "../../../util/utilMsg";
+  import Loading from "../../../components/loading";
+  import { validationMixin } from "vuelidate";
+  import {
+    required,
+    integer,
+    between,
+    minValue,
+    maxValue,
+  } from "vuelidate/lib/validators";
 
-export default {
-  name: 'AgregarPromociones',
-  mixins: [validationMixin],
-  components: { Loading },
-  data() {
-    return {
-      sending: false,
-      loadingProducts: false,
-      initialDate: 0,
-      finalDate: 0,
-      foto: '',
-      nombre: '',
-      peso: 0,
-      unidad: '',
-      cantidad: 0,
-      precio: 0,
+  export default {
+    name: "AgregarPromociones",
+    mixins: [validationMixin],
+    components: { Loading },
+    data() {
+      return {
+        sending: false,
+        loadingProducts: false,
+        initialDate: 0,
+        finalDate: 0,
+        foto: "",
+        nombre: "",
+        peso: 0,
+        unidad: "",
+        cantidad: 0,
+        precio: 0,
+        form: {
+          idProducto: "",
+          fechaInicio: "",
+          fechaFin: "",
+          porcentaje: "",
+          mensaje: "",
+        },
+      };
+    },
+    computed: {
+      ...mapState(["promos", "productsNoPromo"]),
+    },
+    validations: {
       form: {
-        idProducto: '',
-        fechaInicio: '',
-        fechaFin: '',
-        porcentaje: '',
-        mensaje: '',
-      },
-    };
-  },
-  computed: {
-    ...mapState(['promos', 'productsNoPromo']),
-  },
-  validations: {
-    form: {
-      idProducto: {
-        required,
-      },
-      fechaInicio: {
-        required,
-        maxValue(value) {
-          return maxValue(this.finalDate)(value);
+        idProducto: {
+          required,
         },
-      },
-      fechaFin: {
-        required,
-        minValue(value) {
-          return minValue(this.initialDate)(value);
+        fechaInicio: {
+          required,
+          maxValue(value) {
+            return maxValue(this.finalDate)(value);
+          },
         },
+        fechaFin: {
+          required,
+          minValue(value) {
+            return minValue(this.initialDate)(value);
+          },
+        },
+        porcentaje: {
+          required,
+          integer,
+          between: between(0, 100),
+        },
+        mensaje: { required },
       },
-      porcentaje: {
-        required,
-        integer,
-        between: between(0, 100),
+    },
+    methods: {
+      ...mapActions(["setPromos", "setProductsNoPromo", "setError"]),
+      getValidationClass(fieldName) {
+        if (this.form.fechaInicio) {
+          this.initialDate = this.form.fechaInicio.getTime();
+        } else {
+          this.initialDate = 0;
+        }
+        if (this.form.fechaFin) {
+          this.finalDate = this.form.fechaFin.getTime();
+        } else {
+          this.finalDate = 0;
+        }
+        const field = this.$v.form[fieldName];
+        if (field) {
+          return {
+            "md-invalid": field.$invalid && field.$dirty,
+          };
+        }
       },
-      mensaje: { required },
-    },
-  },
-  methods: {
-    ...mapActions(['setPromos', 'setProductsNoPromo', 'setError']),
-    getValidationClass(fieldName) {
-      if (this.form.fechaInicio) {
-        this.initialDate = this.form.fechaInicio.getTime();
-      } else {
-        this.initialDate = 0;
-      }
-      if (this.form.fechaFin) {
-        this.finalDate = this.form.fechaFin.getTime();
-      } else {
-        this.finalDate = 0;
-      }
-      const field = this.$v.form[fieldName];
-      if (field) {
-        return {
-          'md-invalid': field.$invalid && field.$dirty,
-        };
-      }
-    },
-    save() {
-      this.sending = true;
-      const body = this.form;
-      postApi(promos, body)
-        .then(() => {
-          getApi(promos).then((response) => {
-            this.setPromos(response.data);
-            successMsg(
-              'Mercar Chevere',
-              'Se ha almacenado satisfactoriamente la promocion'
+      save() {
+        this.sending = true;
+        const body = this.form;
+        postApi(promos, body)
+          .then(() => {
+            getApi(promos).then((response) => {
+              this.setPromos(response.data);
+              successMsg(
+                "Mercar Chevere",
+                "Se ha almacenado satisfactoriamente la promocion"
+              );
+              this.sending = false;
+              this.$router.push("/admin/promociones");
+            });
+          })
+          .catch((error) => {
+            errorMsg(
+              "Mercar Chevere",
+              "No se ha podido almacenar el promocion" + error
             );
-            this.sending = false;
-            this.$router.push('/admin/promociones');
           });
-        })
-        .catch((error) => {
-          errorMsg(
-            'Mercar Chevere',
-            'No se ha podido almacenar el promocion' + error
-          );
-        });
+      },
+      validate() {
+        this.$v.$touch();
+        if (!this.$v.$invalid) {
+          this.save();
+        }
+      },
+      fetchProduct(id) {
+        this.loadingProduct = true;
+        getOneOrManyApi(products, id)
+          .then((res) => {
+            this.setProduct(res.data);
+            this.nombre = this.product.nombre;
+            this.foto = this.product.foto;
+            this.peso = this.product.caracteristicas.peso;
+            this.unidad = this.product.caracteristicas.unidad;
+            this.cantidad = this.product.caracteristicas.cantidad;
+            this.precio = this.product.caracteristicas.precio;
+            this.loadingProduct = false;
+          })
+          .catch((err) => {
+            this.setError(err);
+            this.loadingProduct = false;
+          });
+      },
+      fetchProducts() {
+        this.loadingProducts = true;
+        getApi(productosSinPromo)
+          .then((res) => {
+            this.setProductsNoPromo(res.data);
+            this.loadingProducts = false;
+          })
+          .catch((err) => {
+            this.setError(err);
+            this.loadingProducts = false;
+          });
+      },
     },
-    validate() {
-      this.$v.$touch();
-      if (!this.$v.$invalid) {
-        this.save();
+    async created() {
+      if (!this.productNoPromo) {
+        await this.fetchProducts();
       }
+      this.$material.locale.dateFormat = "dd/MM/yyyy";
+      this.form.fechaInicio = new Date();
+      this.form.fechaFin = new Date();
     },
-    fetchProduct(id) {
-      this.loadingProduct = true;
-      getOneOrManyApi(products, id)
-        .then((res) => {
-          this.setProduct(res.data);
-          this.nombre = this.product.nombre;
-          this.foto = this.product.foto;
-          this.peso = this.product.caracteristicas.peso;
-          this.unidad = this.product.caracteristicas.unidad;
-          this.cantidad = this.product.caracteristicas.cantidad;
-          this.precio = this.product.caracteristicas.precio;
-          this.loadingProduct = false;
-        })
-        .catch((err) => {
-          this.setError(err);
-          this.loadingProduct = false;
-        });
-    },
-    fetchProducts() {
-      this.loadingProducts = true;
-      getApi(productosSinPromo)
-        .then((res) => {
-          this.setProductsNoPromo(res.data);
-          this.loadingProducts = false;
-        })
-        .catch((err) => {
-          this.setError(err);
-          this.loadingProducts = false;
-        });
-    },
-  },
-  async created() {
-    if (!this.productNoPromo) {
-      await this.fetchProducts();
-    }
-    this.$material.locale.dateFormat = 'dd/MM/yyyy';
-    this.form.fechaInicio = new Date();
-    this.form.fechaFin = new Date();
-  },
-};
+  };
 </script>
 
 <style scoped></style>
