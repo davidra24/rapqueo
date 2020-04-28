@@ -19,7 +19,7 @@ import AgregarCategoria from "../views/admin/categorias/AgregarCategoria";
 import AgregarProductos from "../views/admin/productos/AgregarProductos";
 import EditarProductos from "../views/admin/productos/EditarProductos";
 import EditarPromociones from "../views/admin/promociones/EditarPromociones";
-//import AgregarCategoria from "../views/admin/categorias/AgregarCategoria";
+import AgregarPromociones from "../views/admin/promociones/AgregarPromociones";
 import Perfil from "../views/perfil";
 import PedidosUsuario from "../views/pedidos/Orders";
 import Order from "../views/pedidos/Order";
@@ -136,6 +136,11 @@ const routes = [
     path: "/admin/editar/promociones/:id",
     name: "EditarPromociones",
     component: EditarPromociones,
+  },
+  {
+    path: "/admin/agregar/promocion",
+    name: "AgregarPromociones",
+    component: AgregarPromociones,
   },
   {
     path: "/olvide",
