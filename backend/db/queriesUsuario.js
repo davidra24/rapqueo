@@ -47,10 +47,14 @@ putUser = async (req, res) => {
       });
     })
     .catch((err) => {
-      res.send({
-        code: 500,
-        msg: 'No se han podido actualizar los datos personales',
-      });
+      if (err.code === 11000) {
+        res.send({
+          code: 401,
+          msg: 'El Usuario con ese correo electrónico ya existe en el sistema',
+        });
+      } else {
+        res.send({ code: 500, msg: 'Error de servidor' });
+      }
     });
 };
 
