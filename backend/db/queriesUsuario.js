@@ -66,9 +66,7 @@ deleteUser = (req, res) => {
 
 signup = async (req, res) => {
   const data = {
-    telefono: req.body.telefono,
-    nombre: req.body.nombre,
-    apellido: req.body.apellido,
+    ...req.body,
     contrasena: await bcrypt.hash(req.body.contrasena, 10),
     admin: false,
   };
