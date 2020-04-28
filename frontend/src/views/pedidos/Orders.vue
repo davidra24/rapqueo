@@ -5,7 +5,7 @@
       <div v-if="loading" class="col-12">
         <Loading />
       </div>
-      <div v-else-if="!ordersUser" class="col-12">
+      <div v-else-if="!ordersUser || ordersUser.length <= 0" class="col-12">
         <h2>
           <strong>
             NO HA REALIZADO PEDIDOS

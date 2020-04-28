@@ -721,7 +721,6 @@ export default {
           default:
             break;
         }
-      } else {
       }
     },
     formatTelephone(number) {
