@@ -17,18 +17,16 @@
               <b-card-body>
                 <!----------------------------------->
                 <div class="row">
-                  <div class="col-12" style="margin-bottom: 1%;">
+                  <div class="col-12" style="margin-bottom: 3%;">
                     <md-chip class="md-primary" style="width:50%;">
+                      <strong>Teléfono:</strong>
                       {{
                       formatTelephone(user.telefono)
                       }}
                     </md-chip>
                   </div>
-                  <div class="col-12" style="margin-bottom: 2%;">
-                    <md-chip class="md-accent" style="width:50%;">{{ user.correo }}</md-chip>
-                  </div>
                   <md-tooltip md-direction="top">
-                    Estas propiedades no se pueden cambiar, nos ayudan a
+                    Esta propiedad no se puede cambiar, nos ayudan a
                     identificarte
                   </md-tooltip>
                 </div>
@@ -69,6 +67,23 @@
                         </md-field>
                       </div>
                     </div>
+                    <div class="md-layout-item md-small-size-100">
+                      <md-field :class="getValidationClass('email')">
+                        <label for="email">Correo electrónico</label>
+                        <md-input
+                          name="email"
+                          id="email"
+                          autocomplete="email"
+                          v-model="form.email"
+                          :disabled="sending"
+                        />
+                        <span
+                          class="md-error"
+                          v-if="!$v.form.email.required"
+                        >El apellido es requerido</span>
+                        <span class="md-error" v-if="!$v.form.email.email">El apellido es requerido</span>
+                      </md-field>
+                    </div>
 
                     <div class="row">
                       <div class="col-12 col-md-6">
@@ -99,9 +114,14 @@
                       &nbsp;&nbsp;{{ user.apellido }}
                     </div>
                   </div>
+                  <div class="md-layout-item md-small-size-100" style="margin-top: 2%;">
+                    <strong>Correo electrónico:</strong>
+                    &nbsp;&nbsp;{{ user.correo }}
+                  </div>
                   <md-button
                     @click="editarPersonales()"
                     class="md-raised md-primary"
+                    style="margin-top: 3%;"
                     :disabled="sending"
                   >Editar</md-button>
                 </div>
@@ -208,7 +228,7 @@
                   </form>
                 </div>
                 <div v-else>
-                  <div class="col-12">
+                  <div class="col-12" style="margin-top: 4%; margin-bottom: 4%;">
                     <strong>Contraseña:</strong>&nbsp;&nbsp;&nbsp;&nbsp;•••••••••••••••
                   </div>
                   <md-button
@@ -433,7 +453,8 @@ import {
   minLength,
   integer,
   between,
-  alpha
+  alpha,
+  email
 } from "vuelidate/lib/validators";
 import { mapState, mapActions } from "vuex";
 import { crypt } from "../../util/utilCrypt";
@@ -464,6 +485,7 @@ export default {
         firstName: "",
         lastName: "",
         lastPassword: "",
+        email: "",
         password: "",
         password2: ""
       },
@@ -484,6 +506,12 @@ export default {
         required: requiredIf(function() {
           return this.editarpersonales;
         })
+      },
+      email: {
+        required: requiredIf(function() {
+          return this.editarpersonales;
+        }),
+        email
       },
       lastPassword: {
         required: requiredIf(function() {
@@ -551,6 +579,7 @@ export default {
     editarPersonales() {
       this.form.firstName = this.user.nombre;
       this.form.lastName = this.user.apellido;
+      this.form.email = this.user.correo;
       this.editarpersonales = true;
     },
     guardarPersonales() {
@@ -558,7 +587,8 @@ export default {
       console.log(this.form);
       const data = {
         nombre: this.form.firstName,
-        apellido: this.form.lastName
+        apellido: this.form.lastName,
+        correo: this.form.email
       };
       console.log(data);
       this.actualizarDatos(data);

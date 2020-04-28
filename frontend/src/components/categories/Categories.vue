@@ -25,9 +25,10 @@
                     ></b-card-img>
                   </b-col>
                   <b-col md="6">
-                    <b-card-body :title="categorie.nombre">
+                    <b-card-body>
+                      <h5>{{categorie.nombre}}</h5>
                       <md-content class="md-scrollbar">
-                        <b-card-text>{{ categorie.descripcion }}</b-card-text>
+                        <b-card-text class="text-left">{{ categorie.descripcion }}</b-card-text>
                       </md-content>
                     </b-card-body>
                   </b-col>
