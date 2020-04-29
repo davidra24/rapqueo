@@ -255,8 +255,13 @@
                 <div v-for="dir in user.direccion" :key="dir.direccion">
                   <b-alert show variant="secondary">
                     <div class="row">
-                      <p class="col-11 d-flex justify-content-center">Barrio: {{ dir.barrio }}</p>
-                      <div class="col-1 d-flex justify-content-end" v-if="editardireccion">
+                      <p
+                        class="col-10 col-md-9 col-lg-8 d-flex justify-content-end"
+                      >Direccion: {{ dir.direccion }}</p>
+                      <div
+                        class="col-2 col-md-3 col-lg-4 d-flex justify-content-end"
+                        v-if="editardireccion"
+                      >
                         <md-button
                           class="md-icon-button md-accent"
                           @click="quitarDireccion(dir)"
@@ -265,8 +270,11 @@
                           <md-icon>delete_outline</md-icon>
                         </md-button>
                       </div>
-                      <p class="col-12">Direccion: {{ dir.direccion }}</p>
-                      <p class="col-12">Datos adicionales: {{ dir.datos_adicionales }}</p>
+                      <p class="col-12 d-flex justify-content-center">Barrio: {{ dir.barrio }}</p>
+                      <p
+                        class="col-12"
+                        v-if="dir.datos_adicionales"
+                      >Datos adicionales: {{ dir.datos_adicionales }}</p>
                     </div>
                   </b-alert>
                 </div>
@@ -274,123 +282,25 @@
                   <b-alert show variant="secondary">
                     <form novalidate @submit.prevent="validateForm(2)">
                       <div class="d-flex justify-content-center row">
-                        <md-autocomplete
-                          name="Via"
-                          id="Via"
-                          class="col-5 col-lg-2"
-                          style="margin-right:3%;"
-                          v-model="form.Via"
-                          :md-options="via"
+                        <md-field
+                          class="col-11 col-md-8 col-lg-6"
+                          name="direccion"
+                          id="direccion"
+                          v-model="form.direccion"
                           :disabled="sending"
-                          :class="getValidationClass('Via')"
+                          :class="getValidationClass('direccion')"
                         >
-                          <label>Via</label>
-                          <span class="md-helper-text">Ej: Calle, Carrera</span>
+                          <label>Direccion</label>
+                          <md-input v-model="form.direccion"></md-input>
                           <span
                             class="md-error"
-                            v-if="!$v.form.Via.required"
-                          >El nombre de la via es requerida</span>
-                          <span
-                            class="md-error"
-                            v-else-if="!$v.form.Via.ViaValid"
-                          >El formato del nombre de la via es incorrecto</span>
-                        </md-autocomplete>
-                        <md-field
-                          class="col-3 col-lg-1"
-                          style="margin-right:1%;"
-                          name="numeroVia"
-                          id="numeroVia"
-                          v-model="form.numeroVia"
-                          :disabled="sending"
-                          :class="getValidationClass('numeroVia')"
-                        >
-                          <label>Numero</label>
-                          <md-input v-model="form.numeroVia" md-counter="false" maxlength="2"></md-input>
-                          <span class="md-error" v-if="!$v.form.numeroVia.required">Requerido</span>
-                          <span
-                            class="md-error"
-                            v-else-if="!$v.form.numeroVia.ViaValid"
-                          >Formato incorrecto</span>
-                        </md-field>
-                        <md-field
-                          class="col-3 col-lg-2"
-                          style="margin-right:3%;"
-                          name="letra"
-                          id="letra"
-                          v-model="form.letra"
-                          :disabled="sending"
-                          :class="getValidationClass('letra')"
-                        >
-                          <label>Especial</label>
-                          <span class="md-helper-text">Ej: A; SUR; B SUR</span>
-                          <md-input v-model="form.letra" md-counter="false" maxlength="7"></md-input>
-                          <span class="md-error" v-if="!$v.form.letra.ViaValid">Formato incorrecto</span>
-                        </md-field>
-                        <div class="d-flex align-items-center" style="margin-right:0.4%;">#</div>
-                        <md-field
-                          class="col-4 col-md-2 col-lg-1"
-                          style="margin-right:1%;"
-                          name="numero1"
-                          id="numero1"
-                          v-model="form.numero1"
-                          :disabled="sending"
-                          :class="getValidationClass('numero1')"
-                        >
-                          <label>Numero</label>
-                          <md-input v-model="form.numero1" md-counter="false" maxlength="2"></md-input>
-                          <span class="md-error" v-if="!$v.form.numero1.required">Requerido</span>
-                          <span
-                            class="md-error"
-                            v-else-if="!$v.form.numero1.ViaValid"
-                          >Formato incorrecto</span>
-                        </md-field>
-                        <md-field
-                          class="col-4 col-md-2 col-lg-1"
-                          name="letra1"
-                          id="letra1"
-                          v-model="form.letra1"
-                          :disabled="sending"
-                          :class="getValidationClass('letra1')"
-                        >
-                          <label>Letra</label>
-                          <md-input v-model="form.letra1" md-counter="false" maxlength="1"></md-input>
-                          <span class="md-error" v-if="!$v.form.letra1.ViaValid">Formato incorrecto</span>
-                        </md-field>
-                        <div class="d-flex align-items-center" style="margin-right:1%;">-</div>
-                        <md-field
-                          class="col-4 col-md-2 col-lg-1"
-                          style="margin-right:1%;"
-                          name="numero2"
-                          id="numero2"
-                          v-model="form.numero2"
-                          :disabled="sending"
-                          :class="getValidationClass('numero2')"
-                        >
-                          <label>Numero</label>
-                          <md-input v-model="form.numero2" md-counter="false" maxlength="3"></md-input>
-                          <span class="md-error" v-if="!$v.form.numero2.required">Requerido</span>
-                          <span
-                            class="md-error"
-                            v-else-if="!$v.form.numero2.ViaValid"
-                          >Formato incorrecto</span>
-                        </md-field>
-                        <md-field
-                          class="col-4 col-md-2"
-                          name="letra2"
-                          id="letra2"
-                          v-model="form.letra2"
-                          :disabled="sending"
-                          :class="getValidationClass('letra2')"
-                        >
-                          <label>Especial</label>
-                          <span class="md-helper-text">Ej: SUR</span>
-                          <md-input v-model="form.letra2" md-counter="false" maxlength="5"></md-input>
-                          <span class="md-error" v-if="!$v.form.letra2.ViaValid">Formato incorrecto</span>
+                            v-if="!$v.form.direccion.required"
+                          >La direccion es requerida</span>
                         </md-field>
                       </div>
                       <div class="d-flex justify-content-center">
                         <md-field
-                          class="col-6"
+                          class="col-11 col-md-8 col-lg-6"
                           name="barrio"
                           id="barrio"
                           v-model="form.barrio"
@@ -406,7 +316,7 @@
                         </md-field>
                       </div>
                       <div class="d-flex justify-content-center">
-                        <md-field class="col-6">
+                        <md-field class="col-11 col-md-8 col-lg-6">
                           <label>Informacion adicional</label>
                           <md-input v-model="form.info"></md-input>
                           <span class="md-helper-text">Ej: Conjunto x torre 3 apto 402</span>
@@ -448,21 +358,12 @@
 
 <script>
 import { validationMixin } from "vuelidate";
-import {
-  requiredIf,
-  minLength,
-  integer,
-  between,
-  alpha,
-  email
-} from "vuelidate/lib/validators";
+import { requiredIf, minLength, email } from "vuelidate/lib/validators";
 import { mapState, mapActions } from "vuex";
 import { crypt } from "../../util/utilCrypt";
 import { putApi, postApi } from "../../util/api";
 import { usuarios, verifyPassword } from "../../util/constants";
 import { successMsg, errorMsg } from "../../util/utilMsg";
-const validVias = value =>
-  /(Calle|Carrera|Diagonal|Transversal|Avenida)$/.test(value);
 export default {
   name: "Perfil",
   mixins: [validationMixin],
@@ -473,13 +374,7 @@ export default {
     return {
       via: ["Calle", "Carrera", "Diagonal", "Transversal", "Avenida"],
       form: {
-        Via: "Calle",
-        numeroVia: "",
-        numero1: "",
-        numero2: "",
-        letra: "",
-        letra1: "",
-        letra2: "",
+        direccion: "",
         barrio: "",
         info: "",
         firstName: "",
@@ -531,41 +426,10 @@ export default {
         }),
         minLength: minLength(8)
       },
-      Via: {
+      direccion: {
         required: requiredIf(function() {
           return this.editardireccion;
-        }),
-        validVias
-      },
-      numeroVia: {
-        required: requiredIf(function() {
-          return this.editardireccion;
-        }),
-        integer,
-        between: between(1, 99)
-      },
-      numero1: {
-        required: requiredIf(function() {
-          return this.editardireccion;
-        }),
-        integer,
-        between: between(1, 99)
-      },
-      numero2: {
-        required: requiredIf(function() {
-          return this.editardireccion;
-        }),
-        integer,
-        between: between(1, 999)
-      },
-      letra: {
-        alpha
-      },
-      letra1: {
-        alpha
-      },
-      letra2: {
-        alpha
+        })
       },
       barrio: {
         required: requiredIf(function() {
@@ -655,18 +519,8 @@ export default {
     },
     datosDireccion() {
       return {
-        barrio: this.form.barrio,
-        direccion:
-          this.form.Via +
-          " " +
-          this.form.numeroVia +
-          this.form.letra.toUpperCase() +
-          " #" +
-          this.form.numero1 +
-          this.form.letra1.toUpperCase() +
-          "-" +
-          this.form.numero2 +
-          this.form.letra2.toUpperCase(),
+        barrio: this.form.barrio.toUpperCase(),
+        direccion: this.form.direccion.toUpperCase(),
         datos_adicionales: this.form.info
       };
     },
@@ -685,13 +539,7 @@ export default {
     },
     clearForm() {
       this.$v.$reset();
-      this.form.Via = "";
-      this.form.numeroVia = "";
-      this.form.numero1 = "";
-      this.form.numero2 = "";
-      this.letra = "";
-      this.letra1 = "";
-      this.letra2 = "";
+      this.form.direccion = "";
       this.barrio = "";
       this.info = "";
     },
