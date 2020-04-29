@@ -10,8 +10,28 @@
           <br />
         </div>
         <div class="col-12">
+          <div class="row d-flex justify-content-center">
+            <div class="col-8">
+              <md-field>
+                <label>Buscar productos</label>
+                <md-input
+                  name="search"
+                  id="search"
+                  v-model="filterProduct"
+                  md-layout="box"
+                  class="text-center"
+                />
+              </md-field>
+            </div>
+          </div>
+        </div>
+        <div class="col-12">
           <div class="row">
-            <div class="col-12 col-md-6 col-lg-4" v-for="product in products" :key="product._id">
+            <div
+              class="col-12 col-md-6 col-lg-4"
+              v-for="product in filterProducts"
+              :key="product._id"
+            >
               <Product v-blur="product.caracteristicas.cantidad" v-bind:product="product" />
             </div>
           </div>
@@ -28,8 +48,24 @@ export default {
   components: {
     Product
   },
+  data() {
+    return {
+      filterProduct: ""
+    };
+  },
   computed: {
-    ...mapState(["products"])
+    ...mapState(["products"]),
+    filterProducts() {
+      if (this.filterProduct != "") {
+        return this.products.filter(product => {
+          return product.nombre
+            .toLowerCase()
+            .includes(this.filterProduct.toLowerCase());
+        });
+      } else {
+        return this.products;
+      }
+    }
   }
 };
 </script>

@@ -7,11 +7,27 @@
           <h2>
             <strong>NAVEGA ENTRE LAS CATEGORIAS</strong>
           </h2>
+          <div class="col-12">
+            <div class="row d-flex justify-content-center">
+              <div class="col-8">
+                <md-field>
+                  <label>Buscar categorías</label>
+                  <md-input
+                    name="search"
+                    id="search"
+                    v-model="filterCategorie"
+                    md-layout="box"
+                    class="text-center"
+                  />
+                </md-field>
+              </div>
+            </div>
+          </div>
           <div class="row">
             <div
               class="col-12 col-md-6 col-lg-4 clickable"
               style="margin-bottom: 2%;"
-              v-for="categorie in categories"
+              v-for="categorie in filterCategories"
               :key="categorie._id"
               @click="goProducts(categorie._id)"
             >
@@ -50,8 +66,24 @@ import { buscarImagen } from "../../util/images";
 
 export default {
   name: "Categories",
+  data() {
+    return {
+      filterCategorie: ""
+    };
+  },
   computed: {
-    ...mapState(["categories"])
+    ...mapState(["categories"]),
+    filterCategories() {
+      if (this.filterCategorie != "") {
+        return this.categories.filter(categorie => {
+          return categorie.nombre
+            .toLowerCase()
+            .includes(this.filterCategorie.toLowerCase());
+        });
+      } else {
+        return this.categories;
+      }
+    }
   },
   methods: {
     buscarImagen(name) {

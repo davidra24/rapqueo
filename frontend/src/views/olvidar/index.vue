@@ -24,28 +24,24 @@
                         v-model="form.email"
                         :disabled="sending || lock"
                       />
-                      <span class="md-error" v-if="!$v.form.email.required"
-                        >Correo electrónico es requerido</span
-                      >
-                      <span class="md-error" v-else-if="!$v.form.email.email"
-                        >El correo electrónico es inválido</span
-                      >
+                      <span
+                        class="md-error"
+                        v-if="!$v.form.email.required"
+                      >Correo electrónico es requerido</span>
+                      <span
+                        class="md-error"
+                        v-else-if="!$v.form.email.email"
+                      >El correo electrónico es inválido</span>
                     </md-field>
                   </div>
                 </div>
                 <div v-if="!tengoCodigo">
-                  <md-button
-                    type="submit"
-                    class="md-primary"
-                    :disabled="sending"
-                    >Enviar correo</md-button
-                  >
+                  <md-button type="submit" class="md-primary" :disabled="sending">Enviar correo</md-button>
                   <md-button
                     class="md-primary"
                     @click="tengoCodigo = true"
                     :disabled="sending"
-                    >Ya tengo código</md-button
-                  >
+                  >Ya tengo código</md-button>
                 </div>
                 <div v-else class="md-layout-item md-small-size-100">
                   <md-field>
@@ -57,24 +53,25 @@
                       v-model="form.code"
                       :disabled="sending"
                     />
-                    <span class="md-error" v-if="!$v.form.code.required"
-                      >Código de recuperación es requerido</span
-                    >
+                    <span
+                      class="md-error"
+                      v-if="!$v.form.code.required"
+                    >Código de recuperación es requerido</span>
                     <span
                       class="md-error"
                       v-else-if="
                         !$v.form.code.minlength || !$v.form.code.maxlength
                       "
-                      >El código proporcionado no tiene la longitud
-                      correcta</span
                     >
+                      El código proporcionado no tiene la longitud
+                      correcta
+                    </span>
                   </md-field>
                   <md-button
                     class="md-primary"
                     @click="validarCodigo()"
                     :disabled="sending"
-                    >Validar código</md-button
-                  >
+                  >Validar código</md-button>
                 </div>
               </md-card-content>
             </div>
@@ -91,14 +88,14 @@
                       :disabled="sending"
                       type="password"
                     />
-                    <span class="md-error" v-if="!$v.form.password.required"
-                      >La contraseña es requerida</span
-                    >
+                    <span
+                      class="md-error"
+                      v-if="!$v.form.password.required"
+                    >La contraseña es requerida</span>
                     <span
                       class="md-error"
                       v-else-if="!$v.form.password.minlength"
-                      >La contraseña debe tener un mínimo de 8 caracteres</span
-                    >
+                    >La contraseña debe tener un mínimo de 8 caracteres</span>
                   </md-field>
                 </div>
                 <div class="md-layout-item md-small-size-100">
@@ -112,27 +109,23 @@
                       :disabled="sending"
                       type="password"
                     />
-                    <span class="md-error" v-if="!$v.form.password2.required"
-                      >Confirmación de contraseña es requerida</span
-                    >
+                    <span
+                      class="md-error"
+                      v-if="!$v.form.password2.required"
+                    >Confirmación de contraseña es requerida</span>
                     <span
                       class="md-error"
                       v-else-if="!$v.form.password2.minlength"
-                      >La contraseña debe tener un mínimo de 8 caracteres</span
-                    >
+                    >La contraseña debe tener un mínimo de 8 caracteres</span>
                   </md-field>
                 </div>
 
-                <md-button class="md-primary" type="submit" :disabled="sending"
-                  >Cambiar contraseña</md-button
-                >
+                <md-button class="md-primary" type="submit" :disabled="sending">Cambiar contraseña</md-button>
               </md-card-content>
             </div>
             <md-progress-bar md-mode="indeterminate" v-if="sending" />
           </md-card>
-          <md-snackbar :md-active.sync="sended"
-            >Codigo enviado al correo electrónico</md-snackbar
-          >
+          <md-snackbar :md-active.sync="sended">Codigo enviado al correo electrónico</md-snackbar>
         </form>
       </div>
     </div>
@@ -140,18 +133,18 @@
 </template>
 
 <script>
-import { validationMixin } from 'vuelidate';
+import { validationMixin } from "vuelidate";
 import {
   requiredIf,
   email,
   minLength,
-  maxLength,
-} from 'vuelidate/lib/validators';
-import { postApi } from '../../util/api';
-import { forgot, codeRecovery, recoveryPassword } from '../../util/constants';
-import { errorMsg, successMsg } from '../../util/utilMsg';
+  maxLength
+} from "vuelidate/lib/validators";
+import { postApi } from "../../util/api";
+import { forgot, codeRecovery, recoveryPassword } from "../../util/constants";
+import { errorMsg, successMsg } from "../../util/utilMsg";
 export default {
-  name: 'Olvide',
+  name: "Olvide",
   mixins: [validationMixin],
   data() {
     return {
@@ -163,13 +156,10 @@ export default {
         email: null,
         code: null,
         password: null,
-        password2: null,
+        password2: null
       },
-      lock: false,
+      lock: false
     };
-  },
-  errorCaptured(err, vm, info) {
-    return false;
   },
   validations: {
     form: {
@@ -177,35 +167,35 @@ export default {
         required: requiredIf(function() {
           return !this.cambiar;
         }),
-        email,
+        email
       },
       code: {
         required: requiredIf(function() {
           return this.tengoCodigo;
         }),
         minLength: minLength(6),
-        maxLength: maxLength(6),
+        maxLength: maxLength(6)
       },
       password: {
         required: requiredIf(function() {
           return this.cambiar;
         }),
-        minLength: minLength(8),
+        minLength: minLength(8)
       },
       password2: {
         required: requiredIf(function() {
           return this.cambiar;
         }),
-        minLength: minLength(8),
-      },
-    },
+        minLength: minLength(8)
+      }
+    }
   },
   methods: {
     getValidationClass(fieldName) {
       const field = this.$v.form[fieldName];
       if (field) {
         return {
-          'md-invalid': field.$invalid && field.$dirty,
+          "md-invalid": field.$invalid && field.$dirty
         };
       }
     },
@@ -215,10 +205,10 @@ export default {
         this.sending = true;
         const body = {
           correo: this.form.email,
-          codigo: this.form.code,
+          codigo: this.form.code
         };
         postApi(codeRecovery, body)
-          .then((response) => {
+          .then(response => {
             if (response.data) {
               const { code, msg } = response.data;
               if (parseInt(code) === 200) {
@@ -226,13 +216,13 @@ export default {
                 this.cambiar = true;
               } else {
                 this.sending = false;
-                errorMsg('Mercar Chevere', msg);
+                errorMsg("Mercar Chevere", msg);
               }
             } else {
               this.sending = false;
               errorMsg(
-                'Mercar Chevere',
-                'El código proporcionado es incorrecto'
+                "Mercar Chevere",
+                "El código proporcionado es incorrecto"
               );
             }
           })
@@ -244,21 +234,21 @@ export default {
     cambiarPass(data) {
       this.sending = true;
       postApi(recoveryPassword, data)
-        .then((response) => {
-          const { code, msg, respuesta } = response.data;
+        .then(response => {
+          const { code, msg } = response.data;
           if (parseInt(code) === 200) {
-            successMsg('Mercar Chevere', msg);
+            successMsg("Mercar Chevere", msg);
             this.sending = false;
-            this.$router.push('/login');
+            this.$router.push("/login");
           } else {
-            errorMsg('Mercar Chevere', msg);
+            errorMsg("Mercar Chevere", msg);
             this.sending = false;
           }
         })
-        .catch((err) => {
+        .catch(err => {
           errorMsg(
-            'Mercar Chevere',
-            'Se ha perdido la conexión con el servidor, error: ' + err
+            "Mercar Chevere",
+            "Se ha perdido la conexión con el servidor, error: " + err
           );
           this.sending = false;
         });
@@ -266,14 +256,14 @@ export default {
     sendCode() {
       this.sending = true;
       const body = Object.assign({}, this.form);
-      postApi(forgot, body).then((response) => {
+      postApi(forgot, body).then(response => {
         const { code, msg } = response.data;
         if (parseInt(code) === 200) {
           this.lock = true;
           this.sended = true;
           this.tengoCodigo = true;
         } else {
-          errorMsg('Mercar Chevere', msg);
+          errorMsg("Mercar Chevere", msg);
         }
         this.sending = false;
       });
@@ -286,20 +276,20 @@ export default {
         } else {
           if (this.form.password !== this.form.password2) {
             errorMsg(
-              'Mercar Chevere',
-              'La contraseña nueva no coincide con su verificación, por favor reviselas'
+              "Mercar Chevere",
+              "La contraseña nueva no coincide con su verificación, por favor reviselas"
             );
           } else {
             const data = {
               correo: this.form.email,
-              contrasena: this.form.password,
+              contrasena: this.form.password
             };
             this.cambiarPass(data);
           }
         }
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

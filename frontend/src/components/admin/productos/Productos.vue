@@ -8,10 +8,26 @@
             <strong>PRODUCTOS</strong>
           </h2>
           <div class="row">
+            <div class="col-12">
+              <div class="row d-flex justify-content-center">
+                <div class="col-8">
+                  <md-field>
+                    <label>Buscar productos</label>
+                    <md-input
+                      name="search"
+                      id="search"
+                      v-model="filterProduct"
+                      md-layout="box"
+                      class="text-center"
+                    />
+                  </md-field>
+                </div>
+              </div>
+            </div>
             <div
               class="col-12 col-md-6 col-lg-4"
               style="margin-bottom: 2%; cursor: pointer;"
-              v-for="product in products"
+              v-for="product in filterProducts"
               :key="product._id"
               @click="goProduct(product._id)"
             >
@@ -50,8 +66,24 @@
 import { mapState } from "vuex";
 export default {
   name: "ProductosAdminComponent",
+  data() {
+    return {
+      filterProduct: ""
+    };
+  },
   computed: {
-    ...mapState(["products"])
+    ...mapState(["products"]),
+    filterProducts() {
+      if (this.filterProduct != "") {
+        return this.products.filter(product => {
+          return product.nombre
+            .toLowerCase()
+            .includes(this.filterProduct.toLowerCase());
+        });
+      } else {
+        return this.products;
+      }
+    }
   },
   methods: {
     goProduct(id) {
