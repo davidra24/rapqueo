@@ -11,7 +11,7 @@ self.addEventListener('push', (event) => {
   const { message, url } = data.message;
   const options = {
     body: message,
-    icon: './favicon.ico',
+    icon: 'https://mercarchevere.com/favicon.ico',
     data: {
       url,
     },

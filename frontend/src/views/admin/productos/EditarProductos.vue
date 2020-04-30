@@ -10,19 +10,12 @@
             <div class="col-12 col-md-6">
               <div class="d-flex justify-content-center">
                 <div style="width: 100%;">
-                  <img
-                    v-if="form.foto"
-                    :src="form.foto"
-                    alt="Skyscraper"
-                    style="width:80%"
-                  />
+                  <img v-if="form.foto" :src="form.foto" alt="Skyscraper" style="width:80%" />
                   <div v-else>
                     <Loading />
                   </div>
                   <div v-if="!showCamera">
-                    <md-button class="md-primary" @click="changeCamera()"
-                      >Tomar foto</md-button
-                    >
+                    <md-button class="md-primary" @click="changeCamera()">Tomar foto</md-button>
                   </div>
                   <md-dialog
                     md-fullscreen
@@ -32,7 +25,7 @@
                     <div class="wrapper">
                       <video
                         class="video"
-                        :class="activeDevice === 0 ? 'front' : ''"
+                        :class="facingMode === 'user' ? 'front' : ''"
                         ref="video"
                       />
                       <canvas style="display:none" ref="canva" />
@@ -74,9 +67,10 @@
                           v-model="form.nombre"
                           :disabled="sending"
                         />
-                        <span class="md-error" v-if="!$v.form.nombre.required"
-                          >El nombre del producto es requerido</span
-                        >
+                        <span
+                          class="md-error"
+                          v-if="!$v.form.nombre.required"
+                        >El nombre del producto es requerido</span>
                       </md-field>
                     </div>
                     <div class="md-layout-item md-small-size-100">
@@ -92,8 +86,7 @@
                         <span
                           class="md-error"
                           v-if="!$v.form.caracteristicas.peso.required"
-                          >La característica de peso es requerida</span
-                        >
+                        >La característica de peso es requerida</span>
                       </md-field>
                     </div>
                     <div class="md-layout-item md-small-size-100">
@@ -108,8 +101,7 @@
                         <span
                           class="md-error"
                           v-if="!$v.form.caracteristicas.unidad.required"
-                          >La característica de unidad es requerida</span
-                        >
+                        >La característica de unidad es requerida</span>
                       </md-field>
                     </div>
                     <div class="md-layout-item md-small-size-100">
@@ -125,8 +117,7 @@
                         <span
                           class="md-error"
                           v-if="!$v.form.caracteristicas.cantidad.required"
-                          >La característica de cantidad es requerida</span
-                        >
+                        >La característica de cantidad es requerida</span>
                       </md-field>
                     </div>
                     <div class="md-layout-item md-small-size-100">
@@ -153,8 +144,7 @@
                         <span
                           class="md-error"
                           v-if="!$v.form.caracteristicas.precio.required"
-                          >La característica de precio es requerida</span
-                        >
+                        >La característica de precio es requerida</span>
                       </md-field>
                     </div>
                     <div class="md-layout-item md-small-size-100">
@@ -169,8 +159,7 @@
                         <span
                           class="md-error"
                           v-if="!$v.form.caracteristicas.marca.required"
-                          >La característica de marca es requerida</span
-                        >
+                        >La característica de marca es requerida</span>
                       </md-field>
                     </div>
                     <div class="md-layout-item md-small-size-100">
@@ -186,32 +175,20 @@
                             v-for="categorie in categories"
                             :key="categorie._id"
                             :value="categorie._id"
-                            >{{ categorie.nombre }}</md-option
-                          >
+                          >{{ categorie.nombre }}</md-option>
                         </md-select>
                         <span
                           class="md-error"
                           v-if="!$v.form.idCategoria.required"
-                          >La categoría es requerida</span
-                        >
+                        >La categoría es requerida</span>
                       </md-field>
                     </div>
                   </div>
                 </md-card-content>
                 <md-progress-bar md-mode="indeterminate" v-if="sending" />
                 <md-card-actions>
-                  <md-button
-                    @click="eliminar()"
-                    class="md-accent"
-                    :disabled="sending"
-                    >Eliminar</md-button
-                  >
-                  <md-button
-                    type="submit"
-                    class="md-primary"
-                    :disabled="sending"
-                    >Actualizar</md-button
-                  >
+                  <md-button @click="eliminar()" class="md-accent" :disabled="sending">Eliminar</md-button>
+                  <md-button type="submit" class="md-primary" :disabled="sending">Actualizar</md-button>
                 </md-card-actions>
               </md-card>
             </form>
@@ -223,15 +200,15 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
-import { getOneOrManyApi, getApi, putApi, deleteApi } from '../../../util/api';
-import { products, categories, promos } from '../../../util/constants';
-import { successMsg, errorMsg, questionMsg } from '../../../util/utilMsg';
-import Loading from '../../../components/loading';
-import { validationMixin } from 'vuelidate';
-import { required } from 'vuelidate/lib/validators';
+import { mapState, mapActions } from "vuex";
+import { getOneOrManyApi, getApi, putApi, deleteApi } from "../../../util/api";
+import { products, categories, promos } from "../../../util/constants";
+import { successMsg, errorMsg, questionMsg } from "../../../util/utilMsg";
+import Loading from "../../../components/loading";
+import { validationMixin } from "vuelidate";
+import { required } from "vuelidate/lib/validators";
 export default {
-  name: 'EditarProductos',
+  name: "EditarProductos",
   mixins: [validationMixin],
   components: { Loading },
   data() {
@@ -240,94 +217,95 @@ export default {
       showCamera: false,
       loadingProduct: false,
       form: {
-        nombre: '',
-        foto: '',
+        nombre: "",
+        foto: "",
         caracteristicas: {
-          peso: '',
-          unidad: '',
-          cantidad: '',
-          sabor: '',
-          precio: '',
-          marca: '',
+          peso: "",
+          unidad: "",
+          cantidad: "",
+          sabor: "",
+          precio: "",
+          marca: ""
         },
-        idCategoria: '',
+        idCategoria: ""
       },
-      photo: '',
       mediaStream: null,
       videoDevices: [],
-      activeDevice: 0,
+      facingMode: "environment",
+      counter: 0,
+      switchingCamera: false
     };
   },
   computed: {
-    ...mapState(['product', 'products', 'categories', 'promos', 'user']),
+    ...mapState(["product", "products", "categories", "promos", "user"])
   },
   validations: {
     form: {
       nombre: {
-        required,
+        required
       },
       idCategoria: {
-        required,
+        required
       },
       caracteristicas: {
         peso: {
-          required,
+          required
         },
         unidad: {
-          required,
+          required
         },
         cantidad: {
-          required,
+          required
         },
         precio: {
-          required,
+          required
         },
         marca: {
-          required,
-        },
-      },
-    },
+          required
+        }
+      }
+    }
   },
   methods: {
-    ...mapActions(['setProduct', 'setProducts', 'setCategories', 'setPromos']),
+    ...mapActions(["setProduct", "setProducts", "setCategories", "setPromos"]),
     getValidationClass(fieldName) {
       const field = this.$v.form[fieldName];
       if (field) {
         return {
-          'md-invalid': field.$invalid && field.$dirty,
+          "md-invalid": field.$invalid && field.$dirty
         };
       }
     },
     async eliminar() {
       const { id } = this.$route.params;
       await questionMsg(
-        'Mercar Chevere',
+        "Mercar Chevere",
         `¿Está seguro que desea eliminar este producto?
             Recuerde que este cambio es para siempre`
-      ).then((result) => {
+      ).then(result => {
         if (result.value) {
           this.sending = true;
           deleteApi(products, id)
-            .then((response) => {
+            .then(response => {
               if (response) {
-                getApi(products).then((respuesta) => {
+                getApi(products).then(respuesta => {
                   this.setProducts(respuesta.data);
-                  getApi(promos).then((responsee) => {
+                  getApi(promos).then(responsee => {
                     this.setPromos(responsee.data);
                     successMsg(
-                      'Mercar Chevere',
-                      'El producto se ha eliminado con éxito'
+                      "Mercar Chevere",
+                      "El producto se ha eliminado con éxito"
                     );
                     this.sending = false;
-                    this.$router.push('/admin/productos');
+                    this.$router.push("/admin/productos");
                   });
                 });
               }
             })
-            .catch((err) => {
+            .catch(err => {
               errorMsg(
-                'Mercar Chevere',
-                'No se ha podido eliminar la categoría, error: ' + err
+                "Mercar Chevere",
+                "No se ha podido eliminar la categoría, error: " + err
               );
             });
         }
@@ -339,21 +317,21 @@ export default {
       this.sending = true;
       putApi(products, id, body)
         .then(() => {
-          getApi(products).then((response) => {
+          getApi(products).then(response => {
             this.setProducts(response.data);
             this.setProduct(body);
             successMsg(
-              'Mercar Chevere',
-              'Se ha actualizado satisfactoriamente el producto'
+              "Mercar Chevere",
+              "Se ha actualizado satisfactoriamente el producto"
             );
             this.sending = false;
-            this.$router.push('/admin/productos');
+            this.$router.push("/admin/productos");
           });
         })
-        .catch((error) => {
+        .catch(error => {
           errorMsg(
-            'Mercar Chevere',
-            'No se ha podido actualizar el producto' + error
+            "Mercar Chevere",
+            "No se ha podido actualizar el producto" + error
           );
         });
     },
@@ -363,21 +341,15 @@ export default {
         this.save();
       }
     },
-    async changeCamera() {
-      this.showCamera = true;
-      const devices = await navigator.mediaDevices.enumerateDevices();
-      this.videoDevices = devices.filter((d) => d.kind === 'videoinput');
-      this.StartRecording(0);
-    },
     fetchProduct(id) {
       this.loadingProduct = true;
       getOneOrManyApi(products, id)
-        .then((res) => {
+        .then(res => {
           this.setProduct(res.data);
           this.form = Object.assign({}, this.product);
           this.loadingProduct = false;
         })
-        .catch((err) => {
+        .catch(err => {
           this.setError(err);
           this.loadingProduct = false;
         });
@@ -385,22 +357,23 @@ export default {
     fetchCategories() {
       this.loadingProduct = true;
       getApi(categories)
-        .then((res) => {
+        .then(res => {
           this.setCategories(res.data);
           this.loadingProduct = false;
         })
-        .catch((err) => {
+        .catch(err => {
           this.setError(err);
           this.loadingProduct = false;
         });
     },
-    async StartRecording(deviceIdx) {
+    async StartRecording(facingMode) {
+      this.facingMode = facingMode;
       let video = this.$refs.video;
       this.mediaStream = await navigator.mediaDevices.getUserMedia({
-        video: { deviceId: { exact: this.videoDevices[deviceIdx].deviceId } },
+        video: { facingMode: facingMode }
       });
-      video.srcObject = await this.mediaStream;
-      video.play();
+      video.srcObject = this.mediaStream;
+      return await video.play();
     },
     async TakePhoto() {
       let video = this.$refs.video;
@@ -409,49 +382,60 @@ export default {
       let height = video.videoHeight;
       canva.width = width;
       canva.height = height;
-      let ctx = canva.getContext('2d');
+      let ctx = canva.getContext("2d");
       ctx.save();
-      if (this.activeDevice === 0) {
+      if (this.facingMode === "user") {
         ctx.scale(-1, 1);
         ctx.drawImage(video, width * -1, 0, width, height);
       } else {
         ctx.drawImage(video, 0, 0);
       }
       ctx.restore();
-      this.form.foto = canva.toDataURL('image/png');
+      this.form.foto = canva.toDataURL("image/png");
       this.showCamera = false;
     },
-    switchCamera() {
+    async changeCamera() {
+      this.showCamera = true;
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      this.videoDevices = devices.filter(d => d.kind === "videoinput");
+      await this.StartRecording(
+        this.videoDevices.length === 1 ? "user" : "environment"
+      );
+    },
+    async switchCamera() {
+      this.switchingCamera = true;
       const tracks = this.mediaStream.getVideoTracks();
-      tracks.forEach((track) => {
+      tracks.forEach(track => {
         track.stop();
       });
-      this.StartRecording((this.activeDevice + 1) % 2);
-      this.activeDevice = (this.activeDevice + 1) % 2;
+      await this.StartRecording(
+        this.facingMode === "environment" ? "user" : "environment"
+      );
+      this.switchingCamera = false;
     },
     async validateAdmin() {
       if (this.user) {
         if (!this.user.admin) {
-          this.$router.push('/');
+          this.$router.push("/");
         } else {
-          const id = this.$route.params.id;
-          if (!this.product || this.product._id !== id) {
-            await this.fetchProduct(id);
+          const { id } = this.$route.params;
+          if (!this.product || id !== this.product._id) {
+            this.fetchProduct(id);
           } else {
-            this.form = await Object.assign({}, this.product);
+            this.form = Object.assign({}, this.product);
           }
           if (!this.categories) {
             await this.fetchCategories();
           }
         }
       } else {
-        this.$router.push('/');
+        this.$router.push("/");
       }
-    },
+    }
   },
   async mounted() {
     await this.validateAdmin();
-  },
+  }
 };
 </script>
 
