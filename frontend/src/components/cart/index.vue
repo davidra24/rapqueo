@@ -351,7 +351,7 @@ export default {
     getOtherDirection() {
       return {
         barrio: this.form.barrio,
-        direccion: this.form.direccion.toUpperCase(),
+        direccion: this.form.direccion,
         datos_adicionales: this.form.info
       };
     },

@@ -519,8 +519,8 @@ export default {
     },
     datosDireccion() {
       return {
-        barrio: this.form.barrio.toUpperCase(),
-        direccion: this.form.direccion.toUpperCase(),
+        barrio: this.form.barrio,
+        direccion: this.form.direccion,
         datos_adicionales: this.form.info
       };
     },
