@@ -238,7 +238,7 @@ export default {
       this.sending = true;
       if (this.form.password === this.form.password2) {
         const data = {
-          telefono: `+57 ${this.form.phone}`,
+          telefono: `+57${this.form.phone}`,
           nombre: this.form.firstName,
           apellido: this.form.lastName,
           correo: this.form.email,
