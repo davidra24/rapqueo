@@ -58,7 +58,7 @@ export default {
       this.$router.push({ path: `/promociones` });
     },
     validarPromos() {
-      return this.filteredPromos;
+      return this.filteredPromos && this.filteredPromos.length;
     }
   }
 };
