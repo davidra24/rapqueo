@@ -57,21 +57,6 @@ export default {
     goPromos() {
       this.$router.push({ path: `/promociones` });
     },
-    /*    validateFecha(fechaInicio, fechaFin) {
-      var initialDate = new Date(fechaInicio);
-      var finalDate = new Date(fechaFin);
-      var actualDate = new Date();
-      return (
-        initialDate.getTime() < actualDate.getTime() &&
-        finalDate.getTime() > actualDate.getTime()
-      );
-    },
-    validarPromo(promo) {
-      return (
-        promo.producto.caracteristicas.cantidad > 0 &&
-        this.validateFecha(promo.fechaInicio, promo.fechaFin)
-      );
-    },*/
     validarPromos() {
       return this.promos;
     }
