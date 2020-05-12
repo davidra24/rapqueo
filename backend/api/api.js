@@ -209,6 +209,29 @@ api.get('/users/:id', queryUsuario.getOneUser);
 api.post('/users', queryUsuario.postUser);
 /**
  * @swagger
+ *  /api/users/:
+ *    post:
+ *      tags: ['Usuarios']
+ *      description: Agrega un Usuario
+ *      summary: Add a new User
+ *      requestBody:
+ *        description: Agrega un Usuario
+ *        required: true
+ *      parameters:
+ *        - name: Usuario
+ *          description: Users Object
+ *          in:  body
+ *          required: true
+ *          type: object
+ *      responses:
+ *        '200':
+ *          {description: Successful}
+ *        '500':
+ *          {description: Internal Server Error}
+ */
+api.post('/userByPhone', queryUsuario.getUserByPhone);
+/**
+ * @swagger
  *  /api/users/{id}:
  *    put:
  *      tags: ['Usuarios']

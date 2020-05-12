@@ -18,6 +18,21 @@ getOneUser = (req, res) => {
   });
 };
 
+getUserByPhone = (req, res) => {
+  const telefono = req.body.telefono;
+  Usuarios.findOne({ telefono })
+    .then((data) => {
+      if (data) {
+        res.send({ code: 200, data });
+      } else {
+        res.send({ code: 404, msg: 'Usuario no existente' });
+      }
+    })
+    .catch((err) => {
+      res.send({ code: 404, msg: 'Usuario no existente' });
+    });
+};
+
 postUser = (req, res) => {
   Usuarios.create(req.body).then((data) => {
     res.send(data);
@@ -42,7 +57,7 @@ putUser = async (req, res) => {
           nombre: data.nombre,
           apellido: data.apellido,
           admin: data.admin,
-          direccion: data.direccion ? data.direccion : null,
+          mensajero: data.mensajero,
         },
       });
     })
@@ -65,12 +80,11 @@ deleteUser = (req, res) => {
 };
 
 signup = async (req, res) => {
-  const data = {
+  const body = {
     ...req.body,
     contrasena: await bcrypt.hash(req.body.contrasena, 10),
-    admin: false,
   };
-  await Usuarios.create(data)
+  await Usuarios.create(body)
     .then((data) => {
       res.send({
         code: 200,
@@ -115,7 +129,7 @@ login = async (req, res) => {
               apellido: data.apellido,
               admin: data.admin,
               correo: data.correo,
-              direccion: data.direccion ? data.direccion : null,
+              mensajero: data.mensajero,
             },
           });
         }
@@ -312,4 +326,5 @@ module.exports = {
   forgotPassword,
   codeRecovery,
   recoveryPassword,
+  getUserByPhone,
 };

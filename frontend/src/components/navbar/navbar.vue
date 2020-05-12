@@ -38,6 +38,10 @@
                 <md-menu-item @click="irPromociones()">Promociones</md-menu-item>
                 <md-menu-item @click="irProductos()">Productos</md-menu-item>
                 <md-menu-item @click="irPedidos()">Pedidos</md-menu-item>
+                <md-menu-item @click="irUsuarios()">Usuarios</md-menu-item>
+              </div>
+              <div v-else-if="user.mensajero">
+                <md-menu-item @click="irPedidos()">Pedidos</md-menu-item>
               </div>
               <div v-else>
                 <md-menu-item @click="irPedido(user.id)">Mis pedidos</md-menu-item>
@@ -135,6 +139,9 @@ export default {
     },
     irInicioSesion() {
       this.$router.push(`/login`);
+    },
+    irUsuarios() {
+      this.$router.push("/admin/usuarios");
     },
     irCategorias() {
       this.$router.push(`/admin/categorias`);

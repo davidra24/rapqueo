@@ -1,9 +1,9 @@
 //DESARROLLO
-//export const apiUrl = 'http://localhost:3000';
+export const apiUrl = 'http://localhost:3000';
 //PRUEBAS
 //export const apiUrl = 'http://192.168.100.62:3000';
 //PRODUCCIÓN
-export const apiUrl = 'https://mercarchevere.herokuapp.com';
+//export const apiUrl = 'https://mercarchevere.herokuapp.com';
 export const categories = 'api/categories';
 export const products = 'api/products';
 export const productsByCategorie = 'api/productsByCategorie';
@@ -23,6 +23,7 @@ export const forgot = 'api/forgot';
 export const codeRecovery = 'api/code-recovery';
 export const recoveryPassword = 'api/recoveryPassword';
 export const productosSinPromo = 'api/products-no-promo';
+export const userByPhone = 'api/userByPhone';
 //Service worker and notifications
 export const public_key =
   'BNdocsBvG3mZu0FY2GUOD7kZsLykj5mnnroe49ws-vXAm-usT9WAUxORSJqmMWn-9E8N0-LPbIXYfFghauVkcoM';

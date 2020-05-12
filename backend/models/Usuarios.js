@@ -8,7 +8,8 @@ const usuario = new Schema({
   correo: { unique: true, type: String },
   contrasena: String,
   direccion: Array,
-  admin: Boolean,
+  admin: { type: Boolean, default: false },
+  mensajero: { type: Boolean, default: false },
   displayNotifications: Array,
 });
 
