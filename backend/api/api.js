@@ -1,5 +1,6 @@
 const express = require('express');
 const api = express.Router();
+const queryAdicional=require('../db/queriesAdicional');
 const queryCategoria = require('../db/queriesCategoria');
 const queryUsuario = require('../db/queriesUsuario');
 const queryProducto = require('../db/queriesProducto');
@@ -945,5 +946,78 @@ api.put('/roles/:id', queryRol.pullRole);
  *          {description: Internal Server Error}
  */
 api.delete('/roles/:id', queryRol.deleteRole);
+
+/**
+ * @swagger
+ *  /api/aditional/{id}:
+ *    get:
+ *      tags: ['Adicional']
+ *      description: Trae el precio adicional
+ *      summary: Get one product by ID
+ *      parameters:
+ *      - in: path
+ *        name: id
+ *        type: string
+ *        required: true
+ *        description: Id de adicional
+ *      responses:
+ *        '200':
+ *          {description: Successful}
+ *        '500':
+ *          {description: Internal Server Error}
+ */
+api.get('/aditional/:id', queryAdicional.getAditional);
+
+/**
+ * @swagger
+ *  /api/aditional:
+ *    post:
+ *      tags: ['Adicional']
+ *      description: Agrega el precio Adicional
+ *      summary: Add the Aditional Prices
+ *      requestBody:
+ *        description: Agrega el precio Adicional
+ *        required: true
+ *      parameters:
+ *        - name: adicional
+ *          description: Aditional Object
+ *          in:  body
+ *          required: true
+ *          type: object
+ *      responses:
+ *        '200':
+ *          {description: Successful}
+ *        '500':
+ *          {description: Internal Server Error}
+ */
+api.post('/aditional', queryAdicional.postAditional);
+/**
+ * @swagger
+ *  /api/Aditional/{id}:
+ *    put:
+ *      tags: ['Adicional']
+ *      description: Edita un Adicional
+ *      summary: Edit existent Aditional
+ *      requestBody:
+ *        description: Agrega un Adicional
+ *        required: true
+ *      parameters:
+ *        - in: path
+ *          name: id
+ *          type: string
+ *          required: true
+ *          description: Id de Adicional
+ *        - name: Adicional
+ *          description: Aditional Object
+ *          in:  body
+ *          required: true
+ *          type: object
+ *      responses:
+ *        '200':
+ *          {description: Successful}
+ *        '500':
+ *          {description: Internal Server Error}
+ */
+api.put('/aditional/:id', queryAdicional.pullAditional);
 
 module.exports = api;
