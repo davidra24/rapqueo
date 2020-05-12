@@ -4,8 +4,15 @@ const Promociones = require('../models/Promociones');
 const Productos = require('../models/Productos');
 
 getAllPromos = (req, res) => {
+  const today = new Date();
   Promociones.find().then((data) => {
-    res.send(data);
+    const filtered = data.filter(
+      (promo) =>
+        promo.fechaInicio.getTime() <= today.getTime() &&
+        promo.fechaFin.getTime() >= today.getTime() &&
+        promo.producto.caracteristicas.cantidad
+    );
+    res.send(filtered);
   });
 };
 
