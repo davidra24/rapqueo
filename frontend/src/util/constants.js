@@ -23,6 +23,7 @@ export const forgot = "api/forgot";
 export const codeRecovery = "api/code-recovery";
 export const recoveryPassword = "api/recoveryPassword";
 export const productosSinPromo = "api/products-no-promo";
+export const userByPhone = "api/userByPhone";
 export const aditionals = "api/aditional";
 //Service worker and notifications
 export const public_key =
