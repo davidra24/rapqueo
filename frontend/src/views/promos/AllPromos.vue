@@ -17,7 +17,7 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
-import { promos } from "@/util/constants";
+import { filteredPromos } from "@/util/constants";
 import { getApi } from "@/util/api";
 import Loading from "@/components/loading";
 import AllPromos from "@/components/promos/AllPromos.vue";
@@ -28,7 +28,7 @@ export default {
     Loading
   },
   computed: {
-    ...mapState(["promos"])
+    ...mapState(["filteredPromos"])
   },
   data() {
     return {
@@ -36,12 +36,12 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["setPromos", "setError"]),
+    ...mapActions(["setFilteredPromos", "setError"]),
     async fetch() {
       this.loading = true;
-      await getApi(promos)
+      await getApi(filteredPromos)
         .then(respuesta => {
-          this.setPromos(respuesta.data);
+          this.setFilteredPromos(respuesta.data);
           this.loading = false;
         })
         .catch(err => {
@@ -51,7 +51,7 @@ export default {
     }
   },
   mounted() {
-    if (!this.promos) {
+    if (!this.filteredPromos) {
       this.fetch();
     }
   }
