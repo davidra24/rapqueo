@@ -4,6 +4,11 @@ const Promociones = require('../models/Promociones');
 const Productos = require('../models/Productos');
 
 getAllPromos = (req, res) => {
+  Promociones.find().then((data) => {
+    res.send(data);
+  });
+};
+getFilteredPromos = (req, res) => {
   const today = new Date();
   Promociones.find().then((data) => {
     const filtered = data.filter(
@@ -50,6 +55,7 @@ deletePromo = (req, res) => {
 
 module.exports = {
   getAllPromos,
+  getFilteredPromos,
   getOnePromo,
   postPromo,
   pullPromo,

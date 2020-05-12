@@ -565,6 +565,20 @@ api.delete('/products/:id', queryProducto.deleteProduct);
 api.get('/promos', queryPromocion.getAllPromos);
 /**
  * @swagger
+ *  /api/promos:
+ *    get:
+ *      tags: ['Promociones']
+ *      description: Trae todos los Promociones
+ *      summary: Get All Promos
+ *      responses:
+ *        '200':
+ *          {description: Successful}
+ *        '500':
+ *          {description: Internal Server Error}
+ */
+api.get('/filteredPromos', queryPromocion.getFilteredPromos);
+/**
+ * @swagger
  *  /api/promos/{id}:
  *    get:
  *      tags: ['Promociones']

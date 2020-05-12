@@ -18,6 +18,7 @@ const store = new Vuex.Store({
     cart: null,
     openedCart: false,
     promos: null,
+    filteredPromos: null,
     productsNoPromo: null,
     promo: null,
     user: null,
@@ -73,6 +74,9 @@ const store = new Vuex.Store({
     },
     setPromos(state, promos) {
       state.promos = promos;
+    },
+    setFilteredPromos(state, filteredPromos) {
+      state.filteredPromos = filteredPromos;
     },
     setPromo(state, promo) {
       state.promo = promo;
@@ -145,6 +149,9 @@ const store = new Vuex.Store({
     },
     setPromos({ commit }, promos) {
       commit('setPromos', promos);
+    },
+    setFilteredPromos({ commit }, filteredPromos) {
+      commit('setFilteredPromos', filteredPromos);
     },
     setPromo({ commit }, promo) {
       commit('setPromo', promo);

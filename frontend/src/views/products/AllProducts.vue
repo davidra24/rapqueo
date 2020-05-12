@@ -17,7 +17,7 @@
 
 <script>
 import CarouselPromo from "@/components/promos";
-import { products, promos } from "@/util/constants";
+import { products, filteredPromos } from "@/util/constants";
 import AllProducts from "@/components/products/AllProducts.vue";
 import Loading from "@/components/loading";
 import { getApi } from "@/util/api";
@@ -30,7 +30,7 @@ export default {
     AllProducts
   },
   computed: {
-    ...mapState(["products", "promos"])
+    ...mapState(["products", "filteredPromos"])
   },
   data() {
     return {
@@ -39,7 +39,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["setProducts", "setError", "setPromos"]),
+    ...mapActions(["setProducts", "setError", "setFilteredPromos"]),
     async fetchProducts() {
       this.loadingProducts = true;
       await getApi(products)
@@ -54,9 +54,9 @@ export default {
     },
     async fetchPromos() {
       this.loadingPromos = true;
-      await getApi(promos)
+      await getApi(filteredPromos)
         .then(res => {
-          this.setPromos(res.data);
+          this.setFilteredPromos(res.data);
           this.loadingPromos = false;
         })
         .catch(err => {

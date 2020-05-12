@@ -12,7 +12,7 @@
             <CarouselCard :interval="2000" height="300px" type="card" arrow="hover">
               <CarouselCardItem
                 class="d-flex justify-content-center"
-                v-for="promo in promos"
+                v-for="promo in filteredPromos"
                 :key="promo._id"
               >
                 <Promo :promo="promo" />
@@ -23,7 +23,7 @@
             <CarouselCard :interval="2000" height="300px" arrow="hover">
               <CarouselCardItem
                 class="d-flex justify-content-center"
-                v-for="promo in promos"
+                v-for="promo in filteredPromos"
                 :key="promo._id"
               >
                 <Promo :promo="promo" />
@@ -51,14 +51,14 @@ export default {
     CarouselCardItem
   },
   computed: {
-    ...mapState(["promos"])
+    ...mapState(["filteredPromos"])
   },
   methods: {
     goPromos() {
       this.$router.push({ path: `/promociones` });
     },
     validarPromos() {
-      return this.promos;
+      return this.filteredPromos;
     }
   }
 };
