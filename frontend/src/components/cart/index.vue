@@ -13,9 +13,13 @@
                   </md-list-item>
                 </md-list>
                 <div class="col-12">
+                  <div>Subtotal: ${{totalPriece}}</div>
+                  <div>Domicilio: ${{aditional.precio}}</div>
+                </div>
+                <div class="col-12">
                   <h4>
                     <strong>Precio Total:</strong>
-                    ${{ totalPriece }}
+                    ${{ totalPriece +aditional.precio}}
                   </h4>
                 </div>
               </div>
@@ -235,7 +239,7 @@ export default {
     BuyContent
   },
   computed: {
-    ...mapState(["cart", "user"]),
+    ...mapState(["cart", "user", "aditional"]),
     ...mapGetters(["getCountCart", "totalPriece"])
   },
   methods: {
@@ -283,7 +287,7 @@ export default {
             metodo_pago: this.pago,
             productos: this.getProductos(),
             direccion,
-            total: this.totalPriece
+            total: this.totalPriece + this.aditional.precio
           };
 
           this.save(data);

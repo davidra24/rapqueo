@@ -23,7 +23,7 @@
                 </md-field>
               </md-card-content>
               <md-card-actions>
-                <md-button class="md-primary">Cambiar</md-button>
+                <md-button class="md-primary" @click="save">Cambiar</md-button>
               </md-card-actions>
             </md-card>
           </div>
@@ -63,14 +63,14 @@
 
 <script>
 import { postApi, putApi } from "../../../util/api";
-import { userByPhone, usuarios } from "../../../util/constants";
+import { userByPhone, usuarios, aditionals } from "../../../util/constants";
 import { errorMsg, successMsg } from "../../../util/utilMsg";
 import { mapState } from "vuex";
 import Loading from "../../../components/loading";
 export default {
   name: "Usuarios",
   computed: {
-    ...mapState(["user"])
+    ...mapState(["user", "aditional"])
   },
   data() {
     return {
@@ -121,6 +121,28 @@ export default {
           this.loading = false;
         });
     },
+    async save() {
+      this.loading = true;
+      const data = { precio: this.precio_envio };
+      await putApi(aditionals, "5eba3f6f5f6f9c35b497fb6c", data)
+        .then(response => {
+          if (response.data) {
+            const { code, msg } = response.data;
+            if (parseInt(code) === 200) {
+              successMsg("Mercar Chevere", msg);
+            } else {
+              errorMsg("Mercar Chevere", msg);
+            }
+          } else {
+            errorMsg("Mercar Chevere", "Error de servidor ");
+          }
+          this.loading = false;
+        })
+        .catch(err => {
+          errorMsg("Mercar Chevere", "Error de servidor " + err);
+          this.loading = false;
+        });
+    },
     async handleChange(type) {
       this.loading = true;
       if (type === "admin") {
@@ -129,7 +151,6 @@ export default {
         this.admin = !this.mensajero;
       }
       const data = { admin: this.admin, mensajero: this.mensajero };
-
       await putApi(usuarios, this.id, data)
         .then(response => {
           if (response.data) {
@@ -161,6 +182,7 @@ export default {
   },
   mounted() {
     this.validateAdmin();
+    this.precio_envio = this.aditional.precio;
   }
 };
 </script>
