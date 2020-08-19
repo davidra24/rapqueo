@@ -45,7 +45,7 @@ router.post('/subscribe', async (req, res) => {
 
 router.post('/sendNotification', async (req, res) => {
   const payload = await JSON.stringify({
-    title: 'MercarChevere.com',
+    title: 'MercarChevere.com.co',
     message: req.body.msg,
     url: req.body.url,
   });

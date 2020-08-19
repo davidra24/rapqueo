@@ -96,7 +96,7 @@ import { errorMsg, successMsg } from "@/util/utilMsg";
 import { urlBase64ToUint8Array, subscription } from "@/util";
 import { crypt, decrypt } from "@/util/utilCrypt";
 
-const isPhone = value => /^3(0|1|2|5)\d{8}$/.test(value); //phone valid
+const isPhone = (value) => /^3(0|1|2|5)\d{8}$/.test(value); //phone valid
 export default {
   name: "Login",
   mixins: [validationMixin],
@@ -104,23 +104,23 @@ export default {
     redireccionamiento: "/",
     form: {
       phone: null,
-      password: null
+      password: null,
     },
     sending: false,
-    lastUser: null
+    lastUser: null,
   }),
   validations: {
     form: {
       phone: {
         required,
         minLength: minLength(8),
-        phoneValid: isPhone
+        phoneValid: isPhone,
       },
       password: {
         required,
-        minLength: minLength(8)
-      }
-    }
+        minLength: minLength(8),
+      },
+    },
   },
   mounted() {
     this.validateSession();
@@ -131,7 +131,7 @@ export default {
       const field = this.$v.form[fieldName];
       if (field) {
         return {
-          "md-invalid": field.$invalid && field.$dirty
+          "md-invalid": field.$invalid && field.$dirty,
         };
       }
     },
@@ -149,7 +149,7 @@ export default {
     async subscribeNotification(id) {
       const subscribe = await subscription(urlBase64ToUint8Array(public_key));
       await postApi(notificationRegister, { id, subscribe }).then(
-        async result => {
+        async (result) => {
           await console.log("Notification: ", result);
         }
       );
@@ -158,10 +158,10 @@ export default {
       this.sending = true;
       const data = {
         telefono: `+57${this.form.phone}`,
-        contrasena: this.form.password
+        contrasena: this.form.password,
       };
       await postApi(login, data)
-        .then(async result => {
+        .then(async (result) => {
           if (result.data) {
             const { code, msg, token, data } = await result.data;
             if (parseInt(code) === 200) {
@@ -183,12 +183,12 @@ export default {
           } else {
             errorMsg(
               "Mercar Chevere",
-              "No se ha podido crear el usuario, error de conexión al servidor"
+              "No ha podido iniciar sesión el usuario, error de conexión al servidor"
             );
             this.sending = false;
           }
         })
-        .catch(err => {
+        .catch((err) => {
           this.setError(err);
           this.sending = false;
           errorMsg("Mercar Chevere", `${err}: Error de servidor`);
@@ -222,8 +222,8 @@ export default {
         : null;
       this.setSession(localSession);
       if (localSession && localToken) await this.$router.push("/");
-    }
-  }
+    },
+  },
 };
 </script>
 

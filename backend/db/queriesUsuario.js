@@ -201,12 +201,12 @@ forgotPassword = async (req, res) => {
       `;
 
       const options = {
-        host: 'mail.mercarchevere.com',
+        host: 'mail.mercarchevere.com.co',
         port: 587,
         secure: false,
         auth: {
-          user: 'info@mercarchevere.com',
-          pass: 'mercarchevere.com',
+          user: 'info@mercarchevere.com.co',
+          pass: 'mercarchevere.com.co',
         },
         tls: {
           rejectUnauthorized: false,
@@ -219,7 +219,7 @@ forgotPassword = async (req, res) => {
 
       await transporter
         .sendMail({
-          from: '📲🛒 MercarChevere <info@mercarchevere.com>',
+          from: '📲🛒 MercarChevere <info@mercarchevere.com.co>',
           to: email,
           subject: '🔑 ¡Recupera tu contraseña!',
           html: contentHTML,
