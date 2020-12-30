@@ -1,56 +1,75 @@
+const mySQLConnection=require('./mysqlconnect');
 require('dotenv/config');
 
-const Promociones = require('../models/Promociones');
-const Productos = require('../models/Productos');
-
 getAllPromos = (req, res) => {
-  Promociones.find().then((data) => {
-    res.send(data);
-  });
+  mySQLConnection.query('SELECT * FROM promos',(err, rows, fields)=>{
+    if(!err){
+      res.json(rows);
+    }else{
+      console.log(err);
+    }
+  })
 };
 getFilteredPromos = (req, res) => {
   const today = new Date();
-  Promociones.find().then((data) => {
-    const filtered = data.filter(
-      (promo) =>
-        promo.fechaInicio.getTime() <= today.getTime() &&
-        promo.fechaFin.getTime() >= today.getTime() &&
-        promo.producto.caracteristicas.cantidad
-    );
-    res.send(filtered);
-  });
+  mySQLConnection.query('SELECT * FROM promos',(err, rows, fields)=>{
+    if(!err){
+      const filtered = rows.filter(
+        (promo) =>
+          promo.fechaInicio.getTime() <= today.getTime() &&
+          promo.fechaFin.getTime() >= today.getTime() &&
+          promo.producto.caracteristicas.cantidad
+      );
+      res.json(filtered);
+    }else{
+      console.log(err);
+    }
+  })
 };
 
 getOnePromo = (req, res) => {
-  const id = req.params.id;
-  Promociones.findById(id).then((data) => {
-    res.send(data);
-  });
+  const id = req.params;
+  mySQLConnection.query('SELECT * FROM promos WHERE id=?',[id],(err, rows, fields)=>{
+    if(!err){
+      res.json(rows);
+    }else{
+      console.log(err);
+    }
+  })
 };
 
 postPromo = async (req, res) => {
-  const producto = await Productos.findById(req.body.idProducto);
-  const promocion = new Promociones(req.body);
-  promocion.producto = producto;
-  promocion.markModified('producto');
-  await promocion.save();
-  await res.send(promocion);
+  const { fechaInicio, fechaFin, message, percentaje, id_product }=req.body;
+  mySQLConnection.query('INSERT INTO promos (fechaInicio, fechaFin, message, percentaje, id_product) values(?, ?, ?, ?, ?) ',[fechaInicio, fechaFin, message, percentaje, id_product],(err, rows, fields)=>{
+    if(!err){
+      res.json({Status: 'Promocion añadida'});
+    }else{
+      console.log(err);
+    }
+  })
 };
 
 pullPromo = (req, res) => {
-  Promociones.findByIdAndUpdate(
-    req.params.id,
-    req.body,
-    (err, todo) => {}
-  ).then((data) => {
-    res.send(data);
-  });
+  const { fechaInicio, fechaFin, message, percentaje, id_product }=req.body;
+  const { id } = req.params;
+  mySQLConnection.query('UPDATE promos SET(fechaInicio=?, fechaFin=?, message=?, percentaje=?, id_product=?) WHERE id=?',[fechaInicio, fechaFin, message, percentaje, id_product, id],(err, rows, fields)=>{
+    if(!err){
+      res.json({Status: 'Promocion actualizada'});
+    }else{
+      console.log(err);
+    }
+  })
 };
 
 deletePromo = (req, res) => {
-  Promociones.findByIdAndRemove(req.params.id).then((data) => {
-    res.send(data);
-  });
+  const { id } = req.params;
+  mySQLConnection.query('DELETE FROM promos WHERE id=?',[id],(err, rows, fields)=>{
+    if(!err){
+      res.json({Status: 'Promocion eliminada'});
+    }else{
+      console.log(err);
+    }
+  })
 };
 
 module.exports = {

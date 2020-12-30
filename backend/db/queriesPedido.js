@@ -1,3 +1,4 @@
+const mySQLConnection=require('./mysqlconnect');
 require('dotenv/config');
 
 const webpush = require('web-push');
@@ -13,30 +14,46 @@ webpush.setVapidDetails(
 );
 
 getAllOrders = (req, res) => {
-  Pedidos.find().then((data) => {
-    res.send(data);
-  });
+  mySQLConnection.query('SELECT * FROM orders',(err, rows, fields)=>{
+    if(!err){
+      res.json(rows);
+    }else{
+      console.log(err);
+    }
+  })
 };
 
 getOrdersByUser = (req, res) => {
-  const id = req.params.id;
-  Pedidos.find({ id_usuario: id }).then((data) => {
-    res.send(data);
-  });
+  const { id } = req.params;
+  mySQLConnection.query('SELECT * FROM order_user WHERE id_user=?',[id],(err, rows, fields)=>{
+    if(!err){
+      res.json(rows);
+    }else{
+      console.log(err);
+    }
+  })
 };
 
 getOrdersByState = (req, res) => {
-  const id = req.params.id;
-  Pedidos.find({ estado: id }).then((data) => {
-    res.send(data);
-  });
+  const { id } = req.params;
+  mySQLConnection.query('SELECT * FROM orders WHERE state=?',[id],(err, rows, fields)=>{
+    if(!err){
+      res.json(rows);
+    }else{
+      console.log(err);
+    }
+  })
 };
 
 getOneOrder = (req, res) => {
-  const id = req.params.id;
-  Pedidos.findById(id).then((data) => {
-    res.send(data);
-  });
+  const { id } = req.params;
+  mySQLConnection.query('SELECT * FROM orders WHERE id=?',[id],(err, rows, fields)=>{
+    if(!err){
+      res.json(rows);
+    }else{
+      console.log(err);
+    }
+  })
 };
 
 postOrder = async (req, res) => {
@@ -122,17 +139,26 @@ updateStateOrder = async (req, res) => {
 };
 
 pullOrder = (req, res) => {
-  Pedidos.findByIdAndUpdate(req.params.id, req.body, (err, todo) => {}).then(
-    (data) => {
-      res.send(data);
+  const { date, state, aditional }=req.body;
+  const { id } = req.params;
+  mySQLConnection.query('UPDATE orders SET(date=?, state=?, aditional=?) WHERE id=?',[date, state, aditional, id],(err, rows, fields)=>{
+    if(!err){
+      res.json({Status: 'Orden actualizada'});
+    }else{
+      console.log(err);
     }
-  );
+  })
 };
 
 deleteOrder = (req, res) => {
-  Pedidos.findByIdAndRemove(req.params.id).then((data) => {
-    res.send(data);
-  });
+  const { id } = req.params;
+  mySQLConnection.query('DELETE FROM orders WHERE id=?',[id],(err, rows, fields)=>{
+    if(!err){
+      res.json({Status: 'Orden eliminada'});
+    }else{
+      console.log(err);
+    }
+  })
 };
 
 const sendNotification = async (notification, body) => {

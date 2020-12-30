@@ -1,32 +1,43 @@
+const mySQLConnection=require('./mysqlconnect');
+
 require("dotenv/config");
 
-const Adicional = require("../models/Adicional");
-
 getAditional = (req, res) => {
-  const id = req.params.id;
-  Adicional.findById(id).then((data) => {
-    res.send(data);
-  });
-};
+  const { id }=req.params;
+  mySQLConnection.query('SELECT * FROM aditional WHERE id=?',[id], (err, rows, fields)=>{
+    if(!err){
+      res.json(rows);
+    }else{
+      console.log(err);
+    }
+  })
+}
 
 postAditional = (req, res) => {
-  Adicional.create(req.body).then((data) => {
-    res.send(data);
-  });
+  const{ price }=req.body;
+  mySQLConnection.query('INSERT INTO aditional (price) VALUES(?)',[price],(err, rows, fields)=>{
+    if(!err){
+      res.json({Status: 'Adicional agregado'});
+    } else{
+      console.log(err);
+    }
+  })
 };
 
-pullAditional = (req, res) => {
-  Adicional.findByIdAndUpdate(req.params.id, req.body)
-    .then((data) => {
-      res.send({ code: 200, data, msg: "Ok" });
-    })
-    .catch((err) => {
-      res.send({ code: 500, msg: err });
-    });
+putAditional = (req, res) => {
+  const {price} = req.body;
+  const {id} = req.params;
+  mySQLConnection.query('UPDATE aditional SET price=? WHERE id=?',[price, id],(err,rows,fieds)=>{
+    if(!err){
+      res.json({Status: 'Actualizado'});
+    }else{
+      console.log(err);
+    }
+  })
 };
 
 module.exports = {
   getAditional,
   postAditional,
-  pullAditional,
+  putAditional,
 };

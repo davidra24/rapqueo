@@ -1,3 +1,4 @@
+const mySQLConnection=require('./mysqlconnect');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Codigos = require('../models/Codigos');
@@ -6,13 +7,24 @@ const nodemailer = require('nodemailer');
 const smtpTransport = require('nodemailer-smtp-transport');
 
 getAllUsers = (req, res) => {
-  Usuarios.find().then((data) => {
-    res.send(data);
-  });
+  mySQLConnection.query('SELECT * FROM users', (err, rows, fields)=>{
+    if(!err){
+      res.json(rows);
+    }else{
+      console.log(err);
+    }
+  })
 };
 
 getOneUser = (req, res) => {
-  const id = req.params.id;
+  const { id } = req.params;
+  mySQLConnection.query('SELECT * FROM users WHERE id=?',[id], (err, rows, fields)=>{
+    if(!err){
+      res.json(rows);
+    }else{
+      console.log(err);
+    }
+  })
   Usuarios.findById(id).then((data) => {
     res.send(data);
   });
@@ -34,9 +46,14 @@ getUserByPhone = (req, res) => {
 };
 
 postUser = (req, res) => {
-  Usuarios.create(req.body).then((data) => {
-    res.send(data);
-  });
+const { name, lastname, phone, email, password, direction, admin, deliver, displayNotification }=req.body;
+  mySQLConnection.query('INSERT INTO users (name, lastname, phone, email, password, direction, admin, deliver, displayNotification) VALUES(?, ? ,? ,?, ?, ?, ?, ?, ? )',[name, lastname, phone, email, password, direction, admin, deliver, displayNotification], (err, rows, fields)=>{
+    if(!err){
+      res.json(rows);
+    }else{
+      console.log(err);
+    }
+  })
 };
 
 putUser = async (req, res) => {
@@ -74,9 +91,14 @@ putUser = async (req, res) => {
 };
 
 deleteUser = (req, res) => {
-  Usuarios.findByIdAndRemove(req.params.id).then((data) => {
-    res.send(data);
-  });
+  const { id } = req.params;
+  mySQLConnection.query('DELETE FROM users WHERE id=?',[id],(err, rows, fields)=>{
+    if(!err){
+      res.json({Status: 'Usuario eliminado'});
+    }else{
+      console.log(err);
+    }
+  })
 };
 
 signup = async (req, res) => {

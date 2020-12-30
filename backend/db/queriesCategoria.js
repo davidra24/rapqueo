@@ -1,49 +1,60 @@
+const mySQLConnection=require('./mysqlconnect');
+
 require('dotenv/config');
 
-const Categorias = require('../models/Categorias');
-
 getAllCategories = (req, res) => {
-  Categorias.find().then((data) => {
-    res.send(data);
-  });
+  mySQLConnection.query('SELECT * FROM categories', (err, rows, fields)=>{
+    if(!err){
+      res.json(rows);
+    }else{
+      console.log(err);
+    }
+  })
 };
 
 getOneCategorie = (req, res) => {
-  const id = req.params.id;
-
-  Categorias.findById(id)
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      res.send('404');
-    });
-};
-
-postCategorie = (req, res) => {
-  Categorias.create(req.body)
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
+  const { id }=req.params;
+  mySQLConnection.query('SELECT * FROM categories WHERE id=?',[id], (err, rows, fields)=>{
+    if(!err){
+      res.json(rows);
+    }else{
       console.log(err);
-    });
+    }
+  })
+};
+ 
+postCategorie = (req, res) => {
+  const{ name, id_photo, subcategorie }=req.body;
+  mySQLConnection.query('INSERT INTO categories (name, id_photo, subcategorie) VALUES(?,?,?)',[name, id_photo, subcategorie],(err, rows, fields)=>{
+    if(!err){
+      res.json({Status: 'Categoria agregada'});
+    } else{
+      console.log(err);
+    }
+  })
 };
 
 pullCategorie = (req, res) => {
-  Categorias.findByIdAndUpdate(req.params.id, req.body, (err, todo) => {})
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
+  const { name, id_photo, subcategorie } = req.body;
+  const { id } = req.params;
+  mySQLConnection.query('UPDATE categories SET name=?, id_photo=?, subcategorie=? WHERE id=?',[name, id_photo, subcategorie, id],(err, rows, fields)=>{
+    if(!err){
+      res.json({Status: 'Categoria actualizada'});
+    } else{
       console.log(err);
-    });
+    }
+  })
 };
 
 deleteCategorie = (req, res) => {
-  Categorias.findByIdAndRemove(req.params.id).then((data) => {
-    res.send(data);
-  });
+  const { id } = req.params;
+  mySQLConnection.query('DELETE FROM categories WHERE id=?',[id],(err, rows, fields)=>{
+    if(!err){
+      res.json({Status: 'Categoria eliminada'});
+    }else{
+      console.log(err);
+    }
+  })
 };
 
 module.exports = {
