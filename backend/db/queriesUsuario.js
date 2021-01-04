@@ -1,197 +1,221 @@
-const mySQLConnection=require('./mysqlconnect');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const Codigos = require('../models/Codigos');
-const Usuarios = require('../models/Usuarios');
-const nodemailer = require('nodemailer');
-const smtpTransport = require('nodemailer-smtp-transport');
+const mySQLConnection = require("./mysqlconnect");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const Codigos = require("../models/Codigos");
+const Usuarios = require("../models/Usuarios");
+const nodemailer = require("nodemailer");
+const smtpTransport = require("nodemailer-smtp-transport");
 
 getAllUsers = (req, res) => {
-  mySQLConnection.query('SELECT * FROM users', (err, rows, fields)=>{
-    if(!err){
+  mySQLConnection.query("SELECT * FROM users", (err, rows, fields) => {
+    if (!err) {
       res.json(rows);
-    }else{
+    } else {
       console.log(err);
     }
-  })
+  });
 };
 
 getOneUser = (req, res) => {
   const { id } = req.params;
-  mySQLConnection.query('SELECT * FROM users WHERE id=?',[id], (err, rows, fields)=>{
-    if(!err){
-      res.json(rows);
-    }else{
-      console.log(err);
+  mySQLConnection.query(
+    "SELECT * FROM users WHERE id=?",
+    [id],
+    (err, rows, fields) => {
+      if (!err) {
+        res.json(rows);
+      } else {
+        console.log(err);
+      }
     }
-  })
-  Usuarios.findById(id).then((data) => {
-    res.send(data);
-  });
+  );
 };
 
 getUserByPhone = (req, res) => {
   const telefono = req.body.telefono;
-  Usuarios.findOne({ telefono })
-    .then((data) => {
-      if (data) {
-        res.send({ code: 200, data });
+  mySQLConnection.query(
+    "SELECT * FROM users WHERE phone=?",
+    [telefono],
+    (err, rows, fields) => {
+      if (!err) {
+        res.send({ code: 200, rows });
       } else {
-        res.send({ code: 404, msg: 'Usuario no existente' });
+        res.send({ code: 404, msg: "Usuario no existente" });
       }
-    })
-    .catch((err) => {
-      res.send({ code: 404, msg: 'Usuario no existente' });
-    });
+    }
+  );
 };
 
 postUser = (req, res) => {
-const { name, lastname, phone, email, password, direction, admin, deliver, displayNotification }=req.body;
-  mySQLConnection.query('INSERT INTO users (name, lastname, phone, email, password, direction, admin, deliver, displayNotification) VALUES(?, ? ,? ,?, ?, ?, ?, ?, ? )',[name, lastname, phone, email, password, direction, admin, deliver, displayNotification], (err, rows, fields)=>{
-    if(!err){
-      res.json(rows);
-    }else{
-      console.log(err);
+  const {
+    name,
+    lastname,
+    phone,
+    email,
+    password,
+    direction,
+    admin,
+    deliver,
+    displayNotification,
+  } = req.body;
+  mySQLConnection.query(
+    "INSERT INTO users (name, lastname, phone, email, password, direction, admin, deliver, displayNotification) VALUES(?, ? ,? ,?, ?, ?, ?, ?, ? )",
+    [
+      name,
+      lastname,
+      phone,
+      email,
+      password,
+      direction,
+      admin,
+      deliver,
+      displayNotification,
+    ],
+    (err, rows, fields) => {
+      if (!err) {
+        res.json(rows);
+      } else {
+        console.log(err);
+      }
     }
-  })
+  );
 };
 
 putUser = async (req, res) => {
-  if (req.body.contrasena) {
-    const contrasena = await bcrypt.hash(req.body.contrasena, 10);
+  if (req.body.password) {
+    const contrasena = await bcrypt.hash(req.body.password, 10);
     var body = { ...req.body, contrasena };
   } else {
     var body = req.body;
   }
-  await Usuarios.findByIdAndUpdate(req.params.id, body)
-    .then((data) => {
-      res.send({
-        code: 200,
-        msg: 'Se han actualizado los datos personales satisfactoriamente',
-        data: {
-          id: data._id,
-          telefono: data.telefono,
-          nombre: data.nombre,
-          apellido: data.apellido,
-          admin: data.admin,
-          mensajero: data.mensajero,
-        },
-      });
-    })
-    .catch((err) => {
-      if (err.code === 11000) {
+  mySQLConnection.query(
+    "UPDATE users SET name=?, lastname=?, phone=?, email=?, password=?, direction=?, admin=?, deliver=?, displayNotification=? WHERE id=?",
+    [
+      body.name,
+      body.lastname,
+      body.phone,
+      body.email,
+      body.contrasena,
+      body.direction,
+      body.admin,
+      body.deliver,
+      body.displayNotification,
+      body.id,
+    ],
+    (err, rows, fields) => {
+      if (!err) {
         res.send({
-          code: 401,
-          msg: 'El Usuario con ese correo electrónico ya existe en el sistema',
+          code: 200,
+          msg: "Se han actualizado los datos personales satisfactoriamente",
         });
       } else {
-        res.send({ code: 500, msg: 'Error de servidor' });
+        res.send({ code: 500, msg: "Error de servidor" });
       }
-    });
+    }
+  );
 };
 
 deleteUser = (req, res) => {
   const { id } = req.params;
-  mySQLConnection.query('DELETE FROM users WHERE id=?',[id],(err, rows, fields)=>{
-    if(!err){
-      res.json({Status: 'Usuario eliminado'});
-    }else{
-      console.log(err);
+  mySQLConnection.query(
+    "DELETE FROM users WHERE id=?",
+    [id],
+    (err, rows, fields) => {
+      if (!err) {
+        res.json({ Status: "Usuario eliminado" });
+      } else {
+        console.log(err);
+      }
     }
-  })
+  );
 };
 
 signup = async (req, res) => {
   const body = {
     ...req.body,
-    contrasena: await bcrypt.hash(req.body.contrasena, 10),
+    contrasena: await bcrypt.hash(req.body.password, 10),
   };
-  await Usuarios.create(body)
-    .then((data) => {
-      res.send({
-        code: 200,
-        msg: '¡Usuario creado con éxito! :)',
-        data: {
-          telefono: req.body.telefono,
-          contrasena: req.body.contrasena,
-        },
-      });
-    })
-    .catch((err) => {
-      if (err.code === 11000) {
+  mySQLConnection.query(
+    "INSERT INTO users (name, lastname, phone, email, password, direction, admin, deliver, displayNotification) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)",
+    [
+      body.name,
+      body.lastname,
+      body.phone,
+      body.email,
+      body.contrasena,
+      body.direction,
+      body.admin,
+      body.deliver,
+      body.displayNotification,
+    ],
+    (err, rows, fields) => {
+      if (!err) {
         res.send({
-          code: 401,
-          msg:
-            'El Usuario con ese número de teléfono o correo electrónico ya existe en la base de datos',
+          code: 200,
+          msg: "¡Usuario creado con éxito! :)",
         });
       } else {
-        res.send({ code: 500, msg: 'Error de servidor' });
+        res.send({ code: 500, msg: "Error de servidor" });
       }
-    });
+    }
+  );
 };
 
 login = async (req, res) => {
   const { telefono, contrasena } = req.body;
-  await Usuarios.findOne({ telefono })
-    .then((data) => {
-      bcrypt.compare(contrasena, data.contrasena).then((result) => {
+  mySQLConnection.query("SELECT * from users WHERE phone=?",[telefono],(err,rows, fields)=>{
+    if(!err){
+      bcrypt.compare(contrasena, rows.password).then((result) => {
         if (!result) {
-          res.send({ code: 402, msg: 'Teléfono o contraseña incorrecto' });
+          res.send({ code: 402, msg: "Teléfono o contraseña incorrecto" });
         } else {
           const secretKey = process.env.KEY;
-          const token = jwt.sign({ id: data._id }, secretKey);
+          const token = jwt.sign({ id: rows.id }, secretKey);
           res.send({
             code: 200,
-            msg: 'Sesión iniciada correctamente',
+            msg: "Sesión iniciada correctamente",
             token,
             data: {
-              id: data._id,
-              telefono: data.telefono,
-              nombre: data.nombre,
-              apellido: data.apellido,
-              admin: data.admin,
-              correo: data.correo,
-              mensajero: data.mensajero,
+              id: rows.id,
+              phone: rows.phone,
+              name: rows.name,
+              lastname: rows.lastname,
+              admin: rows.admin,
+              email: rows.email,
+              deliver: rows.deliver,
             },
           });
         }
       });
-    })
-    .catch((err) => {
-      res.send({ code: 404, msg: 'Teléfono o contraseña incorrecto' });
-    });
+    }else{
+      res.send({ code: 404, msg: "Teléfono o contraseña incorrecto" });
+    }
+  })
 };
 
 verifyPassword = async (req, res) => {
   const { telefono, contrasena } = req.body;
-  await Usuarios.findOne({ telefono })
-    .then((data) => {
-      bcrypt.compare(contrasena, data.contrasena).then((result) => {
-        if (!result) {
-          res.send({
-            code: 402,
-            msg: 'La contraseña antigua es incorrecta, por favor verifíquela',
-          });
-        } else {
-          res.send({
-            code: 200,
-            msg: 'Correcto',
-          });
-        }
-      });
-    })
-    .catch((err) => {
-      res.send({
-        code: 404,
-        msg: 'La contraseña antigua es incorrecta, por favor verifíquela',
-      });
+  mySQLConnection.query("SELECT * FROM users WHERE phone=?",[telefono],(err, rows, fields)=>{
+    bcrypt.compare(contrasena, rows.password).then((result) => {
+      if (!result) {
+        res.send({
+          code: 402,
+          msg: "La contraseña antigua es incorrecta, por favor verifíquela",
+        });
+      } else {
+        res.send({
+          code: 200,
+          msg: "Correcto",
+        });
+      }
     });
+  })
 };
 
 function makeid(length) {
-  var result = '';
+  var result = "";
   var characters =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   var charactersLength = characters.length;
   for (var i = 0; i < length; i++) {
     result += characters.charAt(Math.floor(Math.random() * charactersLength));
@@ -202,111 +226,97 @@ function makeid(length) {
 forgotPassword = async (req, res) => {
   const { email } = req.body;
   const codigo = makeid(6);
-  await Usuarios.findOne({ correo: email })
-    .then(async (usuario) => {
-      if (!usuario) {
-        res.send({ code: 501, msg: 'Correo no existente' });
-      }
-      const { correo } = usuario;
-      contentHTML = `
-        <h1>Mercarchevere.com</h1>
-        <strong>
-        <p>🥳 Bienvenido a mercarchevere.com </p>
-        <p>🤖 Como no queremos que te quedes sin utilizar nuestros servicios</p>
-        </strong>
-        <p>🤫 Te enviamos el siguiente Código de restauración para tu cuenta.</p>
-        <p>😎 Disfruta tus compras </p>
-        <br/>
-        <br/>
-        <p>🤯 Tu código es</p>
-        <h3>${codigo}</h3>
-      `;
+  mySQLConnection.query("SELECT * FROM users where email=?",[email],(err, rows, fields)=>{
+    if (!rows) {
+      res.send({ code: 501, msg: "Correo no existente" });
+    }
+    const { correo } = rows.email;
+    const { idUser } = rows.id;
+    contentHTML = `
+      <h1>Mercarchevere.com</h1>
+      <strong>
+      <p>🥳 Bienvenido a mercarchevere.com </p>
+      <p>🤖 Como no queremos que te quedes sin utilizar nuestros servicios</p>
+      </strong>
+      <p>🤫 Te enviamos el siguiente Código de restauración para tu cuenta.</p>
+      <p>😎 Disfruta tus compras </p>
+      <br/>
+      <br/>
+      <p>🤯 Tu código es</p>
+      <h3>${codigo}</h3>
+    `;
 
-      const options = {
-        host: 'mail.mercarchevere.com',
-        port: 587,
-        secure: false,
-        auth: {
-          user: 'info@mercarchevere.com',
-          pass: 'mercarchevere.com',
-        },
-        tls: {
-          rejectUnauthorized: false,
-        },
-      };
+    const options = {
+      host: "mail.mercarchevere.com",
+      port: 587,
+      secure: false,
+      auth: {
+        user: "info@mercarchevere.com",
+        pass: "mercarchevere.com",
+      },
+      tls: {
+        rejectUnauthorized: false,
+      },
+    };
 
-      const transporter = await nodemailer.createTransport(
-        smtpTransport(options)
-      );
+    const transporter = await nodemailer.createTransport(
+      smtpTransport(options)
+    );
 
-      await transporter
-        .sendMail({
-          from: '📲🛒 MercarChevere <info@mercarchevere.com>',
-          to: email,
-          subject: '🔑 ¡Recupera tu contraseña!',
-          html: contentHTML,
+    await transporter
+      .sendMail({
+        from: "📲🛒 MercarChevere <info@mercarchevere.com>",
+        to: email,
+        subject: "🔑 ¡Recupera tu contraseña!",
+        html: contentHTML,
+      })
+      .then((response) => {
+        console.log("mail sended", response.messageId);
+        mySQLConnection.query("INSERT INTO recuperation_codes (code, used, expiration, id_user) VALUES(?, 0, ?, ?)",[codigo, getExpiration(),idUser],(err, rows, fields)=>{
+          if(!err){
+            res.send({ code: 200, msg: "Ok" });
+          }else {
+            res.send({
+              code: 500,
+              msg: "Error de conexión con el servidor de correo",
+            });
+          }
         })
-        .then((response) => {
-          console.log('mail sended', response.messageId);
-          Codigos.create({
-            correo,
-            codigo,
-            expiracion: getExpiration(),
-          }).then((response) => {
-            res.send({ code: 200, msg: 'Ok' });
-          });
-        })
-        .catch((err) => {
-          res.send({
-            code: 500,
-            msg: 'Error de conexión con el servidor de correo',
-          });
-        });
+      })
     })
-    .catch((err) => {
-      res.send({
-        code: 500,
-        msg: 'Error de conexión con el servidor de correo',
-      });
-    });
 };
 
 codeRecovery = async (req, res) => {
   const { codigo, correo } = req.body;
-  await Codigos.findOne({ codigo, correo })
-    .then(async (response) => {
-      if (response) {
-        var valido = false;
-        const { _id, utilizado, expiracion } = response;
-        if (!utilizado && compareDates(expiracion)) {
+  mySQLConnection.query("SELECT * FROM recuperation_codes WHERE code=? AND email=?",[codigo, correo],(err, rows, fields)=>{
+    if(!err){
+      var valido = false;
+        if (rows.used==0 && compareDates(rows.expiration)) {
           valido = true;
-          await Codigos.findByIdAndUpdate(_id, { utilizado: true }).then(
+          mySQLConnection.query("UPDATE recuperation_codes SET used=1 WHERE id=?",[rows.id],(err, rows, fields)=>{
             (response) => {
               res.send({
                 code: 200,
-                msg: 'Se ha comprobado el código exitosamente',
+                msg: "Se ha comprobado el código exitosamente",
                 data: response,
               });
             }
-          );
+          })
           return;
         }
         if (!valido) {
           res.send({
             code: 500,
-            msg: 'El código proporcionado no es correcto o ha expirado',
+            msg: "El código proporcionado no es correcto o ha expirado",
           });
         }
-      } else {
-        res.send({
-          code: 500,
-          msg: 'El código proporcionado no es correcto',
-        });
-      }
-    })
-    .catch((err) => {
-      res.send({ code: 500, msg: 'El código proporcionado no es correcto' });
-    });
+    }else{
+      res.send({
+        code: 500,
+        msg: "El código proporcionado no es correcto",
+      });
+    }
+  })
 };
 
 function compareDates(date) {
@@ -322,18 +332,18 @@ function getExpiration() {
 
 recoveryPassword = async (req, res) => {
   const { correo } = req.body;
-  const contrasena = await bcrypt.hash(req.body.contrasena, 10);
-  await Usuarios.findOneAndUpdate({ correo }, { contrasena })
-    .then((response) => {
+  const contrasena = await bcrypt.hash(req.body.password, 10);
+  mySQLConnection.query("UPDATE users SET password=? WHERE email=?",[contrasena, correo],(err, rows, fields)=>{
+    if(!err){
       res.send({
         code: 200,
-        msg: 'Su contraseña se ha actualizado con éxito, puede iniciar sesión',
+        msg: "Su contraseña se ha actualizado con éxito, puede iniciar sesión",
         respuesta: response,
       });
-    })
-    .catch((err) => {
-      res.send({ code: 500, msg: 'No se ha podido cambiar la contraseña' });
-    });
+    }else{
+      res.send({ code: 500, msg: "No se ha podido cambiar la contraseña" });
+    }
+  })
 };
 
 module.exports = {
