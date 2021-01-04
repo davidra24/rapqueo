@@ -1,10 +1,8 @@
-const mySQLConnection = require("./mysqlconnect");
+const connection = require("./mysqlconnect");
 require("dotenv/config");
 
-const Productos = require("../models/Productos");
-const Promos = require("../models/Promociones");
-
 getAllProducts = (req, res) => {
+  const mySQLConnection = connection();
   mySQLConnection.query("SELECT * FROM products", (err, rows, fields) => {
     if (!err) {
       res.json(rows);
@@ -15,9 +13,11 @@ getAllProducts = (req, res) => {
 };
 
 getAllProductsWithoutPromo = async (req, res) => {
+  const mySQLConnection = connection();
   mySQLConnection.query("SELECT * FROM promos", (err, rows, fields) => {
     if (!err) {
       async (promos) => {
+        const mySQLConnection = connection();
         mySQLConnection.query("SELECT * FROM products", (err, rows, fieds) => {
           if (!err) {
             async (productos) => {
@@ -47,6 +47,7 @@ getAllProductsWithoutPromo = async (req, res) => {
 };
 
 getProductWithoutCategorie = (req, res) => {
+  const mySQLConnection = connection();
   mySQLConnection.query(
     "SELECT * FROM products WHERE id_categorie=null",
     (err, rows, fields) => {
@@ -61,6 +62,7 @@ getProductWithoutCategorie = (req, res) => {
 
 getOneProduct = (req, res) => {
   const { id } = req.params;
+  const mySQLConnection = connection();
   mySQLConnection.query(
     "SELECT * FROM products WHERE id=?",
     [id],
@@ -76,6 +78,7 @@ getOneProduct = (req, res) => {
 
 getProductsByCategorie = (req, res) => {
   const id = req.params;
+  const mySQLConnection = connection();
   mySQLConnection.query(
     "SELECT * FROM products WHERE id_categorie=?",
     [id],
@@ -91,6 +94,7 @@ getProductsByCategorie = (req, res) => {
 
 postProduct = (req, res) => {
   const { name, caracteristics, id_photo, id_categorie } = req.body;
+  const mySQLConnection = connection();
   mySQLConnection.query(
     "INSERT INTO products (name, caracteristics, id_photo, id_categorie) VALUES(?,?,?,?)",
     [name, caracteristics, id_photo, id_categorie],
@@ -107,6 +111,7 @@ postProduct = (req, res) => {
 pullProduct = (req, res) => {
   const { name, caracteristics, id_photo, id_categorie } = req.body;
   const { id } = req.params;
+  const mySQLConnection = connection();
   mySQLConnection.query(
     "UPDATE products SET name=?, caracteristics=?, id_photo=?, id_categorie=? WHERE id=?",
     [name, caracteristics, id_photo, id_categorie, id],
@@ -122,6 +127,7 @@ pullProduct = (req, res) => {
 
 deleteProduct = (req, res) => {
   const { id } = req.params;
+  const mySQLConnection = connection();
   mySQLConnection.query(
     "DELETE FROM products WHERE id=?",
     [id],

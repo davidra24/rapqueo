@@ -1,9 +1,10 @@
-const mySQLConnection = require("./mysqlconnect");
+const connection = require("./mysqlconnect");
 
 require("dotenv/config");
 
 getAditional = (req, res) => {
   const { id } = req.params;
+  const mySQLConnection = connection();
   mySQLConnection.query(
     "SELECT * FROM aditional WHERE id=?",
     [id],
@@ -19,10 +20,12 @@ getAditional = (req, res) => {
 
 postAditional = (req, res) => {
   const { price } = req.body;
+  let mySQLConnection = connection();
   mySQLConnection.query(
     "UPDATE aditional SET active=0 WHERE active=1",
     (err, rows, fields) => {}
   );
+  mySQLConnection = connection();
   mySQLConnection.query(
     "INSERT INTO aditional (price, active) VALUES(? , 1)",
     [price],
@@ -39,6 +42,7 @@ postAditional = (req, res) => {
 putAditional = (req, res) => {
   const { price } = req.body;
   const { id } = req.params;
+  const mySQLConnection = connection();
   mySQLConnection.query(
     "UPDATE aditional SET price=? WHERE id=?",
     [price, id],

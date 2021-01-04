@@ -1,4 +1,4 @@
-const mySQLConnection = require("./mysqlconnect");
+const connection = require("./mysqlconnect");
 require("dotenv/config");
 
 const webpush = require("web-push");
@@ -10,6 +10,7 @@ webpush.setVapidDetails(
 );
 
 getAllOrders = (req, res) => {
+  const mySQLConnection = connection();
   mySQLConnection.query("SELECT * FROM orders", (err, rows, fields) => {
     if (!err) {
       res.json(rows);
@@ -21,6 +22,7 @@ getAllOrders = (req, res) => {
 
 getOrdersByUser = (req, res) => {
   const { id } = req.params;
+  const mySQLConnection = connection();
   mySQLConnection.query(
     "SELECT * FROM order_user WHERE id_user=?",
     [id],
@@ -36,6 +38,7 @@ getOrdersByUser = (req, res) => {
 
 getOrdersByState = (req, res) => {
   const { id } = req.params;
+  const mySQLConnection = connection();
   mySQLConnection.query(
     "SELECT * FROM orders WHERE state=?",
     [id],
@@ -51,6 +54,7 @@ getOrdersByState = (req, res) => {
 
 getOneOrder = (req, res) => {
   const { id } = req.params;
+  const mySQLConnection = connection();
   mySQLConnection.query(
     "SELECT * FROM orders WHERE id=?",
     [id],
@@ -69,6 +73,7 @@ postOrder = async (req, res) => {
   let existencia = true;
   let msg = "No hay existencia en el momento de los siguientes productos: \n";
   await productos.forEach((producto) => {
+    const mySQLConnection = connection();
     mySQLConnection.query(
       "SELECT * FROM products WHERE id=?",
       [producto.id],
@@ -87,18 +92,21 @@ postOrder = async (req, res) => {
       data: null,
     });
   } else {
+    let mySQLConnection = connection();
     mySQLConnection.query(
       "SELECT * FROM users WHERE admin=1",
       (err, rows, fields) => {
         const user = rows;
       }
     );
+    mySQLConnection = connection();
     mySQLConnection.query(
       "SELECT id FROM orders WHERE latest=1",
       (err, rows, fields) => {
         const idOrder = rows;
       }
     );
+    mySQLConnection = connection();
     mySQLConnection.query(
       "INSERT INTO orders (date, state, aditional) VALUES(?, ?, (SELECT id FROM aditional WHERE active=1))",
       [now(), 0],
@@ -123,15 +131,18 @@ postOrder = async (req, res) => {
       }
     );
     await productos.forEach((producto) => {
+      const mySQLConnection = connection();
       mySQLConnection.query(
         "INSERT INTO orders_products (id_order, id_product, cantidad) VALUES(?, ?, ?)",
         [idOrder, producto.id, producto.cantidad],
         (err, rows, fields) => {
           if (!err) {
+            const mySQLConnection = connection();
             mySQLConnection.query(
               "SELECT * FROM products WHERE id=?",
               [producto.id],
               (err, rows, fields) => {
+                const mySQLConnection = connection();
                 mySQLConnection.query(
                   "UPDATE products SET caracteristicas.cantidad=? WHERE id=?",
                   [rows.caracteristicas.cantidad - producto.cantidad, id],
@@ -166,6 +177,7 @@ postOrder = async (req, res) => {
 
 updateStateOrder = async (req, res) => {
   const { body } = req;
+  let mySQLConnection = connection();
   mySQLConnection.query(
     "SELECT * FROM users WHERE id=?",
     [body._id],
@@ -179,6 +191,7 @@ updateStateOrder = async (req, res) => {
       : body.estado === 1
       ? "En proceso"
       : "Entregado";
+  mySQLConnection = connection();
   mySQLConnection.query(
     "UPDATE orders SET state=? WHERE id=?",
     [body.estado, body._id],
@@ -210,6 +223,7 @@ updateStateOrder = async (req, res) => {
 pullOrder = (req, res) => {
   const { date, state, aditional } = req.body;
   const { id } = req.params;
+  const mySQLConnection = connection();
   mySQLConnection.query(
     "UPDATE orders SET(date=?, state=?, aditional=?) WHERE id=?",
     [date, state, aditional, id],
@@ -225,6 +239,7 @@ pullOrder = (req, res) => {
 
 deleteOrder = (req, res) => {
   const { id } = req.params;
+  const mySQLConnection = connection();
   mySQLConnection.query(
     "DELETE FROM orders WHERE id=?",
     [id],

@@ -6,23 +6,10 @@ const queryUsuario = require("../db/queriesUsuario");
 const queryProducto = require("../db/queriesProducto");
 const queryPromocion = require("../db/queriesPromocion");
 const queryPedido = require("../db/queriesPedido");
-const queryRol = require("../db/queriesRol");
 const queryFoto = require("../db/queriesFoto");
 const queryCodigos = require("../db/queriesCodigosRecuperacion");
-const mongoose = require("mongoose");
 const { Router } = require("express");
 
-mongoose
-  .connect(process.env.MONGOLAB_ONYX_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
-  })
-  .then((db) => {
-    console.log("CONNECTED DATABASE");
-  })
-  .catch((err) => console.log("Error: ", err));
 /**
  * @swagger
  *  /api/send/:
@@ -865,113 +852,6 @@ api.put("/orders/:id", queryPedido.pullOrder);
  *          {description: Internal Server Error}
  */
 api.delete("/orders/:id", queryPedido.deleteOrder);
-
-// ---------------------------- Roles --------------------------------//
-/**
- * @swagger
- *  /api/roles:
- *    get:
- *      tags: ['Roles']
- *      description: Trae todos los Roles
- *      summary: Get All Roles
- *      responses:
- *        '200':
- *          {description: Successful}
- *        '500':
- *          {description: Internal Server Error}
- */
-api.get("/roles", queryRol.getAllRoles);
-/**
- * @swagger
- *  /api/roles/{id}:
- *    get:
- *      tags: ['Roles']
- *      description: Trae un Rol
- *      summary: Get one role by ID
- *      parameters:
- *      - in: path
- *        name: id
- *        type: string
- *        required: true
- *        description: Id de Rol
- *      responses:
- *        '200':
- *          {description: Successful}
- *        '500':
- *          {description: Internal Server Error}
- */
-api.get("/roles/:id", queryRol.getOneRole);
-/**
- * @swagger
- *  /api/roles/:
- *    post:
- *      tags: ['Roles']
- *      description: Agrega un Rol
- *      summary: Add a new Role
- *      requestBody:
- *        description: Agrega un Rol
- *        required: true
- *      parameters:
- *        - name: Rol
- *          description: Roles Object
- *          in:  body
- *          required: true
- *          type: object
- *      responses:
- *        '200':
- *          {description: Successful}
- *        '500':
- *          {description: Internal Server Error}
- */
-api.post("/roles", queryRol.postRole);
-/**
- * @swagger
- *  /api/products/{id}:
- *    put:
- *      tags: ['Productos']
- *      description: Agrega un Producto
- *      summary: Edit existent Product
- *      requestBody:
- *        description: Agrega un Producto
- *        required: true
- *      parameters:
- *        - in: path
- *          name: id
- *          type: string
- *          required: true
- *          description: Id de Producto
- *        - name: producto
- *          description: Products Object
- *          in:  body
- *          required: true
- *          type: object
- *      responses:
- *        '200':
- *          {description: Successful}
- *        '500':
- *          {description: Internal Server Error}
- */
-api.put("/roles/:id", queryRol.pullRole);
-/**
- * @swagger
- *  /api/roles/{id}:
- *    delete:
- *      tags: ['Roles']
- *      description: Elimina un Rol
- *      summary: Delete one role by ID
- *      parameters:
- *        - in: path
- *          name: id
- *          type: string
- *          required: true
- *          description: Id de Rol
- *      responses:
- *        '200':
- *          {description: Successful}
- *        '500':
- *          {description: Internal Server Error}
- */
-api.delete("/roles/:id", queryRol.deleteRole);
 
 /**
  * @swagger

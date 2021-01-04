@@ -1,17 +1,16 @@
-const { Router } = require('express');
+const { Router } = require("express");
 const router = Router();
-const webpush = require('web-push');
-const Usuarios = require('../models/Usuarios');
+const webpush = require("web-push");
 
 webpush.setVapidDetails(
-  'mailto:mercachevere0@gmail.com',
+  "mailto:mercachevere0@gmail.com",
   process.env.PUBLIC_KEY,
   process.env.PRIVATE_KEY
 );
 
 //var pushSubscription = null;
 
-router.post('/subscribe', async (req, res) => {
+router.post("/subscribe", async (req, res) => {
   const { id, subscribe } = await req.body;
   const usuario = await Usuarios.findById(id);
   var displayNotifications =
@@ -35,17 +34,17 @@ router.post('/subscribe', async (req, res) => {
           displayNotifications,
         }
       );
-      res.send({ status: 200, msg: 'Suscripción exitosa' });
+      res.send({ status: 200, msg: "Suscripción exitosa" });
     }
-    res.send({ status: 401, msg: 'Suscripción nula' });
+    res.send({ status: 401, msg: "Suscripción nula" });
   } else {
-    res.send({ status: 201, msg: 'Suscripción previamente existente' });
+    res.send({ status: 201, msg: "Suscripción previamente existente" });
   }
 });
 
-router.post('/sendNotification', async (req, res) => {
+router.post("/sendNotification", async (req, res) => {
   const payload = await JSON.stringify({
-    title: 'MercarChevere.com',
+    title: "MercarChevere.com",
     message: req.body.msg,
     url: req.body.url,
   });
@@ -54,7 +53,7 @@ router.post('/sendNotification', async (req, res) => {
     try {
       await webpush.sendNotification(element, payload);
     } catch (error) {
-      console.log('ERROR:' + error);
+      console.log("ERROR:" + error);
     }
   });
 });
