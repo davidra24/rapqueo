@@ -3,11 +3,9 @@ const connection = require("./mysqlconnect");
 require("dotenv/config");
 
 getAditional = (req, res) => {
-  const { id } = req.params;
   const mySQLConnection = connection();
   mySQLConnection.query(
-    "SELECT * FROM aditional WHERE id=?",
-    [id],
+    "SELECT * FROM aditional WHERE active=1",
     (err, rows, fields) => {
       if (!err) {
         res.json(rows);

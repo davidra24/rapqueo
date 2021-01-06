@@ -4,6 +4,7 @@ export const apiUrl = "http://localhost:3000";
 //export const apiUrl = 'http://192.168.100.62:3000';
 //PRODUCCIÓN
 //export const apiUrl = "https://mercarchevere.herokuapp.com";
+export const photos = "api/photos";
 export const categories = "api/categories";
 export const products = "api/products";
 export const productsByCategorie = "api/productsByCategorie";

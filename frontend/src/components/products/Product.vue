@@ -5,20 +5,20 @@
         <b-overlay :show="producto" rounded="sm">
           <div
             class="container-fluid"
-            @click="goProduct(product._id)"
+            @click="goProduct(product.id)"
             style="cursor: pointer;"
           >
             <md-card-header>
               <md-card-header-text>
                 <h6>
-                  <strong>{{ product.nombre }}</strong>
+                  <strong>{{ product.name }}</strong>
                 </h6>
                 <div class="md-subhead">{{ peso }} {{ unidad }}</div>
                 <br />
-                <div v-for="promo in promos" :key="promo._id">
+                <div v-for="promo in promos" :key="promo.id">
                   <div
                     v-if="
-                      promo.producto._id === product._id &&
+                      promo.id_product === product.id &&
                         validateFecha(promo.fechaInicio, promo.fechaFin)
                     "
                   >
@@ -27,7 +27,7 @@
                       <span
                         class="md-body-2"
                         style="text-decoration: line-through;"
-                        >${{ promo.producto.caracteristicas.precio }}</span
+                        >${{ promo.product.caracteristics.precio }}</span
                       >
                     </b-card-text>
                     <div>
@@ -46,10 +46,12 @@
               </md-card-header-text>
               <md-card-media md-big>
                 <img
+                  v-if="!loadingImage"
                   class="img-fluid resize-img"
-                  v-bind:src="product.foto"
-                  v-bind:alt="product.nombre"
+                  v-bind:src="foto"
+                  v-bind:alt="product.name"
                 />
+                <div v-else><Mini /></div>
               </md-card-media>
             </md-card-header>
           </div>
@@ -83,7 +85,7 @@
           <template v-slot:overlay>
             <div class="text-center">
               <p>
-                <strong>{{ product.nombre }}</strong>
+                <strong>{{ product.name }}</strong>
               </p>
               <p>{{ peso }}{{ unidad }}</p>
               <b-icon icon="x" font-scale="3"></b-icon>
@@ -103,33 +105,36 @@
 </template>
 
 <script>
-import Loading from '../loading';
-import { promos } from '@/util/constants';
-import { addToCart } from '../../util';
-import { mapActions, mapState } from 'vuex';
-import { getApi } from '@/util/api';
+import Loading from "@/components/loading";
+import Mini from "@/components/loading/mini"
+import { promos } from "@/util/constants";
+import { addToCart } from "../../util";
+import { mapActions, mapState } from "vuex";
+import { getApi } from "@/util/api";
 export default {
-  name: 'Product',
-  props: ['product', 'promo'],
+  name: "Product",
+  props: ["product", "promo", "loadingImage"],
   component: {
     Loading,
+    Mini,
     promos,
   },
   data() {
+    const carac = JSON.parse(this.product.caracteristics);
     return {
       cantidad: 1,
       promoV: false,
-      precio: this.product.caracteristicas.precio,
-      peso: this.product.caracteristicas.peso,
-      unidad: this.product.caracteristicas.unidad,
-      foto: this.product.foto,
+      precio: carac.precio,
+      peso: carac.peso,
+      unidad: carac.unidad,
+      foto: this.product.image,
       descuento: 1,
       show: false,
       producto: this.productVerify(),
     };
   },
   methods: {
-    ...mapActions(['addCart', 'setPromos', 'setError']),
+    ...mapActions(["addCart", "setPromos", "setError"]),
     async fetchPromos() {
       await getApi(promos)
         .then((res) => {
@@ -157,7 +162,7 @@ export default {
       this.promoV = true;
     },
     productVerify() {
-      if (this.product.caracteristicas.cantidad < 1) {
+      if (JSON.parse(this.product.caracteristics).cantidad < 1) {
         return true;
       }
       return false;
@@ -173,9 +178,9 @@ export default {
     },
     agregarCarrito() {
       const cart = {
-        id: this.product._id,
-        nombre: this.product.nombre,
-        imagen: this.product.foto,
+        id: this.product.id,
+        nombre: this.product.name,
+        imagen: this.foto,
         cantidad: this.cantidad,
         peso: this.peso,
         unidad: this.unidad,
@@ -183,26 +188,27 @@ export default {
       };
       addToCart(cart);
       this.addCart(cart);
-      this.precio = this.product.caracteristicas.precio;
+      this.precio = JSON.parse(this.product.caracteristics).precio;
       this.cantidad = 1;
     },
     resta() {
       this.cantidad = this.cantidad > 1 ? this.cantidad - 1 : this.cantidad;
       this.precio =
         this.cantidad > 0
-          ? this.cantidad * this.product.caracteristicas.precio
+          ? this.cantidad * JSON.parse(this.product.caracteristics).precio
           : this.precio;
     },
     suma() {
       this.cantidad =
-        this.cantidad < this.product.caracteristicas.cantidad
+        this.cantidad < JSON.parse(this.product.caracteristics).cantidad
           ? this.cantidad + 1
           : this.cantidad;
-      this.precio = this.cantidad * this.product.caracteristicas.precio;
+      this.precio =
+        this.cantidad * JSON.parse(this.product.caracteristics).precio;
     },
   },
   computed: {
-    ...mapState(['promos']),
+    ...mapState(["promos"]),
   },
   mounted() {
     if (!this.promos) {

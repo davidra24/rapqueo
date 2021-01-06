@@ -15,7 +15,7 @@
 import Loading from "@/components/loading";
 import Categories from "@/components/categories/Categories.vue";
 import { categories } from "@/util/constants";
-import { getApi } from "@/util/api";
+import { getApi} from "@/util/api";
 import { mapState, mapActions } from "vuex";
 export default {
   name: "CategoriesContainer",
@@ -28,7 +28,7 @@ export default {
   },
   data() {
     return {
-      loadingCategories: true
+      loadingCategories: true,
     };
   },
   methods: {
@@ -43,7 +43,7 @@ export default {
           this.setError(err);
           this.loadingCategories = false;
         });
-    }
+    },
   },
   mounted() {
     if (!this.categories) {

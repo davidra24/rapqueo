@@ -11,6 +11,11 @@ const db_config = {
 //const mySQLConnection = mysql.createConnection(db_config);
 
 function handleDisconnect() {
+  /*const connection = mysql.createPool({
+    ...db_config,
+    connectionLimit: 10,
+    acquireTimeout: 30000, //30 secs
+  });*/
   const connection = mysql.createConnection(db_config); // Recreate the connection, since
   // the old one cannot be reused.
 

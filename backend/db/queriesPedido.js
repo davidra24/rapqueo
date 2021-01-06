@@ -60,7 +60,7 @@ getOneOrder = (req, res) => {
     [id],
     (err, rows, fields) => {
       if (!err) {
-        res.json(rows);
+        res.json(rows[0]);
       } else {
         console.log(err);
       }

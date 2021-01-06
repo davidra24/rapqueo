@@ -30,9 +30,13 @@
             <div
               class="col-12 col-md-6 col-lg-4"
               v-for="product in filterProducts"
-              :key="product._id"
+              :key="product.id"
             >
-              <Product v-blur="product.caracteristicas.cantidad" v-bind:product="product" />
+              <Product
+                v-bind:loadingImage="loadingImage"
+                v-blur="product.caracteristics.cantidad"
+                v-bind:product="product"
+              />
             </div>
           </div>
         </div>
@@ -45,28 +49,29 @@ import Product from "./Product";
 import { mapState } from "vuex";
 export default {
   name: "AllProducts",
+  props: ["loadingImage"],
   components: {
-    Product
+    Product,
   },
   data() {
     return {
-      filterProduct: ""
+      filterProduct: "",
     };
   },
   computed: {
     ...mapState(["products"]),
     filterProducts() {
       if (this.filterProduct != "") {
-        return this.products.filter(product => {
-          return product.nombre
+        return this.products.filter((product) => {
+          return product.name
             .toLowerCase()
             .includes(this.filterProduct.toLowerCase());
         });
       } else {
         return this.products;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

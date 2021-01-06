@@ -16,7 +16,7 @@ getAllProductsWithoutPromo = async (req, res) => {
   const mySQLConnection = connection();
   mySQLConnection.query("SELECT * FROM promos", (err, rows, fields) => {
     if (!err) {
-      async (promos) => {
+      async (rows) => {
         const mySQLConnection = connection();
         mySQLConnection.query("SELECT * FROM products", (err, rows, fieds) => {
           if (!err) {
@@ -24,8 +24,8 @@ getAllProductsWithoutPromo = async (req, res) => {
               let arr = [];
               for (let i = 0; i < productos.length; i++) {
                 let existe = false;
-                for (let j = 0; j < promos.length; j++) {
-                  const str1 = promos[j].idProduct.toString();
+                for (let j = 0; j < rows.length; j++) {
+                  const str1 = rows[j].idProduct.toString();
                   const str2 = productos[i].id.toString();
                   if (str1.trim() === str2.trim()) {
                     existe = true;
@@ -68,7 +68,7 @@ getOneProduct = (req, res) => {
     [id],
     (err, rows, fields) => {
       if (!err) {
-        res.json(rows);
+        res.json(rows[0]);
       } else {
         console.log(err);
       }
@@ -97,7 +97,7 @@ postProduct = (req, res) => {
   const mySQLConnection = connection();
   mySQLConnection.query(
     "INSERT INTO products (name, caracteristics, id_photo, id_categorie) VALUES(?,?,?,?)",
-    [name, caracteristics, id_photo, id_categorie],
+    [name, JSON.stringify(caracteristics), id_photo, id_categorie],
     (err, rows, fields) => {
       if (!err) {
         res.json({ Status: "Producto añadido" });

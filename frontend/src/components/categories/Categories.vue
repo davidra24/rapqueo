@@ -28,23 +28,28 @@
               class="col-12 col-md-6 col-lg-4 clickable"
               style="margin-bottom: 2%;"
               v-for="categorie in filterCategories"
-              :key="categorie._id"
-              @click="goProducts(categorie._id)"
+              :key="categorie.id"
+              @click="goProducts(categorie.id)"
             >
-              <b-card class="overflow-hidden" style="min-height:100%; max-height: 100%;">
+              <b-card
+                class="overflow-hidden"
+                style="min-height:100%; max-height: 100%;"
+              >
                 <b-row no-gutters class="d-flex align-items-center">
                   <b-col md="6" align-self="center">
                     <b-card-img
                       class="resize-img"
-                      :alt="categorie.nombre"
-                      :src="buscarImagen(categorie.imagen)"
+                      :alt="categorie.name"
+                      :src="foto"
                     ></b-card-img>
                   </b-col>
                   <b-col md="6">
                     <b-card-body>
-                      <h5>{{categorie.nombre}}</h5>
+                      <h5>{{ categorie.name }}</h5>
                       <md-content class="md-scrollbar">
-                        <b-card-text class="text-left">{{ categorie.descripcion }}</b-card-text>
+                        <b-card-text class="text-left">{{
+                          categorie.description
+                        }}</b-card-text>
                       </md-content>
                     </b-card-body>
                   </b-col>
@@ -62,38 +67,47 @@
 
 <script>
 import { mapState } from "vuex";
-import { buscarImagen } from "../../util/images";
+//import { photos } from "@/util/constants";
+//import { getOneOrManyApi } from "@/util/api";
 
 export default {
   name: "Categories",
   data() {
     return {
-      filterCategorie: ""
+      filterCategorie: "",
+      //foto: this.getPhoto(this.categorie.id_photo)
     };
   },
   computed: {
     ...mapState(["categories"]),
     filterCategories() {
       if (this.filterCategorie != "") {
-        return this.categories.filter(categorie => {
-          return categorie.nombre
+        return this.categories.filter((categorie) => {
+          return categorie.name
             .toLowerCase()
             .includes(this.filterCategorie.toLowerCase());
         });
       } else {
         return this.categories;
       }
-    }
+    },
   },
   methods: {
-    buscarImagen(name) {
-      return buscarImagen(name);
-    },
     goProducts(id) {
       this.$router.push({ path: `/categorias/${id}` });
-    }
+    },
+    /*
+    async getPhoto(id) {
+      await getOneOrManyApi(photos, id)
+        .then((res) => {
+          return res.data.image;
+        })
+        .catch((err) => {
+          this.setError(err);
+        });
+    },*/
   },
-  mounted() {}
+  mounted() {},
 };
 </script>
 

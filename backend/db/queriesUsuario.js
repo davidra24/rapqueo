@@ -1,10 +1,11 @@
-const mySQLConnection = require("./mysqlconnect")();
+const connection = require("./mysqlconnect");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const smtpTransport = require("nodemailer-smtp-transport");
 
 getAllUsers = (req, res) => {
+  const mySQLConnection = connection();
   mySQLConnection.query("SELECT * FROM users", (err, rows, fields) => {
     if (!err) {
       res.json(rows);
@@ -16,12 +17,13 @@ getAllUsers = (req, res) => {
 
 getOneUser = (req, res) => {
   const { id } = req.params;
+  const mySQLConnection = connection();
   mySQLConnection.query(
     "SELECT * FROM users WHERE id=?",
     [id],
     (err, rows, fields) => {
       if (!err) {
-        res.json(rows);
+        res.json(rows[0]);
       } else {
         console.log(err);
       }
@@ -31,6 +33,7 @@ getOneUser = (req, res) => {
 
 getUserByPhone = (req, res) => {
   const telefono = req.body.telefono;
+  const mySQLConnection = connection();
   mySQLConnection.query(
     "SELECT * FROM users WHERE phone=?",
     [telefono],
@@ -56,8 +59,9 @@ postUser = (req, res) => {
     deliver,
     displayNotification,
   } = req.body;
+  const mySQLConnection = connection();
   mySQLConnection.query(
-    "INSERT INTO users (name, lastname, phone, email, password, direction, admin, deliver, displayNotification) VALUES(?, ? ,? ,?, ?, ?, ?, ?, ? )",
+    "INSERT INTO users (name, lastname, phone, email, password, direction, admin, deliver, displayNotifications) VALUES(?, ? ,? ,?, ?, ?, ?, ?, ? )",
     [
       name,
       lastname,
@@ -86,8 +90,9 @@ putUser = async (req, res) => {
   } else {
     var body = req.body;
   }
+  const mySQLConnection = connection();
   mySQLConnection.query(
-    "UPDATE users SET name=?, lastname=?, phone=?, email=?, password=?, direction=?, admin=?, deliver=?, displayNotification=? WHERE id=?",
+    "UPDATE users SET name=?, lastname=?, phone=?, email=?, password=?, direction=?, admin=?, deliver=?, displayNotifications=? WHERE id=?",
     [
       body.name,
       body.lastname,
@@ -115,6 +120,7 @@ putUser = async (req, res) => {
 
 deleteUser = (req, res) => {
   const { id } = req.params;
+  const mySQLConnection = connection();
   mySQLConnection.query(
     "DELETE FROM users WHERE id=?",
     [id],
@@ -133,8 +139,9 @@ signup = async (req, res) => {
     ...req.body,
     contrasena: await bcrypt.hash(req.body.password, 10),
   };
+  const mySQLConnection = connection();
   mySQLConnection.query(
-    "INSERT INTO users (name, lastname, phone, email, password, direction, admin, deliver, displayNotification) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)",
+    "INSERT INTO users (name, lastname, phone, email, password, direction, admin, deliver, displayNotifications) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)",
     [
       body.name,
       body.lastname,
@@ -153,7 +160,7 @@ signup = async (req, res) => {
           msg: "¡Usuario creado con éxito! :)",
         });
       } else {
-        res.send({ code: 500, msg: "Error de servidor" });
+        res.send({ code: 500, msg: "Error de servidor: " + err });
       }
     }
   );
@@ -161,29 +168,30 @@ signup = async (req, res) => {
 
 login = async (req, res) => {
   const { telefono, contrasena } = req.body;
+  const mySQLConnection = connection();
   mySQLConnection.query(
     "SELECT * from users WHERE phone=?",
     [telefono],
     (err, rows, fields) => {
       if (!err) {
-        bcrypt.compare(contrasena, rows.password).then((result) => {
+        bcrypt.compare(contrasena, rows[0].password).then((result) => {
           if (!result) {
             res.send({ code: 402, msg: "Teléfono o contraseña incorrecto" });
           } else {
             const secretKey = process.env.KEY;
-            const token = jwt.sign({ id: rows.id }, secretKey);
+            const token = jwt.sign({ id: rows[0].id }, secretKey);
             res.send({
               code: 200,
               msg: "Sesión iniciada correctamente",
               token,
               data: {
-                id: rows.id,
-                phone: rows.phone,
-                name: rows.name,
-                lastname: rows.lastname,
-                admin: rows.admin,
-                email: rows.email,
-                deliver: rows.deliver,
+                id: rows[0].id,
+                phone: rows[0].phone,
+                name: rows[0].name,
+                lastname: rows[0].lastname,
+                admin: rows[0].admin,
+                email: rows[0].email,
+                deliver: rows[0].deliver,
               },
             });
           }
@@ -197,11 +205,12 @@ login = async (req, res) => {
 
 verifyPassword = async (req, res) => {
   const { telefono, contrasena } = req.body;
+  const mySQLConnection = connection();
   mySQLConnection.query(
     "SELECT * FROM users WHERE phone=?",
     [telefono],
     (err, rows, fields) => {
-      bcrypt.compare(contrasena, rows.password).then((result) => {
+      bcrypt.compare(contrasena, rows[0].password).then((result) => {
         if (!result) {
           res.send({
             code: 402,
@@ -232,6 +241,7 @@ function makeid(length) {
 forgotPassword = async (req, res) => {
   const { email } = req.body;
   const codigo = makeid(6);
+  let mySQLConnection = connection();
   mySQLConnection.query(
     "SELECT * FROM users where email=?",
     [email],
@@ -239,8 +249,8 @@ forgotPassword = async (req, res) => {
       if (!rows) {
         res.send({ code: 501, msg: "Correo no existente" });
       }
-      const { correo } = rows.email;
-      const { idUser } = rows.id;
+      const { correo } = rows[0].email;
+      const { idUser } = rows[0].id;
       contentHTML = `
       <h1>Mercarchevere.com</h1>
       <strong>
@@ -279,6 +289,7 @@ forgotPassword = async (req, res) => {
         })
         .then((response) => {
           console.log("mail sended", response.messageId);
+          mySQLConnection = connection();
           mySQLConnection.query(
             "INSERT INTO recuperation_codes (code, used, expiration, id_user) VALUES(?, 0, ?, ?)",
             [codigo, getExpiration(), idUser],
@@ -300,17 +311,19 @@ forgotPassword = async (req, res) => {
 
 codeRecovery = async (req, res) => {
   const { codigo, correo } = req.body;
+  let mySQLConnection = connection();
   mySQLConnection.query(
     "SELECT * FROM recuperation_codes WHERE code=? AND email=?",
     [codigo, correo],
     (err, rows, fields) => {
       if (!err) {
         var valido = false;
-        if (rows.used == 0 && compareDates(rows.expiration)) {
+        if (rows[0].used == 0 && compareDates(rows[0].expiration)) {
           valido = true;
+          mySQLConnection = connection();
           mySQLConnection.query(
             "UPDATE recuperation_codes SET used=1 WHERE id=?",
-            [rows.id],
+            [rows[0].id],
             (err, rows, fields) => {
               (response) => {
                 res.send({
@@ -353,6 +366,7 @@ function getExpiration() {
 recoveryPassword = async (req, res) => {
   const { correo } = req.body;
   const contrasena = await bcrypt.hash(req.body.password, 10);
+  const mySQLConnection = connection();
   mySQLConnection.query(
     "UPDATE users SET password=? WHERE email=?",
     [contrasena, correo],

@@ -8,9 +8,12 @@
             <div
               class="col-12 col-md-6 col-lg-4"
               v-for="product in productsCategorie"
-              :key="product._id"
+              :key="product.id"
             >
-              <Product v-blur="product.caracteristicas.cantidad" v-bind:product="product" />
+              <Product
+                v-blur="product.caracteristics.cantidad"
+                v-bind:product="product"
+              />
             </div>
           </div>
         </div>
@@ -24,11 +27,11 @@ import { mapState } from "vuex";
 export default {
   name: "Products",
   computed: {
-    ...mapState(["productsCategorie"])
+    ...mapState(["productsCategorie"]),
   },
   components: {
-    Product
-  }
+    Product,
+  },
 };
 </script>
 

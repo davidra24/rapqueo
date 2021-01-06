@@ -873,7 +873,7 @@ api.delete("/orders/:id", queryPedido.deleteOrder);
  *          {description: Internal Server Error}
  */
 
-api.get("/aditional/:id", queryAdicional.getAditional);
+api.get("/aditional/", queryAdicional.getAditional);
 
 /**
  * @swagger

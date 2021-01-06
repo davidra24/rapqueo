@@ -6,11 +6,11 @@
           <md-card-header>
             <md-card-header-text>
               <h6>
-                <strong>{{ product.nombre }}</strong>
+                <strong>{{ product.name }}</strong>
               </h6>
               <div class="md-subhead">
-                {{ product.caracteristicas.peso }}
-                {{ product.caracteristicas.unidad }}
+                {{ peso }}
+                {{ unidad }}
               </div>
               <br />
               <div>${{ precio }}</div>
@@ -18,8 +18,8 @@
             <md-card-media md-big>
               <img
                 class="img-fluid resize-img"
-                v-bind:src="product.foto"
-                v-bind:alt="product.nombre"
+                v-bind:src="foto"
+                v-bind:alt="product.name"
               />
             </md-card-media>
           </md-card-header>
@@ -61,6 +61,8 @@
 <script>
 import { addToCart } from "@/util";
 import { mapActions, mapState } from "vuex";
+import { photos } from "@/util/constants";
+import { getOneOrManyApi } from "@/util/api";
 export default {
   name: "OneProduct",
   computed: {
@@ -70,11 +72,19 @@ export default {
     return {
       cantidad: 1,
       precio: 0,
+      peso: '',
+      unidad: '',
+      foto: '',
       show: false
     };
   },
   mounted() {
-    this.precio = this.product.caracteristicas.precio;
+    this.getPhoto(this.product);
+    this.carac = JSON.parse(this.product.caracteristics);
+    this.peso = this.carac.peso
+    this.unidad = this.carac.unidad
+    this.precio = this.carac.precio;
+    this.foto = this.product.image;
   },
   methods: {
     ...mapActions(["addCart"]),
@@ -82,15 +92,15 @@ export default {
       this.cantidad = this.cantidad > 1 ? this.cantidad - 1 : this.cantidad;
       this.precio =
         this.cantidad > 0
-          ? this.cantidad * this.product.caracteristicas.precio
+          ? this.cantidad * JSON.parse(this.product.caracteristics).precio
           : this.precio;
     },
     suma() {
       this.cantidad =
-        this.cantidad < this.product.caracteristicas.cantidad
+        this.cantidad < JSON.parse(this.product.caracteristics).cantidad
           ? this.cantidad + 1
           : this.cantidad;
-      this.precio = this.cantidad * this.product.caracteristicas.precio;
+      this.precio = this.cantidad * JSON.parse(this.product.caracteristics).precio;
     },
     agregado() {
       this.show = true;
@@ -100,9 +110,9 @@ export default {
     },
     agregarCarrito() {
       const cart = {
-        id: this.product._id,
-        nombre: this.product.nombre,
-        imagen: this.product.foto,
+        id: this.product.id,
+        nombre: this.product.name,
+        imagen: this.foto,
         cantidad: this.cantidad,
         peso: this.peso,
         unidad: this.unidad,
@@ -110,7 +120,11 @@ export default {
       };
       addToCart(cart);
       this.addCart(cart);
-    }
+    },
+    async getPhoto(product) {
+      const {data: {image}} = await getOneOrManyApi(photos, product.id_photo);
+      await this.setProduct({...product, image})
+    },
   }
 };
 </script>

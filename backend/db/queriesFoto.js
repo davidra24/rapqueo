@@ -1,15 +1,17 @@
-const mySQLConnection = require("./mysqlconnect");
+const connection = require("./mysqlconnect");
 
 require("dotenv/config");
 
 getPhoto = (req, res) => {
+  const mySQLConnection = connection();
   const { id } = req.params;
   mySQLConnection.query(
     "SELECT * FROM photos WHERE id=?",
     [id],
     (err, rows, fields) => {
       if (!err) {
-        res.json(rows);
+        res.json(rows[0]);
+        mySQLConnection.end();
       } else {
         console.log(err);
       }
@@ -18,6 +20,7 @@ getPhoto = (req, res) => {
 };
 
 postPhoto = (req, res) => {
+  const mySQLConnection = connection();
   const { image, description } = req.body;
   mySQLConnection.query(
     "INSERT INTO photos (image,description) VALUES(?,?)",
@@ -33,6 +36,7 @@ postPhoto = (req, res) => {
 };
 
 putPhoto = (req, res) => {
+  const mySQLConnection = connection();
   const { image, description } = req.body;
   const { id } = req.params;
   mySQLConnection.query(
@@ -49,6 +53,7 @@ putPhoto = (req, res) => {
 };
 
 deletePhoto = (req, res) => {
+  const mySQLConnection = connection();
   const { id } = req.params;
   mySQLConnection.query(
     "DELETE FROM photos WHERE id=?",

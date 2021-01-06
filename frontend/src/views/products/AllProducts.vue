@@ -10,32 +10,33 @@
       <Loading />
     </div>
     <div v-else class="col-12">
-      <AllProducts />
+      <AllProducts v-bind:loadingImage="loadingImage" />
     </div>
   </div>
 </template>
 
 <script>
 import CarouselPromo from "@/components/promos";
-import { products, filteredPromos } from "@/util/constants";
+import { products, photos, filteredPromos } from "@/util/constants";
+import { getApi, getOneOrManyApi } from "@/util/api";
 import AllProducts from "@/components/products/AllProducts.vue";
 import Loading from "@/components/loading";
-import { getApi } from "@/util/api";
 import { mapState, mapActions } from "vuex";
 export default {
   name: "AllProductsContainer",
   components: {
     Loading,
     CarouselPromo,
-    AllProducts
+    AllProducts,
   },
   computed: {
-    ...mapState(["products", "filteredPromos"])
+    ...mapState(["products", "filteredPromos"]),
   },
   data() {
     return {
       loadingPromos: false,
-      loadingProducts: false
+      loadingProducts: false,
+      loadingImage: false,
     };
   },
   methods: {
@@ -43,27 +44,43 @@ export default {
     async fetchProducts() {
       this.loadingProducts = true;
       await getApi(products)
-        .then(res => {
+        .then((res) => {
           this.setProducts(res.data);
+          this.getPhotos(res.data);
           this.loadingProducts = false;
         })
-        .catch(err => {
+        .catch((err) => {
           this.setError(err);
           this.loadingProducts = false;
         });
     },
+    async getPhotos(products) {
+      this.loadingImage = true;
+      const auxProducts = [];
+      await products.forEach(async (product, index) => {
+          const {data: {image}} = await getOneOrManyApi(photos, product.id_photo)
+          await auxProducts.push({...product, image})
+          if(products.length -1 === index){
+            this.loadingProducts = true
+            await this.setProducts(auxProducts)
+            this.loadingImage = await false;
+            this.loadingProducts = false
+          }
+        })
+    },
+
     async fetchPromos() {
       this.loadingPromos = true;
       await getApi(filteredPromos)
-        .then(res => {
+        .then((res) => {
           this.setFilteredPromos(res.data);
           this.loadingPromos = false;
         })
-        .catch(err => {
+        .catch((err) => {
           this.setError(err);
           this.loadingPromos = false;
         });
-    }
+    },
   },
   mounted() {
     if (!this.products) {
@@ -72,6 +89,6 @@ export default {
     if (!this.promos) {
       this.fetchPromos();
     }
-  }
+  },
 };
 </script>
