@@ -8,6 +8,7 @@ const queryPromocion = require("../db/queriesPromocion");
 const queryPedido = require("../db/queriesPedido");
 const queryFoto = require("../db/queriesFoto");
 const queryCodigos = require("../db/queriesCodigosRecuperacion");
+const queryDireccion = require("../db/queriesDireccion");
 const { Router } = require("express");
 
 /**
@@ -1125,5 +1126,132 @@ api.put("/recuperationCodes/:id", queryCodigos.pullRecuperationCode);
  *          {description: Internal Server Error}
  */
 api.delete("/recuperationCodes/:id", queryCodigos.deleteRecuperationCode);
+
+// ---------------------------- Direcciones --------------------------------//
+/**
+ * @swagger
+ *  /api/directions:
+ *    get:
+ *      tags: ['Direcciones']
+ *      description: Trae todas las direcciones
+ *      summary: Get All directions
+ *      responses:
+ *        '200':
+ *          {description: Successful}
+ *        '500':
+ *          {description: Internal Server Error}
+ */
+api.get("/directions", queryDireccion.getAllDirections);
+/**
+ * @swagger
+ *  /api/directions/{id}:
+ *    get:
+ *      tags: ['Direcciones']
+ *      description: Trae una direccion
+ *      summary: Get one Direction by ID
+ *      parameters:
+ *      - in: path
+ *        name: id
+ *        type: string
+ *        required: true
+ *        description: Id de dirección
+ *      responses:
+ *        '200':
+ *          {description: Successful}
+ *        '500':
+ *          {description: Internal Server Error}
+ */
+api.get("/directions/:id", queryDireccion.getOneDirection);
+/**
+ * @swagger
+ *  /api/directionsByUser/{id}:
+ *    get:
+ *      tags: ['Direcciones']
+ *      description: Trae las direcciones por usuario
+ *      summary: Get one direction by User ID
+ *      parameters:
+ *      - in: path
+ *        name: id
+ *        type: string
+ *        required: true
+ *        description: Id de Usuario
+ *      responses:
+ *        '200':
+ *          {description: Successful}
+ *        '500':
+ *          {description: Internal Server Error}
+ */
+api.get("/directionsByUser/:id", queryDireccion.getDirectionsByUser);
+/**
+ * @swagger
+ *  /api/directions/:
+ *    post:
+ *      tags: ['Direcciones']
+ *      description: Agrega una direccion
+ *      summary: Add a direction
+ *      requestBody:
+ *        description: Agrega una direccion
+ *        required: true
+ *      parameters:
+ *        - name: cireccion
+ *          description: Direction Object
+ *          in:  body
+ *          required: true
+ *          type: object
+ *      responses:
+ *        '200':
+ *          {description: Successful}
+ *        '500':
+ *          {description: Internal Server Error}
+ */
+api.post("/directions", queryDireccion.postDirection);
+/**
+ * @swagger
+ *  /api/directions/{id}:
+ *    put:
+ *      tags: ['Direcciones']
+ *      description: Agrega una direccion
+ *      summary: Edit existent a direction
+ *      requestBody:
+ *        description: Agrega una direccion
+ *        required: true
+ *      parameters:
+ *        - in: path
+ *          name: id
+ *          type: string
+ *          required: true
+ *          description: Id de direccion
+ *        - name: direction
+ *          description: Directions Object
+ *          in:  body
+ *          required: true
+ *          type: object
+ *      responses:
+ *        '200':
+ *          {description: Successful}
+ *        '500':
+ *          {description: Internal Server Error}
+ */
+api.put("/directions/:id", queryDireccion.pullDirection);
+/**
+ * @swagger
+ *  /api/directions/{id}:
+ *    delete:
+ *      tags: ['Direcciones']
+ *      description: Elimina una direccion
+ *      summary: Delete one direction by ID
+ *      parameters:
+ *        - in: path
+ *          name: id
+ *          type: string
+ *          required: true
+ *          description: Id de dirección
+ *      responses:
+ *        '200':
+ *          {description: Successful}
+ *        '500':
+ *          {description: Internal Server Error}
+ */
+api.delete("/directions/:id", queryDireccion.deleteDirection);
 
 module.exports = api;
